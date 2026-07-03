@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings } from 'react-icons/fi';
+import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend } from 'react-icons/fi';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
 import { useAdminSession } from '../context/AdminSessionContext';
@@ -1448,6 +1448,11 @@ export default function AdminDashboard() {
   // Profile edit state (inline, no modal)
   const [profileForm, setProfileForm] = useState({});
 
+  // Inbox state
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [replyForm, setReplyForm] = useState({ subject: '', message: '' });
+
   // Settings edit state
   const [settingsForm, setSettingsForm] = useState({
     siteTitle: 'HP.dev',
@@ -1531,7 +1536,7 @@ export default function AdminDashboard() {
       };
       setData(newData);
       if (prof.data && prof.data.name) {
-        setProfileForm({ ...prof.data, roles: (prof.data.roles || []).join(', ') });
+        setProfileForm({ ...prof.data, roles: (prof.data.roles || []).join(', '), laptopSkills: (prof.data.laptopSkills || []).join(', ') });
       }
       if (sett && sett.data) {
         setSettingsForm(sett.data);
@@ -1747,6 +1752,23 @@ export default function AdminDashboard() {
       showToast('Message marked as read.', 'success');
     } catch (err) {
       console.error("Error marking message as read:", err);
+    }
+  };
+
+  // Reply to a contact message
+  const handleReply = async (messageId) => {
+    try {
+      if (!replyForm.subject || !replyForm.message) {
+        showToast('Please enter both subject and message.', 'error');
+        return;
+      }
+      await adminApi.post(`/api/contact/${messageId}/reply`, replyForm, token);
+      showToast('Reply sent successfully!', 'success');
+      setShowReplyForm(false);
+      setReplyForm({ subject: '', message: '' });
+      fetchData();
+    } catch (err) {
+      showToast('Error sending reply: ' + (err.response?.data?.message || err.message), 'error');
     }
   };
 
@@ -2024,6 +2046,49 @@ export default function AdminDashboard() {
                     <input style={profileInputStyle} value={profileForm.roles || ''} onChange={e => setProfileForm({ ...profileForm, roles: e.target.value })} placeholder="MERN Stack Developer, Full Stack Engineer" />
                   </div>
                 </div>
+
+                {/* ── Hero Section Fields ── */}
+                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.1rem' }}>🏠</span> Hero Section
+                  </h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Sub Hero Title</label>
+                      <input style={profileInputStyle} value={profileForm.heroTitle || ''} onChange={e => setProfileForm({ ...profileForm, heroTitle: e.target.value })} placeholder="Full Stack Developer & Software Engineer" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Hero Description</label>
+                      <textarea style={{ ...profileInputStyle, height: '80px', resize: 'vertical' }} value={profileForm.heroDesc || ''} onChange={e => setProfileForm({ ...profileForm, heroDesc: e.target.value })} placeholder="I build scalable, high-performance web applications..." />
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Laptop Screen Fields ── */}
+                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.1rem' }}>💻</span> Laptop Screen Content
+                  </h4>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '16px' }}>Customize the code editor mockup shown inside the interactive laptop on the homepage.</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={profileLabelStyle}>Screen Name</label>
+                      <input style={profileInputStyle} value={profileForm.laptopName || ''} onChange={e => setProfileForm({ ...profileForm, laptopName: e.target.value })} placeholder="Hardik Prajapati" />
+                    </div>
+                    <div>
+                      <label style={profileLabelStyle}>Screen Job Title</label>
+                      <input style={profileInputStyle} value={profileForm.laptopTitle || ''} onChange={e => setProfileForm({ ...profileForm, laptopTitle: e.target.value })} placeholder="Full Stack Engineer" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Screen Skills (comma-separated)</label>
+                      <input style={profileInputStyle} value={profileForm.laptopSkills || ''} onChange={e => setProfileForm({ ...profileForm, laptopSkills: e.target.value })} placeholder="React, Node.js, Express, MongoDB, Java, AI/ML, DSA" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Screen Passion</label>
+                      <input style={profileInputStyle} value={profileForm.laptopPassion || ''} onChange={e => setProfileForm({ ...profileForm, laptopPassion: e.target.value })} placeholder="Turning ideas into impact" />
+                    </div>
+                  </div>
+                </div>
                 <div style={{ marginTop: '16px' }}>
                   <label style={profileLabelStyle}>Tagline</label>
                   <input style={profileInputStyle} value={profileForm.tagline || ''} onChange={e => setProfileForm({ ...profileForm, tagline: e.target.value })} />
@@ -2250,38 +2315,162 @@ export default function AdminDashboard() {
             />
           )}
 
-          {/* ════ MESSAGES ════ */}
+          {/* ════ MESSAGES (INBOX) ════ */}
           {section === 'messages' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>{data.messages.length} messages received</p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', flexDirection: 'column' }}>
+              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '16px' }}>{data.messages.length} messages received</p>
               {data.messages.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>No messages yet. Messages sent via the contact form will appear here.</div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {data.messages.map(m => (
-                    <div key={m._id} style={{ padding: '24px', borderRadius: '16px', background: cardBg, border: m.read ? cardBorder : '1px solid rgba(99,102,241,0.3)', position: 'relative' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                        <div>
-                          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '4px' }}>
-                            <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain }}>{m.name}</span>
-                            <span style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: '#6366F1' }}>{m.email}</span>
+                <div className="inbox-container" style={{ display: 'flex', gap: '0', borderRadius: '20px', background: cardBg, border: cardBorder, overflow: 'hidden', height: 'calc(100vh - 260px)', minHeight: '500px' }}>
+                  {/* ── Left: Message List ── */}
+                  <div style={{ width: '340px', minWidth: '340px', borderRight: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0', overflowY: 'auto', flexShrink: 0 }}>
+                    {data.messages.map(m => {
+                      const isActive = selectedMessage?._id === m._id;
+                      return (
+                        <div
+                          key={m._id}
+                          onClick={() => { setSelectedMessage(m); setShowReplyForm(false); setReplyForm({ subject: `Re: ${m.subject}`, message: '' }); if (!m.read) handleMarkAsRead(m._id); }}
+                          style={{
+                            padding: '16px 20px',
+                            cursor: 'pointer',
+                            borderBottom: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F5F9',
+                            background: isActive ? (isDark ? 'rgba(99,102,241,0.08)' : 'rgba(99,102,241,0.04)') : 'transparent',
+                            borderLeft: isActive ? '3px solid #6366F1' : '3px solid transparent',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.02)' : '#FAFBFC'; }}
+                          onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                            <span style={{ fontFamily: 'Poppins', fontWeight: m.read ? 500 : 700, fontSize: '0.88rem', color: textMain, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '180px' }}>{m.name}</span>
+                            <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: textMuted, whiteSpace: 'nowrap' }}>{new Date(m.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                           </div>
-                          <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.88rem', color: textMain }}>{m.subject}</p>
+                          <p style={{ fontFamily: 'Inter', fontWeight: m.read ? 400 : 600, fontSize: '0.82rem', color: textMain, margin: '0 0 4px 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.subject}</p>
+                          <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.message}</p>
+                          <div style={{ display: 'flex', gap: '6px', marginTop: '6px', alignItems: 'center' }}>
+                            {!m.read && <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366F1', display: 'inline-block' }} />}
+                            {m.replied && <span style={{ fontFamily: 'Inter', fontSize: '0.7rem', color: '#10B981', fontWeight: 600 }}>✓ Replied</span>}
+                          </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          {!m.read && (
-                            <button onClick={() => handleMarkAsRead(m._id)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(99,102,241,0.08)', color: '#6366F1', display: 'flex' }} title="Mark as Read">
-                              <FiCheckCircle size={14} />
-                            </button>
-                          )}
-                          <button onClick={() => handleDelete('message', m._id)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }} title="Delete Message">
-                            <FiTrash2 size={14} />
-                          </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* ── Right: Message Detail Pane ── */}
+                  <div className="inbox-right-pane" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
+                    {!selectedMessage ? (
+                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: textMuted, fontFamily: 'Inter', fontSize: '0.9rem' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <FiMail size={40} style={{ marginBottom: '12px', opacity: 0.3 }} />
+                          <p>Select a message to view details</p>
                         </div>
                       </div>
-                      <p style={{ fontFamily: 'Inter', fontSize: '0.88rem', color: textMuted, lineHeight: 1.6 }}>{m.message}</p>
-                    </div>
-                  ))}
+                    ) : (
+                      <div className="inbox-scroll" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', minHeight: 0 }}>
+                        {/* Header */}
+                        <div style={{ padding: '24px 28px 16px', borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F1F5F9', flexShrink: 0 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div>
+                              <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: '0 0 4px 0' }}>{selectedMessage.name}</h3>
+                              <span style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: '#6366F1' }}>{selectedMessage.email}</span>
+                            </div>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                              <button onClick={() => { setShowReplyForm(!showReplyForm); if (!showReplyForm) setReplyForm({ subject: `Re: ${selectedMessage.subject}`, message: '' }); }} style={{ padding: '8px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: showReplyForm ? 'rgba(239,68,68,0.1)' : 'rgba(99,102,241,0.08)', color: showReplyForm ? '#EF4444' : '#6366F1', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem' }}>
+                                {showReplyForm ? <><FiX size={14} /> Cancel</> : <><FiCornerUpLeft size={14} /> Reply</>}
+                              </button>
+                              <button onClick={() => { handleDelete('message', selectedMessage._id); setSelectedMessage(null); }} style={{ padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }} title="Delete">
+                                <FiTrash2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+                          <div style={{ marginTop: '8px', marginBottom: showReplyForm ? '8px' : '16px', transition: 'margin 0.3s ease-in-out' }}>
+                            <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', color: textMain, margin: 0 }}>{selectedMessage.subject}</p>
+                            <span style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>{new Date(selectedMessage.createdAt).toLocaleString()}</span>
+                          </div>
+                        </div>
+
+                        {/* Message Body — dynamic sizing */}
+                        <div style={{
+                          padding: '20px 28px',
+                          ...(showReplyForm
+                            ? { flex: '0 0 auto', height: '100px', overflowY: 'auto' }
+                            : { flex: 1, minHeight: '140px' }),
+                          transition: 'all 0.3s ease-in-out',
+                        }}>
+                          <p style={{ fontFamily: 'Inter', fontSize: '0.9rem', color: textMuted, lineHeight: 1.7, margin: 0, whiteSpace: 'pre-wrap' }}>{selectedMessage.message}</p>
+                        </div>
+
+                        {/* Admin Reply Display Card */}
+                        {(selectedMessage.replied || selectedMessage.replyMessage) && (
+                          <div style={{
+                            margin: '0 28px 16px',
+                            padding: '16px 20px',
+                            borderRadius: '12px',
+                            background: isDark ? 'rgba(16,185,129,0.06)' : 'rgba(16,185,129,0.04)',
+                            border: isDark ? '1px solid rgba(16,185,129,0.15)' : '1px solid rgba(16,185,129,0.12)',
+                            flexShrink: 0,
+                          }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                              <FiCornerUpLeft size={14} color="#10B981" />
+                              <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.82rem', color: '#10B981' }}>Your Reply</span>
+                              {selectedMessage.repliedAt && (
+                                <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: textMuted, marginLeft: 'auto' }}>
+                                  {new Date(selectedMessage.repliedAt).toLocaleString()}
+                                </span>
+                              )}
+                            </div>
+                            {selectedMessage.replySubject && (
+                              <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', color: textMain, margin: '0 0 6px 0' }}>{selectedMessage.replySubject}</p>
+                            )}
+                            <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: textMuted, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{selectedMessage.replyMessage}</p>
+                          </div>
+                        )}
+
+                        {/* Reply Compose Form */}
+                        <AnimatePresence>
+                          {showReplyForm && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              style={{ padding: '0 28px 24px', flexShrink: 0 }}
+                            >
+                              <div style={{ padding: '20px', borderRadius: '14px', background: isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.03)', border: isDark ? '1px solid rgba(99,102,241,0.15)' : '1px solid rgba(99,102,241,0.1)' }}>
+                                <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain, margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <FiSend size={14} color="#6366F1" /> Compose Reply
+                                </h4>
+                                <div style={{ marginBottom: '12px' }}>
+                                  <label style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '6px', display: 'block' }}>Subject</label>
+                                  <input
+                                    value={replyForm.subject}
+                                    onChange={e => setReplyForm({ ...replyForm, subject: e.target.value })}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: textMain, fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', boxSizing: 'border-box' }}
+                                  />
+                                </div>
+                                <div style={{ marginBottom: '16px' }}>
+                                  <label style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '6px', display: 'block' }}>Message</label>
+                                  <textarea
+                                    value={replyForm.message}
+                                    onChange={e => setReplyForm({ ...replyForm, message: e.target.value })}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: textMain, fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', height: '120px', resize: 'vertical', boxSizing: 'border-box' }}
+                                  />
+                                </div>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                                  <button onClick={() => { setShowReplyForm(false); setReplyForm({ subject: '', message: '' }); }} style={{ padding: '10px 20px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: 'transparent', color: textMuted, fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>
+                                    Cancel
+                                  </button>
+                                  <button onClick={() => handleReply(selectedMessage._id)} style={{ padding: '10px 22px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', boxShadow: '0 4px 14px rgba(99,102,241,0.3)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <FiSend size={14} /> Send Reply
+                                  </button>
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </motion.div>
