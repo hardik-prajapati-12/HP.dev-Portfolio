@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  background: #030712;
+  /* default dark — overridden by ThemeContext */
+}
+
+body {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  overflow-x: hidden;
+  background: #030712;
+  /* default dark — overridden by ThemeContext */
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Every section gets the background so there are no gaps */
+section {
+  background: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6366F1;
+  border-radius: 3px;
+}
+
+::selection {
+  background: #6366F1;
+  color: white;
+}
+
+/* ── Utility classes ── */
+.gradient-text {
+  background: linear-gradient(135deg, #8B5CF6, #3B82F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.section-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #6366F1;
+}
+
+/* ── Animations ── */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0)
+  }
+
+  50% {
+    transform: translateY(-15px)
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center
+  }
+
+  100% {
+    background-position: 200% center
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg)
+  }
+
+  to {
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.9);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.skill-bar {
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #6366F1, #3B82F6);
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 1.8s infinite;
+  background-size: 200% 100%;
+}
+
+/* ── Skills Section (Expertise) Custom Styles ── */
+@keyframes float-small {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-float-small {
+  animation: float-small 4s ease-in-out infinite;
+}
+
+.skills-container {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.skills-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.skills-divider {
+  height: 40px;
+  width: 1px;
+  margin-right: 24px;
+}
+
+.admin-close-button {
+  color: var(--admin-close-color);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-close-button:hover {
+  color: #EF4444;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.18);
+}
+
+.admin-close-button:focus-visible {
+  outline: 2px solid rgba(239, 68, 68, 0.35);
+  outline-offset: 3px;
+}
+
+.navbar-link {
+  color: var(--navbar-link-color, #64748B);
+}
+
+.navbar-link:hover {
+  color: var(--navbar-link-hover-color, #FFFFFF);
+}
+
+.navbar-link-active {
+  color: var(--navbar-link-active-color, #FFFFFF);
+}
+
+.navbar-dot {
+  position: absolute;
+  bottom: -6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6366F1;
+}
+
+.admin-crud-page-form {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-crud-page-form label {
+  margin-bottom: 6px;
+}
+
+.admin-crud-page-form textarea,
+.admin-crud-page-form input,
+.admin-crud-page-form select {
+  margin-bottom: 0;
+}

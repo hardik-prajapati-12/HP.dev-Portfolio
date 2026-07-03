@@ -1,0 +1,29 @@
+.chatbot-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: var(--close-btn-border);
+  background: var(--close-btn-bg);
+  color: var(--close-btn-color);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.chatbot-close-button:hover,
+.chatbot-close-button:focus-visible {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.65);
+  color: #DC2626;
+  transform: scale(1.05);
+  outline: none;
+}
+
+.chatbot-close-button:focus-visible {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.18);
+}
