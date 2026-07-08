@@ -189,12 +189,15 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Category</label>
-                  <select style={inputStyle} value={form.category || 'mern'} onChange={e => setForm({ ...form, category: e.target.value })}>
-                    <option value="mern">MERN Projects</option>
-                    <option value="web">Web Applications</option>
-                    <option value="java">Java Projects</option>
-                    <option value="ui">UI/UX Projects</option>
-                    <option value="other">Other</option>
+                  <select style={inputStyle} value={form.category || ''} onChange={e => {
+                    const selectedCat = data.projectCategories.find(c => c.name === e.target.value);
+                    setForm({ ...form, category: e.target.value, categoryColor: selectedCat?.color || '#6366F1' });
+                  }} required>
+                    <option value="" disabled>Select Category</option>
+                    {data.projectCategories.map(cat => (
+                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                    ))}
+                    <option value="Uncategorized">Uncategorized</option>
                   </select>
                 </div>
                 <div>
@@ -238,6 +241,43 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                 </p>
               </div>
 
+              <ImageUpload label="Case Study Cover Image" value={form.caseStudyImage || ''} onChange={(url) => setForm({ ...form, caseStudyImage: url })} token={token} isDark={isDark} labelStyle={labelStyle} />
+
+              <div style={{ margin: '16px 0 20px', padding: '14px', borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0' }}>
+                <label style={labelStyle}>System Architecture Diagrams</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '12px' }}>
+                  {(form.caseStudyArchitectureDiagrams || []).map((diagram, idx) => (
+                    <div key={idx} style={{ padding: '12px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF', border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.8rem', color: isDark ? '#E2E8F0' : '#1E293B' }}>Diagram #{idx + 1}</span>
+                        <button type="button" onClick={() => {
+                          const newDiags = [...form.caseStudyArchitectureDiagrams];
+                          newDiags.splice(idx, 1);
+                          setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
+                        }} style={{ border: 'none', background: 'none', color: '#EF4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600 }}><FiTrash2 size={13} /> Remove</button>
+                      </div>
+                      
+                      <label style={{ ...labelStyle, fontSize: '0.72rem' }}>Diagram Label</label>
+                      <input style={inputStyle} value={diagram.label || ''} onChange={e => {
+                        const newDiags = [...form.caseStudyArchitectureDiagrams];
+                        newDiags[idx] = { ...newDiags[idx], label: e.target.value };
+                        setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
+                      }} placeholder="e.g. System Flow" required />
+                      
+                      <ImageUpload label="Diagram Image" value={diagram.imageUrl || ''} onChange={(url) => {
+                        const newDiags = [...form.caseStudyArchitectureDiagrams];
+                        newDiags[idx] = { ...newDiags[idx], imageUrl: url };
+                        setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
+                      }} token={token} isDark={isDark} labelStyle={{ ...labelStyle, fontSize: '0.72rem' }} />
+                    </div>
+                  ))}
+                </div>
+                <button type="button" onClick={() => {
+                  const newDiags = [...(form.caseStudyArchitectureDiagrams || []), { label: '', imageUrl: '' }];
+                  setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
+                }} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '8px', border: 'none', background: isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)', color: '#6366F1', cursor: 'pointer', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.8rem' }}><FiPlusCircle size={14} /> Add Diagram</button>
+              </div>
+
               <label style={labelStyle}>Case Study Title</label>
               <input style={inputStyle} value={form.caseStudyTitle || ''} onChange={e => setForm({ ...form, caseStudyTitle: e.target.value })} placeholder="How this project is structured and delivered" />
 
@@ -273,10 +313,15 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Category</label>
-                  <select style={inputStyle} value={form.category || 'frontend'} onChange={e => setForm({ ...form, category: e.target.value })}>
-                    <option value="frontend">Frontend</option>
-                    <option value="backend">Backend</option>
-                    <option value="design">Design</option>
+                  <select style={inputStyle} value={form.category || ''} onChange={e => {
+                    const selectedCat = data.blogCategories.find(c => c.name === e.target.value);
+                    setForm({ ...form, category: e.target.value, categoryColor: selectedCat?.color || '#6366F1' });
+                  }} required>
+                    <option value="" disabled>Select Category</option>
+                    {data.blogCategories.map(cat => (
+                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                    ))}
+                    <option value="Uncategorized">Uncategorized</option>
                   </select>
                 </div>
                 <div>
@@ -523,13 +568,12 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Type</label>
-                  <select style={inputStyle} value={form.type || 'full-time'} onChange={e => setForm({ ...form, type: e.target.value })}>
-                    <option value="full-time">Full-time</option>
-                    <option value="internship">Internship</option>
-                    <option value="freelance">Freelance</option>
-                    <option value="volunteer">Volunteer</option>
-                    <option value="part-time">Part-time</option>
-                    <option value="contract">Contract</option>
+                  <select style={inputStyle} value={form.type || ''} onChange={e => setForm({ ...form, type: e.target.value })} required>
+                    <option value="" disabled>Select Type</option>
+                    {data.experienceTypes.map(t => (
+                      <option key={t._id} value={t.name}>{t.name}</option>
+                    ))}
+                    <option value="-">-</option>
                   </select>
                 </div>
                 <div>
@@ -797,6 +841,64 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
             </>
           )}
 
+          {type === 'projectCategory' && (
+            <>
+              <label style={labelStyle}>Category Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+              
+              <label style={labelStyle}>Category Color</label>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <div style={{ flex: 1 }}>
+                  <input style={{ ...inputStyle, marginBottom: 0 }} value={form.color || '#6366F1'} onChange={e => setForm({ ...form, color: e.target.value })} placeholder="#6366F1" required />
+                </div>
+                <div style={{
+                  width: '44px', height: '44px', borderRadius: '8px',
+                  background: form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1',
+                  border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                  position: 'relative', cursor: 'pointer', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <input type="color" value={form.color || '#6366F1'} onChange={e => setForm({ ...form, color: e.target.value })} style={{ position: 'absolute', inset: -5, width: '150%', height: '150%', cursor: 'pointer', border: 'none', background: 'none' }} />
+                </div>
+              </div>
+            </>
+          )}
+
+          {type === 'blogCategory' && (
+            <>
+              <label style={labelStyle}>Category Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+              
+              <label style={labelStyle}>Category Color</label>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <div style={{ flex: 1 }}>
+                  <input style={{ ...inputStyle, marginBottom: 0 }} value={form.color || '#6366F1'} onChange={e => setForm({ ...form, color: e.target.value })} placeholder="#6366F1" required />
+                </div>
+                <div style={{
+                  width: '44px', height: '44px', borderRadius: '8px',
+                  background: form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1',
+                  border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                  position: 'relative', cursor: 'pointer', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <input type="color" value={form.color || '#6366F1'} onChange={e => setForm({ ...form, color: e.target.value })} style={{ position: 'absolute', inset: -5, width: '150%', height: '150%', cursor: 'pointer', border: 'none', background: 'none' }} />
+                </div>
+              </div>
+            </>
+          )}
+
+          {type === 'experienceType' && (
+            <>
+              <label style={labelStyle}>Type Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+            </>
+          )}
+
+          {type === 'tag' && (
+            <>
+              <label style={labelStyle}>Tag Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+            </>
+          )}
+
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '12px' }}>
             <button type="button" onClick={onClose} style={{ padding: '10px 20px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1', background: 'transparent', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>Cancel</button>
             <button type="submit" style={{ padding: '10px 24px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.2)' }}>Save</button>
@@ -1008,7 +1110,7 @@ function Login({ onLogin }) {
         {mode === 'login' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '1.6rem' }}>🔐</div>
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '70px', objectFit: 'contain', margin: '0 auto 16px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Welcome Back</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>Sign in to your account to continue</p>
             </div>
@@ -1120,7 +1222,7 @@ function Login({ onLogin }) {
         {mode === 'forgot' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '1.6rem' }}>📧</div>
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '70px', objectFit: 'contain', margin: '0 auto 16px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Forgot Password</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>We'll send a 6-digit verification code to your email</p>
             </div>
@@ -1184,7 +1286,7 @@ function Login({ onLogin }) {
         {mode === 'reset' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '1.6rem' }}>🔑</div>
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '70px', objectFit: 'contain', margin: '0 auto 16px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Reset Password</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>Enter the code sent to <strong>{forgotEmail || 'your email'}</strong></p>
             </div>
@@ -1393,14 +1495,14 @@ function CrudList({ items, type, label, onAdd, onEdit, onDelete, renderItem, isD
         <div style={{ textAlign: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>No {label} in database. Click Add to create one.</div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {items.map(item => (
-            <div key={item._id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', borderRadius: '12px', background: cardBg, border: cardBorder }}>
+          {items.map((item, idx) => (
+            <div key={item._id || item.tag || idx} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', borderRadius: '12px', background: cardBg, border: cardBorder }}>
               <div style={{ flex: 1 }}>
                 {renderItem(item, textMain, textMuted)}
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button onClick={() => onEdit(item)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(99,102,241,0.08)', color: '#6366F1', display: 'flex' }}><FiEdit2 size={14} /></button>
-                <button onClick={() => onDelete(item._id)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }}><FiTrash2 size={14} /></button>
+                <button onClick={() => onDelete(item)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }}><FiTrash2 size={14} /></button>
               </div>
             </div>
           ))}
@@ -1419,7 +1521,12 @@ export default function AdminDashboard() {
   const [accessVerified, setAccessVerified] = useState(isAdminAccessVerified());
   const [section, setSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [] });
+  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [] });
+
+  // Sub-tabs state
+  const [experienceSubTab, setExperienceSubTab] = useState('experiences');
+  const [projectsSubTab, setProjectsSubTab] = useState('projects');
+  const [blogsSubTab, setBlogsSubTab] = useState('blogs');
 
   // Toast notification state
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
@@ -1517,7 +1624,10 @@ export default function AdminDashboard() {
       adminApi.get('/api/profile', token).catch(() => ({ data: null })),
       adminApi.get('/api/stats', token).catch(() => ({ data: [] })),
       adminApi.get('/api/settings', token).catch(() => ({ data: {} })),
-    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett]) => {
+      adminApi.get('/api/projects/categories', token).catch(() => ({ data: [] })),
+      adminApi.get('/api/blogs/categories', token).catch(() => ({ data: [] })),
+      adminApi.get('/api/experience/types', token).catch(() => ({ data: [] })),
+    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett, pCats, bCats, expTypes]) => {
       const newData = {
         projects: p.data.data || [],
         messages: c.data.data || [],
@@ -1533,6 +1643,9 @@ export default function AdminDashboard() {
         achievements: Array.isArray(ach.data) ? ach.data : [],
         profile: prof.data,
         stats: Array.isArray(st.data) ? st.data : [],
+        projectCategories: Array.isArray(pCats.data) ? pCats.data : [],
+        blogCategories: Array.isArray(bCats.data) ? bCats.data : [],
+        experienceTypes: Array.isArray(expTypes.data) ? expTypes.data : [],
       };
       setData(newData);
       if (prof.data && prof.data.name) {
@@ -1579,16 +1692,20 @@ export default function AdminDashboard() {
 
   /* ── Modal helpers ── */
   const defaultForms = {
-    project: { title: '', category: 'mern', image: '', technologies: '', features: '', githubUrl: '', liveUrl: '', featured: false, description: '', longDescription: '', caseStudyTitle: '', caseStudyBadge: 'Production-focused build', caseStudyProblem: '', caseStudyArchitecture: '', caseStudyDataModel: '', caseStudyFeatureFocus: '', caseStudyOutcomes: '', caseStudyInsight: '' },
-    blog: { title: '', category: 'frontend', image: '', tags: '', readTime: '', excerpt: '', content: '', featured: false, categoryColor: '#6366F1' },
+    project: { title: '', category: '', image: '', technologies: '', features: '', githubUrl: '', liveUrl: '', featured: false, description: '', longDescription: '', caseStudyTitle: '', caseStudyBadge: 'Production-focused build', caseStudyProblem: '', caseStudyArchitecture: '', caseStudyDataModel: '', caseStudyFeatureFocus: '', caseStudyOutcomes: '', caseStudyInsight: '', caseStudyImage: '', caseStudyArchitectureDiagrams: [] },
+    blog: { title: '', category: '', image: '', tags: '', readTime: '', excerpt: '', content: '', featured: false, categoryColor: '#6366F1' },
     testimonial: { name: '', role: '', company: '', avatar: '', rating: 5, content: '' },
     certification: { title: '', issuer: '', date: new Date().toISOString().split('T')[0], color: '#6366F1', badge: '🏆', credentialUrl: '', description: '', skills: '', logo: '', image: '' },
     skill: { name: '', category: 'Frontend', level: 100, icon: '⚡', order: 0, image: '' },
-    experience: { title: '', company: '', year: '', type: 'full-time', description: '', tech: '', icon: '💼', image: '' },
+    experience: { title: '', company: '', year: '', type: '', description: '', tech: '', icon: '💼', image: '' },
     education: { degree: '', institution: '', year: '', grade: '', icon: '🎓', color: '#6366F1', order: 0, currentlyPursuing: false, image: '' },
     service: { title: '', desc: '', icon: '🚀', color: '#6366F1', image: '' },
     achievement: { title: '', desc: '', icon: '🏆', value: '', details: '', skills: '', image: '', certificateImage: '' },
     stat: { label: '', value: 0, suffix: '', icon: '🚀', description: '', order: 0, image: '' },
+    projectCategory: { name: '', color: '#6366F1' },
+    blogCategory: { name: '', color: '#6366F1' },
+    experienceType: { name: '' },
+    tag: { name: '' },
   };
 
   const openCreateModal = (type) => {
@@ -1613,6 +1730,8 @@ export default function AdminDashboard() {
       formFields.caseStudyDataModel = Array.isArray(item.caseStudy?.dataModel) ? item.caseStudy.dataModel.map(row => `${row.title || ''}: ${row.description || ''}`.trim()).join('\n') : '';
       formFields.caseStudyFeatureFocus = Array.isArray(item.caseStudy?.featureFocus) ? item.caseStudy.featureFocus.join('\n') : '';
       formFields.caseStudyOutcomes = Array.isArray(item.caseStudy?.outcomes) ? item.caseStudy.outcomes.join('\n') : '';
+      formFields.caseStudyImage = item.caseStudy?.caseStudyImage || '';
+      formFields.caseStudyArchitectureDiagrams = item.caseStudy?.architectureDiagrams || [];
     } else if (type === 'blog') {
       formFields.tags = item.tags ? item.tags.join(', ') : '';
       formFields.featured = item.featured !== undefined ? item.featured : false;
@@ -1621,6 +1740,8 @@ export default function AdminDashboard() {
       formFields.date = new Date(item.date).toISOString().split('T')[0];
     } else if (type === 'experience') {
       formFields.tech = item.tech ? item.tech.join(', ') : '';
+    } else if (type === 'tag') {
+      formFields.name = item.tag;
     }
     setModalForm(formFields);
     setModalOpen(true);
@@ -1631,6 +1752,9 @@ export default function AdminDashboard() {
     certification: '/api/certifications', skill: '/api/skills', experience: '/api/experience',
     education: '/api/education', service: '/api/services', achievement: '/api/achievements',
     stat: '/api/stats',
+    projectCategory: '/api/projects/categories',
+    blogCategory: '/api/blogs/categories',
+    experienceType: '/api/experience/types',
   };
 
   const parseLines = (value) => (typeof value === 'string' ? value : '')
@@ -1666,6 +1790,8 @@ export default function AdminDashboard() {
         dataModel: parseTitledLines(payload.caseStudyDataModel),
         featureFocus: parseLines(payload.caseStudyFeatureFocus),
         outcomes: parseLines(payload.caseStudyOutcomes),
+        caseStudyImage: payload.caseStudyImage || '',
+        architectureDiagrams: payload.caseStudyArchitectureDiagrams || [],
       };
       delete payload.caseStudyTitle;
       delete payload.caseStudyBadge;
@@ -1675,10 +1801,30 @@ export default function AdminDashboard() {
       delete payload.caseStudyDataModel;
       delete payload.caseStudyFeatureFocus;
       delete payload.caseStudyOutcomes;
+      delete payload.caseStudyImage;
+      delete payload.caseStudyArchitectureDiagrams;
     } else if (modalType === 'blog') {
       payload.tags = typeof payload.tags === 'string' ? payload.tags.split(',').map(t => t.trim()).filter(Boolean) : payload.tags;
     } else if (modalType === 'experience') {
       payload.tech = typeof payload.tech === 'string' ? payload.tech.split(',').map(t => t.trim()).filter(Boolean) : payload.tech;
+    } else if (modalType === 'tag') {
+      try {
+        if (modalData) {
+          // Rename tag
+          await adminApi.put('/api/blogs/rename-tag', { oldTag: modalData.tag, newTag: payload.name }, token);
+          showToast(`Tag renamed successfully!`, 'success');
+        } else {
+          // Create tag
+          await adminApi.post('/api/blogs/create-tag', { tag: payload.name }, token);
+          showToast(`Tag created successfully!`, 'success');
+        }
+        fetchData();
+        setModalOpen(false);
+        return;
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+        return;
+      }
     }
 
     try {
@@ -1821,7 +1967,6 @@ export default function AdminDashboard() {
     { id: 'certifications', label: 'Certifications', icon: <FiAward /> },
     { id: 'achievements', label: 'Achievements', icon: <FiTrendingUp /> },
     { id: 'blogs', label: 'Blogs', icon: <FiFileText /> },
-    { id: 'tags', label: 'Blog Tags', icon: <FiHash /> },
     { id: 'comments', label: 'Comments', icon: <FiUsers /> },
     { id: 'testimonials', label: 'Testimonials', icon: <FiUsers /> },
     { id: 'messages', label: 'Messages', icon: <FiMail />, badge: data.messages.filter(m => !m.read).length },
@@ -2108,25 +2253,64 @@ export default function AdminDashboard() {
 
           {/* ════ PROJECTS ════ */}
           {section === 'projects' && (
-            <CrudList items={data.projects} type="project" label="projects" onAdd={() => openCreateModal('project')} onEdit={(item) => openEditModal('project', item)} onDelete={(id) => handleDelete('project', id)} isDark={isDark}
-              renderItem={(p, tm, tmut) => (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {p.image && p.image.trim() !== '' ? (
-                    <img src={p.image} alt={p.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
-                  ) : (
-                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📁</div>
+            <div>
+              {/* Sub-tabs */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                <button onClick={() => setProjectsSubTab('projects')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: projectsSubTab === 'projects' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: projectsSubTab === 'projects' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: projectsSubTab === 'projects' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiFolder size={14} /> Projects
+                </button>
+                <button onClick={() => setProjectsSubTab('categories')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: projectsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: projectsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: projectsSubTab === 'categories' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  🏷️ Project Categories
+                </button>
+              </div>
+
+              {projectsSubTab === 'projects' ? (
+                <CrudList items={data.projects} type="project" label="projects" onAdd={() => openCreateModal('project')} onEdit={(item) => openEditModal('project', item)} onDelete={(p) => handleDelete('project', p._id)} isDark={isDark}
+                  renderItem={(p, tm, tmut) => (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      {p.image && p.image.trim() !== '' ? (
+                        <img src={p.image} alt={p.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
+                      ) : (
+                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📁</div>
+                      )}
+                      <div>
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{p.title}</span>
+                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut, textTransform: 'uppercase' }}>{p.category}</span> {p.featured && '⭐'}
+                      </div>
+                    </div>
+                  )} />
+              ) : (
+                <CrudList items={data.projectCategories} type="projectCategory" label="project categories" onAdd={() => openCreateModal('projectCategory')} onEdit={(item) => openEditModal('projectCategory', item)} onDelete={(c) => handleDelete('projectCategory', c._id)} isDark={isDark}
+                  renderItem={(c, tm, tmut) => (
+                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />
+                      {c.name}
+                    </span>
                   )}
-                  <div>
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{p.title}</span>
-                    <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut, textTransform: 'uppercase' }}>{p.category}</span> {p.featured && '⭐'}
-                  </div>
-                </div>
-              )} />
+                />
+              )}
+            </div>
           )}
 
           {/* ════ SKILLS ════ */}
           {section === 'skills' && (
-            <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(id) => handleDelete('skill', id)} isDark={isDark}
+            <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(s) => handleDelete('skill', s._id)} isDark={isDark}
               renderItem={(s, tm, tmut) => {
                 const iconDetails = getSkillIconDetails(s.name, isDark) || {
                   icon: <FiCpu />,
@@ -2153,28 +2337,67 @@ export default function AdminDashboard() {
 
           {/* ════ EXPERIENCE ════ */}
           {section === 'experience' && (
-            <CrudList items={data.experience} type="experience" label="experience entries" onAdd={() => openCreateModal('experience')} onEdit={(item) => openEditModal('experience', item)} onDelete={(id) => handleDelete('experience', id)} isDark={isDark}
-              renderItem={(e, tm, tmut) => (
-                <>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {e.image && e.image.trim() !== '' ? (
-                      <img src={e.image} alt={e.company} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
-                    ) : (
-                      <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {e.icon || '💼'}
+            <div>
+              {/* Sub-tabs */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                <button onClick={() => setExperienceSubTab('experiences')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: experienceSubTab === 'experiences' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: experienceSubTab === 'experiences' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: experienceSubTab === 'experiences' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiBriefcase size={14} /> Experiences
+                </button>
+                <button onClick={() => setExperienceSubTab('types')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: experienceSubTab === 'types' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: experienceSubTab === 'types' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: experienceSubTab === 'types' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiLayers size={14} /> Experience Types
+                </button>
+              </div>
+
+              {experienceSubTab === 'experiences' ? (
+                <CrudList items={data.experience} type="experience" label="experience entries" onAdd={() => openCreateModal('experience')} onEdit={(item) => openEditModal('experience', item)} onDelete={(e) => handleDelete('experience', e._id)} isDark={isDark}
+                  renderItem={(e, tm, tmut) => (
+                    <>
+                      <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {e.image && e.image.trim() !== '' ? (
+                          <img src={e.image} alt={e.company} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                        ) : (
+                          <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {e.icon || '💼'}
+                          </span>
+                        )}
+                        {e.title}
                       </span>
-                    )}
-                    {e.title}
-                  </span>
-                  <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{e.company} · {e.year} · {e.type}</span>
-                </>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{e.company} · {e.year} · {e.type}</span>
+                    </>
+                  )}
+                />
+              ) : (
+                <CrudList items={data.experienceTypes} type="experienceType" label="experience types" onAdd={() => openCreateModal('experienceType')} onEdit={(item) => openEditModal('experienceType', item)} onDelete={(t) => handleDelete('experienceType', t._id)} isDark={isDark}
+                  renderItem={(t, tm, tmut) => (
+                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <FiLayers size={14} color="#6366F1" />
+                      {t.name}
+                    </span>
+                  )}
+                />
               )}
-            />
+            </div>
           )}
 
           {/* ════ EDUCATION ════ */}
           {section === 'education' && (
-            <CrudList items={data.education} type="education" label="education entries" onAdd={() => openCreateModal('education')} onEdit={(item) => openEditModal('education', item)} onDelete={(id) => handleDelete('education', id)} isDark={isDark}
+            <CrudList items={data.education} type="education" label="education entries" onAdd={() => openCreateModal('education')} onEdit={(item) => openEditModal('education', item)} onDelete={(edu) => handleDelete('education', edu._id)} isDark={isDark}
               renderItem={(e, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2196,7 +2419,7 @@ export default function AdminDashboard() {
 
           {/* ════ SERVICES ════ */}
           {section === 'services' && (
-            <CrudList items={data.services} type="service" label="services" onAdd={() => openCreateModal('service')} onEdit={(item) => openEditModal('service', item)} onDelete={(id) => handleDelete('service', id)} isDark={isDark}
+            <CrudList items={data.services} type="service" label="services" onAdd={() => openCreateModal('service')} onEdit={(item) => openEditModal('service', item)} onDelete={(s) => handleDelete('service', s._id)} isDark={isDark}
               renderItem={(s, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2217,7 +2440,7 @@ export default function AdminDashboard() {
 
           {/* ════ ACHIEVEMENTS ════ */}
           {section === 'achievements' && (
-            <CrudList items={data.achievements} type="achievement" label="achievements" onAdd={() => openCreateModal('achievement')} onEdit={(item) => openEditModal('achievement', item)} onDelete={(id) => handleDelete('achievement', id)} isDark={isDark}
+            <CrudList items={data.achievements} type="achievement" label="achievements" onAdd={() => openCreateModal('achievement')} onEdit={(item) => openEditModal('achievement', item)} onDelete={(a) => handleDelete('achievement', a._id)} isDark={isDark}
               renderItem={(a, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2238,7 +2461,7 @@ export default function AdminDashboard() {
 
           {/* ════ STATS ════ */}
           {section === 'stats' && (
-            <CrudList items={data.stats} type="stat" label="stats/counters" onAdd={() => openCreateModal('stat')} onEdit={(item) => openEditModal('stat', item)} onDelete={(id) => handleDelete('stat', id)} isDark={isDark}
+            <CrudList items={data.stats} type="stat" label="stats/counters" onAdd={() => openCreateModal('stat')} onEdit={(item) => openEditModal('stat', item)} onDelete={(s) => handleDelete('stat', s._id)} isDark={isDark}
               renderItem={(s, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2260,25 +2483,87 @@ export default function AdminDashboard() {
 
           {/* ════ BLOGS ════ */}
           {section === 'blogs' && (
-            <CrudList items={data.blogs} type="blog" label="blog posts" onAdd={() => openCreateModal('blog')} onEdit={(item) => openEditModal('blog', item)} onDelete={(id) => handleDelete('blog', id)} isDark={isDark}
-              renderItem={(b, tm, tmut) => (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {b.image && b.image.trim() !== '' ? (
-                    <img src={b.image} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
-                  ) : (
-                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📝</div>
+            <div>
+              {/* Sub-tabs */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                <button onClick={() => setBlogsSubTab('blogs')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: blogsSubTab === 'blogs' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: blogsSubTab === 'blogs' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: blogsSubTab === 'blogs' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiFileText size={14} /> Blogs
+                </button>
+                <button onClick={() => setBlogsSubTab('tags')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: blogsSubTab === 'tags' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: blogsSubTab === 'tags' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: blogsSubTab === 'tags' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiHash size={14} /> Blog Tags
+                </button>
+                <button onClick={() => setBlogsSubTab('categories')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: blogsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: blogsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: blogsSubTab === 'categories' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  🏷️ Blog Categories
+                </button>
+              </div>
+
+              {blogsSubTab === 'blogs' ? (
+                <CrudList items={data.blogs} type="blog" label="blog posts" onAdd={() => openCreateModal('blog')} onEdit={(item) => openEditModal('blog', item)} onDelete={(b) => handleDelete('blog', b._id)} isDark={isDark}
+                  renderItem={(b, tm, tmut) => (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      {b.image && b.image.trim() !== '' ? (
+                        <img src={b.image} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
+                      ) : (
+                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📝</div>
+                      )}
+                      <div>
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{b.title}</span>
+                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}><span style={{ textTransform: 'uppercase' }}>{b.category}</span> {b.featured && '⭐'} · {b.readTime || '5 min read'}</span>
+                      </div>
+                    </div>
+                  )} />
+              ) : blogsSubTab === 'tags' ? (
+                <CrudList items={data.tags} type="tag" label="tags" onAdd={() => openCreateModal('tag')} onEdit={(item) => openEditModal('tag', item)} onDelete={(tg) => handleRemoveTag(tg.tag)} isDark={isDark}
+                  renderItem={(tg, tm, tmut) => (
+                    <>
+                      <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FiHash size={14} color="#6366F1" />
+                        {tg.tag}
+                      </span>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>used in {tg.count} posts</span>
+                    </>
                   )}
-                  <div>
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{b.title}</span>
-                    <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}><span style={{ textTransform: 'uppercase' }}>{b.category}</span> {b.featured && '⭐'} · {b.readTime || '5 min read'}</span>
-                  </div>
-                </div>
-              )} />
+                />
+              ) : (
+                <CrudList items={data.blogCategories} type="blogCategory" label="blog categories" onAdd={() => openCreateModal('blogCategory')} onEdit={(item) => openEditModal('blogCategory', item)} onDelete={(c) => handleDelete('blogCategory', c._id)} isDark={isDark}
+                  renderItem={(c, tm, tmut) => (
+                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />
+                      {c.name}
+                    </span>
+                  )}
+                />
+              )}
+            </div>
           )}
 
           {/* ════ TESTIMONIALS ════ */}
           {section === 'testimonials' && (
-            <CrudList items={data.testimonials} type="testimonial" label="testimonials" onAdd={() => openCreateModal('testimonial')} onEdit={(item) => openEditModal('testimonial', item)} onDelete={(id) => handleDelete('testimonial', id)} isDark={isDark}
+            <CrudList items={data.testimonials} type="testimonial" label="testimonials" onAdd={() => openCreateModal('testimonial')} onEdit={(item) => openEditModal('testimonial', item)} onDelete={(t) => handleDelete('testimonial', t._id)} isDark={isDark}
               renderItem={(t, tm, tmut) => (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   {t.avatar && t.avatar.trim() !== '' ? (
@@ -2296,7 +2581,7 @@ export default function AdminDashboard() {
 
           {/* ════ CERTIFICATIONS ════ */}
           {section === 'certifications' && (
-            <CrudList items={data.certifications} type="certification" label="certifications" onAdd={() => openCreateModal('certification')} onEdit={(item) => openEditModal('certification', item)} onDelete={(id) => handleDelete('certification', id)} isDark={isDark}
+            <CrudList items={data.certifications} type="certification" label="certifications" onAdd={() => openCreateModal('certification')} onEdit={(item) => openEditModal('certification', item)} onDelete={(c) => handleDelete('certification', c._id)} isDark={isDark}
               renderItem={(c, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2831,7 +3116,15 @@ export default function AdminDashboard() {
                                 flexShrink: 0,
                                 transition: 'background 0.3s',
                               }}>
-                                {sec.emoji}
+                                {sec.key === 'about' ? <FiUser size={18} color="#6366F1" /> :
+                                 sec.key === 'skills' ? <FiCpu size={18} color="#6366F1" /> :
+                                 sec.key === 'projects' ? <FiFolder size={18} color="#6366F1" /> :
+                                 sec.key === 'experience' ? <FiBriefcase size={18} color="#6366F1" /> :
+                                 sec.key === 'services' ? <FiLayers size={18} color="#6366F1" /> :
+                                 sec.key === 'certifications' ? <FiAward size={18} color="#6366F1" /> :
+                                 sec.key === 'blog' ? <FiFileText size={18} color="#6366F1" /> :
+                                 sec.key === 'testimonials' ? <FiUsers size={18} color="#6366F1" /> :
+                                 sec.key === 'contact' ? <FiMail size={18} color="#6366F1" /> : sec.emoji}
                               </div>
                               <div style={{ minWidth: 0 }}>
                                 <div style={{
