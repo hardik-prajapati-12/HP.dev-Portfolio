@@ -1110,7 +1110,7 @@ function Login({ onLogin }) {
         {mode === 'login' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '130px', objectFit: 'contain', margin: '0 auto -8px', display: 'block' }} />
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '80px', objectFit: 'contain', margin: '0 auto -12px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Welcome Back</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>Sign in to your account to continue</p>
             </div>
@@ -1222,7 +1222,7 @@ function Login({ onLogin }) {
         {mode === 'forgot' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '130px', objectFit: 'contain', margin: '0 auto -8px', display: 'block' }} />
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '80px', objectFit: 'contain', margin: '0 auto -12px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Forgot Password</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>We'll send a 6-digit verification code to your email</p>
             </div>
@@ -1286,7 +1286,7 @@ function Login({ onLogin }) {
         {mode === 'reset' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '130px', objectFit: 'contain', margin: '0 auto -8px', display: 'block' }} />
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '80px', objectFit: 'contain', margin: '0 auto -12px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Reset Password</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>Enter the code sent to <strong>{forgotEmail || 'your email'}</strong></p>
             </div>
