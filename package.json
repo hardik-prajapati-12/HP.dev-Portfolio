@@ -1,0 +1,17 @@
+{
+  "name": "portfolio-mern",
+  "version": "1.0.0",
+  "description": "Premium MERN Stack Portfolio Website",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build",
+    "seed": "cd backend && node utils/seedAdmin.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

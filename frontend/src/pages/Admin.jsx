@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings } from 'react-icons/fi';
+import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend } from 'react-icons/fi';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
 import { useAdminSession } from '../context/AdminSessionContext';
@@ -189,12 +189,15 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Category</label>
-                  <select style={inputStyle} value={form.category || 'mern'} onChange={e => setForm({ ...form, category: e.target.value })}>
-                    <option value="mern">MERN Projects</option>
-                    <option value="web">Web Applications</option>
-                    <option value="java">Java Projects</option>
-                    <option value="ui">UI/UX Projects</option>
-                    <option value="other">Other</option>
+                  <select style={inputStyle} value={form.category || ''} onChange={e => {
+                    const selectedCat = data.projectCategories.find(c => c.name === e.target.value);
+                    setForm({ ...form, category: e.target.value, categoryColor: selectedCat?.color || '#6366F1' });
+                  }} required>
+                    <option value="" disabled>Select Category</option>
+                    {data.projectCategories.map(cat => (
+                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                    ))}
+                    <option value="Uncategorized">Uncategorized</option>
                   </select>
                 </div>
                 <div>
@@ -238,6 +241,43 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                 </p>
               </div>
 
+              <ImageUpload label="Case Study Cover Image" value={form.caseStudyImage || ''} onChange={(url) => setForm({ ...form, caseStudyImage: url })} token={token} isDark={isDark} labelStyle={labelStyle} />
+
+              <div style={{ margin: '16px 0 20px', padding: '14px', borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0' }}>
+                <label style={labelStyle}>System Architecture Diagrams</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '12px' }}>
+                  {(form.caseStudyArchitectureDiagrams || []).map((diagram, idx) => (
+                    <div key={idx} style={{ padding: '12px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF', border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.8rem', color: isDark ? '#E2E8F0' : '#1E293B' }}>Diagram #{idx + 1}</span>
+                        <button type="button" onClick={() => {
+                          const newDiags = [...form.caseStudyArchitectureDiagrams];
+                          newDiags.splice(idx, 1);
+                          setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
+                        }} style={{ border: 'none', background: 'none', color: '#EF4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600 }}><FiTrash2 size={13} /> Remove</button>
+                      </div>
+                      
+                      <label style={{ ...labelStyle, fontSize: '0.72rem' }}>Diagram Label</label>
+                      <input style={inputStyle} value={diagram.label || ''} onChange={e => {
+                        const newDiags = [...form.caseStudyArchitectureDiagrams];
+                        newDiags[idx] = { ...newDiags[idx], label: e.target.value };
+                        setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
+                      }} placeholder="e.g. System Flow" required />
+                      
+                      <ImageUpload label="Diagram Image" value={diagram.imageUrl || ''} onChange={(url) => {
+                        const newDiags = [...form.caseStudyArchitectureDiagrams];
+                        newDiags[idx] = { ...newDiags[idx], imageUrl: url };
+                        setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
+                      }} token={token} isDark={isDark} labelStyle={{ ...labelStyle, fontSize: '0.72rem' }} />
+                    </div>
+                  ))}
+                </div>
+                <button type="button" onClick={() => {
+                  const newDiags = [...(form.caseStudyArchitectureDiagrams || []), { label: '', imageUrl: '' }];
+                  setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
+                }} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '8px', border: 'none', background: isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)', color: '#6366F1', cursor: 'pointer', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.8rem' }}><FiPlusCircle size={14} /> Add Diagram</button>
+              </div>
+
               <label style={labelStyle}>Case Study Title</label>
               <input style={inputStyle} value={form.caseStudyTitle || ''} onChange={e => setForm({ ...form, caseStudyTitle: e.target.value })} placeholder="How this project is structured and delivered" />
 
@@ -273,10 +313,15 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Category</label>
-                  <select style={inputStyle} value={form.category || 'frontend'} onChange={e => setForm({ ...form, category: e.target.value })}>
-                    <option value="frontend">Frontend</option>
-                    <option value="backend">Backend</option>
-                    <option value="design">Design</option>
+                  <select style={inputStyle} value={form.category || ''} onChange={e => {
+                    const selectedCat = data.blogCategories.find(c => c.name === e.target.value);
+                    setForm({ ...form, category: e.target.value, categoryColor: selectedCat?.color || '#6366F1' });
+                  }} required>
+                    <option value="" disabled>Select Category</option>
+                    {data.blogCategories.map(cat => (
+                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                    ))}
+                    <option value="Uncategorized">Uncategorized</option>
                   </select>
                 </div>
                 <div>
@@ -523,13 +568,12 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Type</label>
-                  <select style={inputStyle} value={form.type || 'full-time'} onChange={e => setForm({ ...form, type: e.target.value })}>
-                    <option value="full-time">Full-time</option>
-                    <option value="internship">Internship</option>
-                    <option value="freelance">Freelance</option>
-                    <option value="volunteer">Volunteer</option>
-                    <option value="part-time">Part-time</option>
-                    <option value="contract">Contract</option>
+                  <select style={inputStyle} value={form.type || ''} onChange={e => setForm({ ...form, type: e.target.value })} required>
+                    <option value="" disabled>Select Type</option>
+                    {data.experienceTypes.map(t => (
+                      <option key={t._id} value={t.name}>{t.name}</option>
+                    ))}
+                    <option value="-">-</option>
                   </select>
                 </div>
                 <div>
@@ -797,6 +841,64 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
             </>
           )}
 
+          {type === 'projectCategory' && (
+            <>
+              <label style={labelStyle}>Category Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+              
+              <label style={labelStyle}>Category Color</label>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <div style={{ flex: 1 }}>
+                  <input style={{ ...inputStyle, marginBottom: 0 }} value={form.color || '#6366F1'} onChange={e => setForm({ ...form, color: e.target.value })} placeholder="#6366F1" required />
+                </div>
+                <div style={{
+                  width: '44px', height: '44px', borderRadius: '8px',
+                  background: form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1',
+                  border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                  position: 'relative', cursor: 'pointer', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <input type="color" value={form.color || '#6366F1'} onChange={e => setForm({ ...form, color: e.target.value })} style={{ position: 'absolute', inset: -5, width: '150%', height: '150%', cursor: 'pointer', border: 'none', background: 'none' }} />
+                </div>
+              </div>
+            </>
+          )}
+
+          {type === 'blogCategory' && (
+            <>
+              <label style={labelStyle}>Category Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+              
+              <label style={labelStyle}>Category Color</label>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <div style={{ flex: 1 }}>
+                  <input style={{ ...inputStyle, marginBottom: 0 }} value={form.color || '#6366F1'} onChange={e => setForm({ ...form, color: e.target.value })} placeholder="#6366F1" required />
+                </div>
+                <div style={{
+                  width: '44px', height: '44px', borderRadius: '8px',
+                  background: form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1',
+                  border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                  position: 'relative', cursor: 'pointer', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <input type="color" value={form.color || '#6366F1'} onChange={e => setForm({ ...form, color: e.target.value })} style={{ position: 'absolute', inset: -5, width: '150%', height: '150%', cursor: 'pointer', border: 'none', background: 'none' }} />
+                </div>
+              </div>
+            </>
+          )}
+
+          {type === 'experienceType' && (
+            <>
+              <label style={labelStyle}>Type Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+            </>
+          )}
+
+          {type === 'tag' && (
+            <>
+              <label style={labelStyle}>Tag Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+            </>
+          )}
+
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '12px' }}>
             <button type="button" onClick={onClose} style={{ padding: '10px 20px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1', background: 'transparent', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>Cancel</button>
             <button type="submit" style={{ padding: '10px 24px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.2)' }}>Save</button>
@@ -1008,7 +1110,7 @@ function Login({ onLogin }) {
         {mode === 'login' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '1.6rem' }}>🔐</div>
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '70px', objectFit: 'contain', margin: '0 auto 16px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Welcome Back</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>Sign in to your account to continue</p>
             </div>
@@ -1120,7 +1222,7 @@ function Login({ onLogin }) {
         {mode === 'forgot' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '1.6rem' }}>📧</div>
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '70px', objectFit: 'contain', margin: '0 auto 16px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Forgot Password</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>We'll send a 6-digit verification code to your email</p>
             </div>
@@ -1184,7 +1286,7 @@ function Login({ onLogin }) {
         {mode === 'reset' && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '1.6rem' }}>🔑</div>
+              <img src={isDark ? logo : logoDark} alt="HP.dev Logo" style={{ height: '70px', objectFit: 'contain', margin: '0 auto 16px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: '1.5rem', color: isDark ? '#F1F5F9' : '#0F172A', marginBottom: '6px' }}>Reset Password</h2>
               <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#94A3B8' : '#64748B' }}>Enter the code sent to <strong>{forgotEmail || 'your email'}</strong></p>
             </div>
@@ -1393,14 +1495,14 @@ function CrudList({ items, type, label, onAdd, onEdit, onDelete, renderItem, isD
         <div style={{ textAlign: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>No {label} in database. Click Add to create one.</div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {items.map(item => (
-            <div key={item._id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', borderRadius: '12px', background: cardBg, border: cardBorder }}>
+          {items.map((item, idx) => (
+            <div key={item._id || item.tag || idx} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', borderRadius: '12px', background: cardBg, border: cardBorder }}>
               <div style={{ flex: 1 }}>
                 {renderItem(item, textMain, textMuted)}
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button onClick={() => onEdit(item)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(99,102,241,0.08)', color: '#6366F1', display: 'flex' }}><FiEdit2 size={14} /></button>
-                <button onClick={() => onDelete(item._id)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }}><FiTrash2 size={14} /></button>
+                <button onClick={() => onDelete(item)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }}><FiTrash2 size={14} /></button>
               </div>
             </div>
           ))}
@@ -1419,7 +1521,12 @@ export default function AdminDashboard() {
   const [accessVerified, setAccessVerified] = useState(isAdminAccessVerified());
   const [section, setSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [] });
+  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [] });
+
+  // Sub-tabs state
+  const [experienceSubTab, setExperienceSubTab] = useState('experiences');
+  const [projectsSubTab, setProjectsSubTab] = useState('projects');
+  const [blogsSubTab, setBlogsSubTab] = useState('blogs');
 
   // Toast notification state
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
@@ -1447,6 +1554,11 @@ export default function AdminDashboard() {
 
   // Profile edit state (inline, no modal)
   const [profileForm, setProfileForm] = useState({});
+
+  // Inbox state
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [replyForm, setReplyForm] = useState({ subject: '', message: '' });
 
   // Settings edit state
   const [settingsForm, setSettingsForm] = useState({
@@ -1476,6 +1588,17 @@ export default function AdminDashboard() {
     otpMaxAttempts: 5,
     enableVisitorLogging: true,
     corsAllowedOrigin: '*',
+    visibleSections: {
+      about: true,
+      skills: true,
+      projects: true,
+      experience: true,
+      services: true,
+      certifications: true,
+      blog: true,
+      testimonials: true,
+      contact: true,
+    },
   });
   const [showSmtpPass, setShowSmtpPass] = useState(false);
   const [settingsTab, setSettingsTab] = useState('general');
@@ -1501,7 +1624,10 @@ export default function AdminDashboard() {
       adminApi.get('/api/profile', token).catch(() => ({ data: null })),
       adminApi.get('/api/stats', token).catch(() => ({ data: [] })),
       adminApi.get('/api/settings', token).catch(() => ({ data: {} })),
-    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett]) => {
+      adminApi.get('/api/projects/categories', token).catch(() => ({ data: [] })),
+      adminApi.get('/api/blogs/categories', token).catch(() => ({ data: [] })),
+      adminApi.get('/api/experience/types', token).catch(() => ({ data: [] })),
+    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett, pCats, bCats, expTypes]) => {
       const newData = {
         projects: p.data.data || [],
         messages: c.data.data || [],
@@ -1517,10 +1643,13 @@ export default function AdminDashboard() {
         achievements: Array.isArray(ach.data) ? ach.data : [],
         profile: prof.data,
         stats: Array.isArray(st.data) ? st.data : [],
+        projectCategories: Array.isArray(pCats.data) ? pCats.data : [],
+        blogCategories: Array.isArray(bCats.data) ? bCats.data : [],
+        experienceTypes: Array.isArray(expTypes.data) ? expTypes.data : [],
       };
       setData(newData);
       if (prof.data && prof.data.name) {
-        setProfileForm({ ...prof.data, roles: (prof.data.roles || []).join(', ') });
+        setProfileForm({ ...prof.data, roles: (prof.data.roles || []).join(', '), laptopSkills: (prof.data.laptopSkills || []).join(', ') });
       }
       if (sett && sett.data) {
         setSettingsForm(sett.data);
@@ -1563,16 +1692,20 @@ export default function AdminDashboard() {
 
   /* ── Modal helpers ── */
   const defaultForms = {
-    project: { title: '', category: 'mern', image: '', technologies: '', features: '', githubUrl: '', liveUrl: '', featured: false, description: '', longDescription: '', caseStudyTitle: '', caseStudyBadge: 'Production-focused build', caseStudyProblem: '', caseStudyArchitecture: '', caseStudyDataModel: '', caseStudyFeatureFocus: '', caseStudyOutcomes: '', caseStudyInsight: '' },
-    blog: { title: '', category: 'frontend', image: '', tags: '', readTime: '', excerpt: '', content: '', featured: false, categoryColor: '#6366F1' },
+    project: { title: '', category: '', image: '', technologies: '', features: '', githubUrl: '', liveUrl: '', featured: false, description: '', longDescription: '', caseStudyTitle: '', caseStudyBadge: 'Production-focused build', caseStudyProblem: '', caseStudyArchitecture: '', caseStudyDataModel: '', caseStudyFeatureFocus: '', caseStudyOutcomes: '', caseStudyInsight: '', caseStudyImage: '', caseStudyArchitectureDiagrams: [] },
+    blog: { title: '', category: '', image: '', tags: '', readTime: '', excerpt: '', content: '', featured: false, categoryColor: '#6366F1' },
     testimonial: { name: '', role: '', company: '', avatar: '', rating: 5, content: '' },
     certification: { title: '', issuer: '', date: new Date().toISOString().split('T')[0], color: '#6366F1', badge: '🏆', credentialUrl: '', description: '', skills: '', logo: '', image: '' },
     skill: { name: '', category: 'Frontend', level: 100, icon: '⚡', order: 0, image: '' },
-    experience: { title: '', company: '', year: '', type: 'full-time', description: '', tech: '', icon: '💼', image: '' },
+    experience: { title: '', company: '', year: '', type: '', description: '', tech: '', icon: '💼', image: '' },
     education: { degree: '', institution: '', year: '', grade: '', icon: '🎓', color: '#6366F1', order: 0, currentlyPursuing: false, image: '' },
     service: { title: '', desc: '', icon: '🚀', color: '#6366F1', image: '' },
     achievement: { title: '', desc: '', icon: '🏆', value: '', details: '', skills: '', image: '', certificateImage: '' },
     stat: { label: '', value: 0, suffix: '', icon: '🚀', description: '', order: 0, image: '' },
+    projectCategory: { name: '', color: '#6366F1' },
+    blogCategory: { name: '', color: '#6366F1' },
+    experienceType: { name: '' },
+    tag: { name: '' },
   };
 
   const openCreateModal = (type) => {
@@ -1597,6 +1730,8 @@ export default function AdminDashboard() {
       formFields.caseStudyDataModel = Array.isArray(item.caseStudy?.dataModel) ? item.caseStudy.dataModel.map(row => `${row.title || ''}: ${row.description || ''}`.trim()).join('\n') : '';
       formFields.caseStudyFeatureFocus = Array.isArray(item.caseStudy?.featureFocus) ? item.caseStudy.featureFocus.join('\n') : '';
       formFields.caseStudyOutcomes = Array.isArray(item.caseStudy?.outcomes) ? item.caseStudy.outcomes.join('\n') : '';
+      formFields.caseStudyImage = item.caseStudy?.caseStudyImage || '';
+      formFields.caseStudyArchitectureDiagrams = item.caseStudy?.architectureDiagrams || [];
     } else if (type === 'blog') {
       formFields.tags = item.tags ? item.tags.join(', ') : '';
       formFields.featured = item.featured !== undefined ? item.featured : false;
@@ -1605,6 +1740,8 @@ export default function AdminDashboard() {
       formFields.date = new Date(item.date).toISOString().split('T')[0];
     } else if (type === 'experience') {
       formFields.tech = item.tech ? item.tech.join(', ') : '';
+    } else if (type === 'tag') {
+      formFields.name = item.tag;
     }
     setModalForm(formFields);
     setModalOpen(true);
@@ -1615,6 +1752,9 @@ export default function AdminDashboard() {
     certification: '/api/certifications', skill: '/api/skills', experience: '/api/experience',
     education: '/api/education', service: '/api/services', achievement: '/api/achievements',
     stat: '/api/stats',
+    projectCategory: '/api/projects/categories',
+    blogCategory: '/api/blogs/categories',
+    experienceType: '/api/experience/types',
   };
 
   const parseLines = (value) => (typeof value === 'string' ? value : '')
@@ -1650,6 +1790,8 @@ export default function AdminDashboard() {
         dataModel: parseTitledLines(payload.caseStudyDataModel),
         featureFocus: parseLines(payload.caseStudyFeatureFocus),
         outcomes: parseLines(payload.caseStudyOutcomes),
+        caseStudyImage: payload.caseStudyImage || '',
+        architectureDiagrams: payload.caseStudyArchitectureDiagrams || [],
       };
       delete payload.caseStudyTitle;
       delete payload.caseStudyBadge;
@@ -1659,10 +1801,30 @@ export default function AdminDashboard() {
       delete payload.caseStudyDataModel;
       delete payload.caseStudyFeatureFocus;
       delete payload.caseStudyOutcomes;
+      delete payload.caseStudyImage;
+      delete payload.caseStudyArchitectureDiagrams;
     } else if (modalType === 'blog') {
       payload.tags = typeof payload.tags === 'string' ? payload.tags.split(',').map(t => t.trim()).filter(Boolean) : payload.tags;
     } else if (modalType === 'experience') {
       payload.tech = typeof payload.tech === 'string' ? payload.tech.split(',').map(t => t.trim()).filter(Boolean) : payload.tech;
+    } else if (modalType === 'tag') {
+      try {
+        if (modalData) {
+          // Rename tag
+          await adminApi.put('/api/blogs/rename-tag', { oldTag: modalData.tag, newTag: payload.name }, token);
+          showToast(`Tag renamed successfully!`, 'success');
+        } else {
+          // Create tag
+          await adminApi.post('/api/blogs/create-tag', { tag: payload.name }, token);
+          showToast(`Tag created successfully!`, 'success');
+        }
+        fetchData();
+        setModalOpen(false);
+        return;
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+        return;
+      }
     }
 
     try {
@@ -1739,6 +1901,23 @@ export default function AdminDashboard() {
     }
   };
 
+  // Reply to a contact message
+  const handleReply = async (messageId) => {
+    try {
+      if (!replyForm.subject || !replyForm.message) {
+        showToast('Please enter both subject and message.', 'error');
+        return;
+      }
+      await adminApi.post(`/api/contact/${messageId}/reply`, replyForm, token);
+      showToast('Reply sent successfully!', 'success');
+      setShowReplyForm(false);
+      setReplyForm({ subject: '', message: '' });
+      fetchData();
+    } catch (err) {
+      showToast('Error sending reply: ' + (err.response?.data?.message || err.message), 'error');
+    }
+  };
+
   const handleProfileSave = async () => {
     try {
       await adminApi.put('/api/profile', profileForm, token);
@@ -1788,7 +1967,6 @@ export default function AdminDashboard() {
     { id: 'certifications', label: 'Certifications', icon: <FiAward /> },
     { id: 'achievements', label: 'Achievements', icon: <FiTrendingUp /> },
     { id: 'blogs', label: 'Blogs', icon: <FiFileText /> },
-    { id: 'tags', label: 'Blog Tags', icon: <FiHash /> },
     { id: 'comments', label: 'Comments', icon: <FiUsers /> },
     { id: 'testimonials', label: 'Testimonials', icon: <FiUsers /> },
     { id: 'messages', label: 'Messages', icon: <FiMail />, badge: data.messages.filter(m => !m.read).length },
@@ -2013,6 +2191,49 @@ export default function AdminDashboard() {
                     <input style={profileInputStyle} value={profileForm.roles || ''} onChange={e => setProfileForm({ ...profileForm, roles: e.target.value })} placeholder="MERN Stack Developer, Full Stack Engineer" />
                   </div>
                 </div>
+
+                {/* ── Hero Section Fields ── */}
+                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.1rem' }}>🏠</span> Hero Section
+                  </h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Sub Hero Title</label>
+                      <input style={profileInputStyle} value={profileForm.heroTitle || ''} onChange={e => setProfileForm({ ...profileForm, heroTitle: e.target.value })} placeholder="Full Stack Developer & Software Engineer" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Hero Description</label>
+                      <textarea style={{ ...profileInputStyle, height: '80px', resize: 'vertical' }} value={profileForm.heroDesc || ''} onChange={e => setProfileForm({ ...profileForm, heroDesc: e.target.value })} placeholder="I build scalable, high-performance web applications..." />
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Laptop Screen Fields ── */}
+                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.1rem' }}>💻</span> Laptop Screen Content
+                  </h4>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '16px' }}>Customize the code editor mockup shown inside the interactive laptop on the homepage.</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={profileLabelStyle}>Screen Name</label>
+                      <input style={profileInputStyle} value={profileForm.laptopName || ''} onChange={e => setProfileForm({ ...profileForm, laptopName: e.target.value })} placeholder="Hardik Prajapati" />
+                    </div>
+                    <div>
+                      <label style={profileLabelStyle}>Screen Job Title</label>
+                      <input style={profileInputStyle} value={profileForm.laptopTitle || ''} onChange={e => setProfileForm({ ...profileForm, laptopTitle: e.target.value })} placeholder="Full Stack Engineer" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Screen Skills (comma-separated)</label>
+                      <input style={profileInputStyle} value={profileForm.laptopSkills || ''} onChange={e => setProfileForm({ ...profileForm, laptopSkills: e.target.value })} placeholder="React, Node.js, Express, MongoDB, Java, AI/ML, DSA" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Screen Passion</label>
+                      <input style={profileInputStyle} value={profileForm.laptopPassion || ''} onChange={e => setProfileForm({ ...profileForm, laptopPassion: e.target.value })} placeholder="Turning ideas into impact" />
+                    </div>
+                  </div>
+                </div>
                 <div style={{ marginTop: '16px' }}>
                   <label style={profileLabelStyle}>Tagline</label>
                   <input style={profileInputStyle} value={profileForm.tagline || ''} onChange={e => setProfileForm({ ...profileForm, tagline: e.target.value })} />
@@ -2032,25 +2253,64 @@ export default function AdminDashboard() {
 
           {/* ════ PROJECTS ════ */}
           {section === 'projects' && (
-            <CrudList items={data.projects} type="project" label="projects" onAdd={() => openCreateModal('project')} onEdit={(item) => openEditModal('project', item)} onDelete={(id) => handleDelete('project', id)} isDark={isDark}
-              renderItem={(p, tm, tmut) => (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {p.image && p.image.trim() !== '' ? (
-                    <img src={p.image} alt={p.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
-                  ) : (
-                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📁</div>
+            <div>
+              {/* Sub-tabs */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                <button onClick={() => setProjectsSubTab('projects')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: projectsSubTab === 'projects' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: projectsSubTab === 'projects' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: projectsSubTab === 'projects' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiFolder size={14} /> Projects
+                </button>
+                <button onClick={() => setProjectsSubTab('categories')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: projectsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: projectsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: projectsSubTab === 'categories' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  🏷️ Project Categories
+                </button>
+              </div>
+
+              {projectsSubTab === 'projects' ? (
+                <CrudList items={data.projects} type="project" label="projects" onAdd={() => openCreateModal('project')} onEdit={(item) => openEditModal('project', item)} onDelete={(p) => handleDelete('project', p._id)} isDark={isDark}
+                  renderItem={(p, tm, tmut) => (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      {p.image && p.image.trim() !== '' ? (
+                        <img src={p.image} alt={p.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
+                      ) : (
+                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📁</div>
+                      )}
+                      <div>
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{p.title}</span>
+                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut, textTransform: 'uppercase' }}>{p.category}</span> {p.featured && '⭐'}
+                      </div>
+                    </div>
+                  )} />
+              ) : (
+                <CrudList items={data.projectCategories} type="projectCategory" label="project categories" onAdd={() => openCreateModal('projectCategory')} onEdit={(item) => openEditModal('projectCategory', item)} onDelete={(c) => handleDelete('projectCategory', c._id)} isDark={isDark}
+                  renderItem={(c, tm, tmut) => (
+                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />
+                      {c.name}
+                    </span>
                   )}
-                  <div>
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{p.title}</span>
-                    <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut, textTransform: 'uppercase' }}>{p.category}</span> {p.featured && '⭐'}
-                  </div>
-                </div>
-              )} />
+                />
+              )}
+            </div>
           )}
 
           {/* ════ SKILLS ════ */}
           {section === 'skills' && (
-            <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(id) => handleDelete('skill', id)} isDark={isDark}
+            <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(s) => handleDelete('skill', s._id)} isDark={isDark}
               renderItem={(s, tm, tmut) => {
                 const iconDetails = getSkillIconDetails(s.name, isDark) || {
                   icon: <FiCpu />,
@@ -2077,28 +2337,67 @@ export default function AdminDashboard() {
 
           {/* ════ EXPERIENCE ════ */}
           {section === 'experience' && (
-            <CrudList items={data.experience} type="experience" label="experience entries" onAdd={() => openCreateModal('experience')} onEdit={(item) => openEditModal('experience', item)} onDelete={(id) => handleDelete('experience', id)} isDark={isDark}
-              renderItem={(e, tm, tmut) => (
-                <>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {e.image && e.image.trim() !== '' ? (
-                      <img src={e.image} alt={e.company} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
-                    ) : (
-                      <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {e.icon || '💼'}
+            <div>
+              {/* Sub-tabs */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                <button onClick={() => setExperienceSubTab('experiences')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: experienceSubTab === 'experiences' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: experienceSubTab === 'experiences' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: experienceSubTab === 'experiences' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiBriefcase size={14} /> Experiences
+                </button>
+                <button onClick={() => setExperienceSubTab('types')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: experienceSubTab === 'types' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: experienceSubTab === 'types' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: experienceSubTab === 'types' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiLayers size={14} /> Experience Types
+                </button>
+              </div>
+
+              {experienceSubTab === 'experiences' ? (
+                <CrudList items={data.experience} type="experience" label="experience entries" onAdd={() => openCreateModal('experience')} onEdit={(item) => openEditModal('experience', item)} onDelete={(e) => handleDelete('experience', e._id)} isDark={isDark}
+                  renderItem={(e, tm, tmut) => (
+                    <>
+                      <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {e.image && e.image.trim() !== '' ? (
+                          <img src={e.image} alt={e.company} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                        ) : (
+                          <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {e.icon || '💼'}
+                          </span>
+                        )}
+                        {e.title}
                       </span>
-                    )}
-                    {e.title}
-                  </span>
-                  <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{e.company} · {e.year} · {e.type}</span>
-                </>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{e.company} · {e.year} · {e.type}</span>
+                    </>
+                  )}
+                />
+              ) : (
+                <CrudList items={data.experienceTypes} type="experienceType" label="experience types" onAdd={() => openCreateModal('experienceType')} onEdit={(item) => openEditModal('experienceType', item)} onDelete={(t) => handleDelete('experienceType', t._id)} isDark={isDark}
+                  renderItem={(t, tm, tmut) => (
+                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <FiLayers size={14} color="#6366F1" />
+                      {t.name}
+                    </span>
+                  )}
+                />
               )}
-            />
+            </div>
           )}
 
           {/* ════ EDUCATION ════ */}
           {section === 'education' && (
-            <CrudList items={data.education} type="education" label="education entries" onAdd={() => openCreateModal('education')} onEdit={(item) => openEditModal('education', item)} onDelete={(id) => handleDelete('education', id)} isDark={isDark}
+            <CrudList items={data.education} type="education" label="education entries" onAdd={() => openCreateModal('education')} onEdit={(item) => openEditModal('education', item)} onDelete={(edu) => handleDelete('education', edu._id)} isDark={isDark}
               renderItem={(e, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2120,7 +2419,7 @@ export default function AdminDashboard() {
 
           {/* ════ SERVICES ════ */}
           {section === 'services' && (
-            <CrudList items={data.services} type="service" label="services" onAdd={() => openCreateModal('service')} onEdit={(item) => openEditModal('service', item)} onDelete={(id) => handleDelete('service', id)} isDark={isDark}
+            <CrudList items={data.services} type="service" label="services" onAdd={() => openCreateModal('service')} onEdit={(item) => openEditModal('service', item)} onDelete={(s) => handleDelete('service', s._id)} isDark={isDark}
               renderItem={(s, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2141,7 +2440,7 @@ export default function AdminDashboard() {
 
           {/* ════ ACHIEVEMENTS ════ */}
           {section === 'achievements' && (
-            <CrudList items={data.achievements} type="achievement" label="achievements" onAdd={() => openCreateModal('achievement')} onEdit={(item) => openEditModal('achievement', item)} onDelete={(id) => handleDelete('achievement', id)} isDark={isDark}
+            <CrudList items={data.achievements} type="achievement" label="achievements" onAdd={() => openCreateModal('achievement')} onEdit={(item) => openEditModal('achievement', item)} onDelete={(a) => handleDelete('achievement', a._id)} isDark={isDark}
               renderItem={(a, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2162,7 +2461,7 @@ export default function AdminDashboard() {
 
           {/* ════ STATS ════ */}
           {section === 'stats' && (
-            <CrudList items={data.stats} type="stat" label="stats/counters" onAdd={() => openCreateModal('stat')} onEdit={(item) => openEditModal('stat', item)} onDelete={(id) => handleDelete('stat', id)} isDark={isDark}
+            <CrudList items={data.stats} type="stat" label="stats/counters" onAdd={() => openCreateModal('stat')} onEdit={(item) => openEditModal('stat', item)} onDelete={(s) => handleDelete('stat', s._id)} isDark={isDark}
               renderItem={(s, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2184,25 +2483,87 @@ export default function AdminDashboard() {
 
           {/* ════ BLOGS ════ */}
           {section === 'blogs' && (
-            <CrudList items={data.blogs} type="blog" label="blog posts" onAdd={() => openCreateModal('blog')} onEdit={(item) => openEditModal('blog', item)} onDelete={(id) => handleDelete('blog', id)} isDark={isDark}
-              renderItem={(b, tm, tmut) => (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {b.image && b.image.trim() !== '' ? (
-                    <img src={b.image} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
-                  ) : (
-                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📝</div>
+            <div>
+              {/* Sub-tabs */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                <button onClick={() => setBlogsSubTab('blogs')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: blogsSubTab === 'blogs' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: blogsSubTab === 'blogs' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: blogsSubTab === 'blogs' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiFileText size={14} /> Blogs
+                </button>
+                <button onClick={() => setBlogsSubTab('tags')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: blogsSubTab === 'tags' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: blogsSubTab === 'tags' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: blogsSubTab === 'tags' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiHash size={14} /> Blog Tags
+                </button>
+                <button onClick={() => setBlogsSubTab('categories')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: blogsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: blogsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: blogsSubTab === 'categories' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  🏷️ Blog Categories
+                </button>
+              </div>
+
+              {blogsSubTab === 'blogs' ? (
+                <CrudList items={data.blogs} type="blog" label="blog posts" onAdd={() => openCreateModal('blog')} onEdit={(item) => openEditModal('blog', item)} onDelete={(b) => handleDelete('blog', b._id)} isDark={isDark}
+                  renderItem={(b, tm, tmut) => (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      {b.image && b.image.trim() !== '' ? (
+                        <img src={b.image} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
+                      ) : (
+                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📝</div>
+                      )}
+                      <div>
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{b.title}</span>
+                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}><span style={{ textTransform: 'uppercase' }}>{b.category}</span> {b.featured && '⭐'} · {b.readTime || '5 min read'}</span>
+                      </div>
+                    </div>
+                  )} />
+              ) : blogsSubTab === 'tags' ? (
+                <CrudList items={data.tags} type="tag" label="tags" onAdd={() => openCreateModal('tag')} onEdit={(item) => openEditModal('tag', item)} onDelete={(tg) => handleRemoveTag(tg.tag)} isDark={isDark}
+                  renderItem={(tg, tm, tmut) => (
+                    <>
+                      <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FiHash size={14} color="#6366F1" />
+                        {tg.tag}
+                      </span>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>used in {tg.count} posts</span>
+                    </>
                   )}
-                  <div>
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{b.title}</span>
-                    <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}><span style={{ textTransform: 'uppercase' }}>{b.category}</span> {b.featured && '⭐'} · {b.readTime || '5 min read'}</span>
-                  </div>
-                </div>
-              )} />
+                />
+              ) : (
+                <CrudList items={data.blogCategories} type="blogCategory" label="blog categories" onAdd={() => openCreateModal('blogCategory')} onEdit={(item) => openEditModal('blogCategory', item)} onDelete={(c) => handleDelete('blogCategory', c._id)} isDark={isDark}
+                  renderItem={(c, tm, tmut) => (
+                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />
+                      {c.name}
+                    </span>
+                  )}
+                />
+              )}
+            </div>
           )}
 
           {/* ════ TESTIMONIALS ════ */}
           {section === 'testimonials' && (
-            <CrudList items={data.testimonials} type="testimonial" label="testimonials" onAdd={() => openCreateModal('testimonial')} onEdit={(item) => openEditModal('testimonial', item)} onDelete={(id) => handleDelete('testimonial', id)} isDark={isDark}
+            <CrudList items={data.testimonials} type="testimonial" label="testimonials" onAdd={() => openCreateModal('testimonial')} onEdit={(item) => openEditModal('testimonial', item)} onDelete={(t) => handleDelete('testimonial', t._id)} isDark={isDark}
               renderItem={(t, tm, tmut) => (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   {t.avatar && t.avatar.trim() !== '' ? (
@@ -2220,7 +2581,7 @@ export default function AdminDashboard() {
 
           {/* ════ CERTIFICATIONS ════ */}
           {section === 'certifications' && (
-            <CrudList items={data.certifications} type="certification" label="certifications" onAdd={() => openCreateModal('certification')} onEdit={(item) => openEditModal('certification', item)} onDelete={(id) => handleDelete('certification', id)} isDark={isDark}
+            <CrudList items={data.certifications} type="certification" label="certifications" onAdd={() => openCreateModal('certification')} onEdit={(item) => openEditModal('certification', item)} onDelete={(c) => handleDelete('certification', c._id)} isDark={isDark}
               renderItem={(c, tm, tmut) => (
                 <>
                   <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2239,38 +2600,162 @@ export default function AdminDashboard() {
             />
           )}
 
-          {/* ════ MESSAGES ════ */}
+          {/* ════ MESSAGES (INBOX) ════ */}
           {section === 'messages' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>{data.messages.length} messages received</p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', flexDirection: 'column' }}>
+              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '16px' }}>{data.messages.length} messages received</p>
               {data.messages.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>No messages yet. Messages sent via the contact form will appear here.</div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {data.messages.map(m => (
-                    <div key={m._id} style={{ padding: '24px', borderRadius: '16px', background: cardBg, border: m.read ? cardBorder : '1px solid rgba(99,102,241,0.3)', position: 'relative' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                        <div>
-                          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '4px' }}>
-                            <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain }}>{m.name}</span>
-                            <span style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: '#6366F1' }}>{m.email}</span>
+                <div className="inbox-container" style={{ display: 'flex', gap: '0', borderRadius: '20px', background: cardBg, border: cardBorder, overflow: 'hidden', height: 'calc(100vh - 260px)', minHeight: '500px' }}>
+                  {/* ── Left: Message List ── */}
+                  <div style={{ width: '340px', minWidth: '340px', borderRight: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0', overflowY: 'auto', flexShrink: 0 }}>
+                    {data.messages.map(m => {
+                      const isActive = selectedMessage?._id === m._id;
+                      return (
+                        <div
+                          key={m._id}
+                          onClick={() => { setSelectedMessage(m); setShowReplyForm(false); setReplyForm({ subject: `Re: ${m.subject}`, message: '' }); if (!m.read) handleMarkAsRead(m._id); }}
+                          style={{
+                            padding: '16px 20px',
+                            cursor: 'pointer',
+                            borderBottom: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F5F9',
+                            background: isActive ? (isDark ? 'rgba(99,102,241,0.08)' : 'rgba(99,102,241,0.04)') : 'transparent',
+                            borderLeft: isActive ? '3px solid #6366F1' : '3px solid transparent',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.02)' : '#FAFBFC'; }}
+                          onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                            <span style={{ fontFamily: 'Poppins', fontWeight: m.read ? 500 : 700, fontSize: '0.88rem', color: textMain, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '180px' }}>{m.name}</span>
+                            <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: textMuted, whiteSpace: 'nowrap' }}>{new Date(m.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                           </div>
-                          <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.88rem', color: textMain }}>{m.subject}</p>
+                          <p style={{ fontFamily: 'Inter', fontWeight: m.read ? 400 : 600, fontSize: '0.82rem', color: textMain, margin: '0 0 4px 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.subject}</p>
+                          <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.message}</p>
+                          <div style={{ display: 'flex', gap: '6px', marginTop: '6px', alignItems: 'center' }}>
+                            {!m.read && <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366F1', display: 'inline-block' }} />}
+                            {m.replied && <span style={{ fontFamily: 'Inter', fontSize: '0.7rem', color: '#10B981', fontWeight: 600 }}>✓ Replied</span>}
+                          </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          {!m.read && (
-                            <button onClick={() => handleMarkAsRead(m._id)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(99,102,241,0.08)', color: '#6366F1', display: 'flex' }} title="Mark as Read">
-                              <FiCheckCircle size={14} />
-                            </button>
-                          )}
-                          <button onClick={() => handleDelete('message', m._id)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }} title="Delete Message">
-                            <FiTrash2 size={14} />
-                          </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* ── Right: Message Detail Pane ── */}
+                  <div className="inbox-right-pane" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
+                    {!selectedMessage ? (
+                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: textMuted, fontFamily: 'Inter', fontSize: '0.9rem' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <FiMail size={40} style={{ marginBottom: '12px', opacity: 0.3 }} />
+                          <p>Select a message to view details</p>
                         </div>
                       </div>
-                      <p style={{ fontFamily: 'Inter', fontSize: '0.88rem', color: textMuted, lineHeight: 1.6 }}>{m.message}</p>
-                    </div>
-                  ))}
+                    ) : (
+                      <div className="inbox-scroll" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', minHeight: 0 }}>
+                        {/* Header */}
+                        <div style={{ padding: '24px 28px 16px', borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F1F5F9', flexShrink: 0 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div>
+                              <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: '0 0 4px 0' }}>{selectedMessage.name}</h3>
+                              <span style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: '#6366F1' }}>{selectedMessage.email}</span>
+                            </div>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                              <button onClick={() => { setShowReplyForm(!showReplyForm); if (!showReplyForm) setReplyForm({ subject: `Re: ${selectedMessage.subject}`, message: '' }); }} style={{ padding: '8px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: showReplyForm ? 'rgba(239,68,68,0.1)' : 'rgba(99,102,241,0.08)', color: showReplyForm ? '#EF4444' : '#6366F1', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem' }}>
+                                {showReplyForm ? <><FiX size={14} /> Cancel</> : <><FiCornerUpLeft size={14} /> Reply</>}
+                              </button>
+                              <button onClick={() => { handleDelete('message', selectedMessage._id); setSelectedMessage(null); }} style={{ padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }} title="Delete">
+                                <FiTrash2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+                          <div style={{ marginTop: '8px', marginBottom: showReplyForm ? '8px' : '16px', transition: 'margin 0.3s ease-in-out' }}>
+                            <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', color: textMain, margin: 0 }}>{selectedMessage.subject}</p>
+                            <span style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>{new Date(selectedMessage.createdAt).toLocaleString()}</span>
+                          </div>
+                        </div>
+
+                        {/* Message Body — dynamic sizing */}
+                        <div style={{
+                          padding: '20px 28px',
+                          ...(showReplyForm
+                            ? { flex: '0 0 auto', height: '100px', overflowY: 'auto' }
+                            : { flex: 1, minHeight: '140px' }),
+                          transition: 'all 0.3s ease-in-out',
+                        }}>
+                          <p style={{ fontFamily: 'Inter', fontSize: '0.9rem', color: textMuted, lineHeight: 1.7, margin: 0, whiteSpace: 'pre-wrap' }}>{selectedMessage.message}</p>
+                        </div>
+
+                        {/* Admin Reply Display Card */}
+                        {(selectedMessage.replied || selectedMessage.replyMessage) && (
+                          <div style={{
+                            margin: '0 28px 16px',
+                            padding: '16px 20px',
+                            borderRadius: '12px',
+                            background: isDark ? 'rgba(16,185,129,0.06)' : 'rgba(16,185,129,0.04)',
+                            border: isDark ? '1px solid rgba(16,185,129,0.15)' : '1px solid rgba(16,185,129,0.12)',
+                            flexShrink: 0,
+                          }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                              <FiCornerUpLeft size={14} color="#10B981" />
+                              <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.82rem', color: '#10B981' }}>Your Reply</span>
+                              {selectedMessage.repliedAt && (
+                                <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: textMuted, marginLeft: 'auto' }}>
+                                  {new Date(selectedMessage.repliedAt).toLocaleString()}
+                                </span>
+                              )}
+                            </div>
+                            {selectedMessage.replySubject && (
+                              <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', color: textMain, margin: '0 0 6px 0' }}>{selectedMessage.replySubject}</p>
+                            )}
+                            <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: textMuted, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{selectedMessage.replyMessage}</p>
+                          </div>
+                        )}
+
+                        {/* Reply Compose Form */}
+                        <AnimatePresence>
+                          {showReplyForm && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              style={{ padding: '0 28px 24px', flexShrink: 0 }}
+                            >
+                              <div style={{ padding: '20px', borderRadius: '14px', background: isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.03)', border: isDark ? '1px solid rgba(99,102,241,0.15)' : '1px solid rgba(99,102,241,0.1)' }}>
+                                <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain, margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <FiSend size={14} color="#6366F1" /> Compose Reply
+                                </h4>
+                                <div style={{ marginBottom: '12px' }}>
+                                  <label style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '6px', display: 'block' }}>Subject</label>
+                                  <input
+                                    value={replyForm.subject}
+                                    onChange={e => setReplyForm({ ...replyForm, subject: e.target.value })}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: textMain, fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', boxSizing: 'border-box' }}
+                                  />
+                                </div>
+                                <div style={{ marginBottom: '16px' }}>
+                                  <label style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '6px', display: 'block' }}>Message</label>
+                                  <textarea
+                                    value={replyForm.message}
+                                    onChange={e => setReplyForm({ ...replyForm, message: e.target.value })}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: textMain, fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', height: '120px', resize: 'vertical', boxSizing: 'border-box' }}
+                                  />
+                                </div>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                                  <button onClick={() => { setShowReplyForm(false); setReplyForm({ subject: '', message: '' }); }} style={{ padding: '10px 20px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: 'transparent', color: textMuted, fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>
+                                    Cancel
+                                  </button>
+                                  <button onClick={() => handleReply(selectedMessage._id)} style={{ padding: '10px 22px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', boxShadow: '0 4px 14px rgba(99,102,241,0.3)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <FiSend size={14} /> Send Reply
+                                  </button>
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </motion.div>
@@ -2287,6 +2772,7 @@ export default function AdminDashboard() {
               <div style={{ display: 'flex', gap: '8px', borderBottom: cardBorder, paddingBottom: '12px', marginBottom: '24px', overflowX: 'auto', whiteSpace: 'nowrap' }}>
                 {[
                   { id: 'general', label: 'General', emoji: '⚙️' },
+                  { id: 'visibility', label: 'Section Visibility', emoji: '👁️' },
                   { id: 'smtp', label: 'SMTP Configuration', emoji: '📧' },
                   { id: 'system', label: 'System Info', emoji: '📊' },
                 ].map(tab => {
@@ -2529,6 +3015,204 @@ export default function AdminDashboard() {
                           </div>
                         )}
                       </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* 4. SECTION VISIBILITY TAB */}
+                {settingsTab === 'visibility' && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+                      <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: 0 }}>👁️ Section Visibility</h3>
+                    </div>
+                    <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '24px', lineHeight: 1.6 }}>
+                      Control which sections are visible on the public website. Hidden sections will also be removed from the navigation bar. Toggle a section off to hide it, and toggle it back on to make it visible again.
+                    </p>
+
+                    <style>{`
+                      .visibility-toggle-track {
+                        position: relative;
+                        width: 52px;
+                        height: 28px;
+                        border-radius: 14px;
+                        cursor: pointer;
+                        border: none;
+                        padding: 0;
+                        transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+                        flex-shrink: 0;
+                      }
+                      .visibility-toggle-track:hover {
+                        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+                      }
+                      .visibility-toggle-track:active {
+                        transform: scale(0.96);
+                      }
+                      .visibility-toggle-thumb {
+                        position: absolute;
+                        top: 3px;
+                        width: 22px;
+                        height: 22px;
+                        border-radius: 50%;
+                        background: #FFFFFF;
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+                        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s;
+                      }
+                      .visibility-toggle-track:active .visibility-toggle-thumb {
+                        transform: scaleX(1.1);
+                      }
+                      .visibility-section-card {
+                        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                      }
+                      .visibility-section-card:hover {
+                        transform: translateY(-1px);
+                        box-shadow: ${isDark ? '0 8px 25px rgba(0,0,0,0.3)' : '0 8px 25px rgba(0,0,0,0.06)'} !important;
+                      }
+                    `}</style>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {[
+                        { key: 'about', label: 'About', emoji: '👤', desc: 'About Me section with bio, education & profile info' },
+                        { key: 'skills', label: 'Skills', emoji: '⚡', desc: 'Technical skills & expertise showcase' },
+                        { key: 'projects', label: 'Projects', emoji: '🚀', desc: 'Featured projects portfolio' },
+                        { key: 'experience', label: 'Experience', emoji: '💼', desc: 'Work experience timeline' },
+                        { key: 'services', label: 'Services', emoji: '🔧', desc: 'Services you offer to clients' },
+                        { key: 'certifications', label: 'Certifications', emoji: '🏆', desc: 'Certifications & awards section' },
+                        { key: 'blog', label: 'Blog', emoji: '📝', desc: 'Blog posts & articles' },
+                        { key: 'testimonials', label: 'Testimonials', emoji: '👥', desc: 'Client testimonials & reviews' },
+                        { key: 'contact', label: 'Contact', emoji: '✉️', desc: 'Contact form & information' },
+                      ].map(sec => {
+                        const isOn = settingsForm.visibleSections?.[sec.key] !== false;
+                        return (
+                          <div
+                            key={sec.key}
+                            className="visibility-section-card"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '18px 20px',
+                              borderRadius: '14px',
+                              background: isDark
+                                ? (isOn ? 'rgba(255,255,255,0.03)' : 'rgba(239,68,68,0.04)')
+                                : (isOn ? '#FAFBFC' : 'rgba(239,68,68,0.03)'),
+                              border: isDark
+                                ? (isOn ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(239,68,68,0.15)')
+                                : (isOn ? '1px solid #E2E8F0' : '1px solid rgba(239,68,68,0.12)'),
+                              gap: '16px',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: 0 }}>
+                              <div style={{
+                                width: '42px',
+                                height: '42px',
+                                borderRadius: '12px',
+                                background: isDark
+                                  ? (isOn ? 'rgba(99,102,241,0.12)' : 'rgba(239,68,68,0.08)')
+                                  : (isOn ? 'rgba(99,102,241,0.08)' : 'rgba(239,68,68,0.06)'),
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '1.15rem',
+                                flexShrink: 0,
+                                transition: 'background 0.3s',
+                              }}>
+                                {sec.key === 'about' ? <FiUser size={18} color="#6366F1" /> :
+                                 sec.key === 'skills' ? <FiCpu size={18} color="#6366F1" /> :
+                                 sec.key === 'projects' ? <FiFolder size={18} color="#6366F1" /> :
+                                 sec.key === 'experience' ? <FiBriefcase size={18} color="#6366F1" /> :
+                                 sec.key === 'services' ? <FiLayers size={18} color="#6366F1" /> :
+                                 sec.key === 'certifications' ? <FiAward size={18} color="#6366F1" /> :
+                                 sec.key === 'blog' ? <FiFileText size={18} color="#6366F1" /> :
+                                 sec.key === 'testimonials' ? <FiUsers size={18} color="#6366F1" /> :
+                                 sec.key === 'contact' ? <FiMail size={18} color="#6366F1" /> : sec.emoji}
+                              </div>
+                              <div style={{ minWidth: 0 }}>
+                                <div style={{
+                                  fontFamily: 'Poppins',
+                                  fontWeight: 700,
+                                  fontSize: '0.92rem',
+                                  color: isOn ? textMain : (isDark ? '#94A3B8' : '#94A3B8'),
+                                  marginBottom: '2px',
+                                  transition: 'color 0.3s',
+                                }}>
+                                  {sec.label}
+                                </div>
+                                <div style={{
+                                  fontFamily: 'Inter',
+                                  fontSize: '0.78rem',
+                                  color: textMuted,
+                                  lineHeight: 1.4,
+                                }}>
+                                  {sec.desc}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+                              <span style={{
+                                fontFamily: 'Inter',
+                                fontSize: '0.75rem',
+                                fontWeight: 700,
+                                padding: '4px 10px',
+                                borderRadius: '8px',
+                                letterSpacing: '0.03em',
+                                background: isOn ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+                                color: isOn ? '#10B981' : '#EF4444',
+                                transition: 'all 0.3s',
+                              }}>
+                                {isOn ? 'Visible' : 'Hidden'}
+                              </span>
+
+                              <button
+                                type="button"
+                                className="visibility-toggle-track"
+                                onClick={() => {
+                                  setSettingsForm(prev => ({
+                                    ...prev,
+                                    visibleSections: {
+                                      ...prev.visibleSections,
+                                      [sec.key]: !isOn,
+                                    },
+                                  }));
+                                }}
+                                style={{
+                                  background: isOn
+                                    ? 'linear-gradient(135deg, #6366F1, #8B5CF6)'
+                                    : (isDark ? 'rgba(255,255,255,0.1)' : '#CBD5E1'),
+                                }}
+                                title={isOn ? `Hide ${sec.label} section` : `Show ${sec.label} section`}
+                              >
+                                <div
+                                  className="visibility-toggle-thumb"
+                                  style={{ left: isOn ? '27px' : '3px' }}
+                                />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div style={{
+                      marginTop: '20px',
+                      padding: '14px 18px',
+                      borderRadius: '12px',
+                      background: isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.04)',
+                      border: isDark ? '1px solid rgba(99,102,241,0.12)' : '1px solid rgba(99,102,241,0.1)',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '10px',
+                    }}>
+                      <span style={{ fontSize: '1rem', marginTop: '1px' }}>💡</span>
+                      <p style={{
+                        fontFamily: 'Inter',
+                        fontSize: '0.8rem',
+                        color: isDark ? '#A5B4FC' : '#6366F1',
+                        lineHeight: 1.6,
+                        margin: 0,
+                      }}>
+                        <strong>Tip:</strong> Hidden sections are only removed from the public website. You can still manage their content from this admin panel. Click <strong>Save Settings</strong> below to apply your changes.
+                      </p>
                     </div>
                   </motion.div>
                 )}
