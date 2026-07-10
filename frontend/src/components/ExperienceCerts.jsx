@@ -5,6 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import { FiX, FiExternalLink } from 'react-icons/fi';
 import { EXPERIENCE, CERTIFICATIONS, ACHIEVEMENTS } from '../data/portfolioData';
 import axios from 'axios';
+import EmojiIcon from './EmojiIcon';
 
 export function Experience() {
   const { isDark } = useTheme();
@@ -53,11 +54,11 @@ export function Experience() {
                 style={{ display:'flex', gap:'32px', paddingLeft:'70px', position:'relative' }}
               >
                 {/* Timeline dot */}
-                <div style={{ position:'absolute', left:'12px', top:'20px', width:'26px', height:'26px', borderRadius:'50%', background: exp.image ? 'transparent' : `linear-gradient(135deg, ${exp.color || '#6366F1'}, #3B82F6)`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow: exp.image ? 'none' : `0 0 15px ${exp.color || '#6366F1'}66`, fontSize:'0.85rem', zIndex:2, overflow: 'hidden' }}>
+                <div style={{ position:'absolute', left:'12px', top:'20px', width:'26px', height:'26px', borderRadius:'50%', background: exp.image ? 'transparent' : `linear-gradient(135deg, ${exp.color || '#6366F1'}, #3B82F6)`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow: exp.image ? 'none' : `0 0 15px ${exp.color || '#6366F1'}66`, zIndex:2, overflow: 'hidden' }}>
                   {exp.image && exp.image.trim() !== '' ? (
                     <img src={exp.image} alt={exp.company} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                   ) : (
-                    exp.icon
+                    <EmojiIcon emoji={exp.icon} size={13} color="#FFF" />
                   )}
                 </div>
 
@@ -157,11 +158,11 @@ export function Certifications() {
               onClick={() => navigate(`/recognition/certification/${cert._id || i}`)}
               style={{ padding:'22px', borderRadius:'16px', background:cardBg, border:cardBorder, display:'flex', gap:'16px', alignItems:'flex-start', transition:'all 0.25s', cursor:'pointer' }}
             >
-              <div style={{ width:'52px', height:'52px', borderRadius:'14px', background:cert.logo?'transparent':`${cert.color || '#6366F1'}15`, border:cert.logo?'none':`1px solid ${cert.color || '#6366F1'}25`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.6rem', flexShrink:0, overflow:'hidden' }}>
+              <div style={{ width:'52px', height:'52px', borderRadius:'14px', background:cert.logo?'transparent':`${cert.color || '#6366F1'}15`, border:cert.logo?'none':`1px solid ${cert.color || '#6366F1'}25`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
                 {cert.logo ? (
                   <img src={cert.logo} alt={cert.title} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                 ) : (
-                  cert.badge
+                  <EmojiIcon emoji={cert.badge} size={22} color={cert.color} />
                 )}
               </div>
               <div style={{ flex:1 }}>
@@ -194,7 +195,9 @@ export function Certifications() {
                     <img src={ach.image} alt={ach.title} style={{ width:'56px', height:'56px', borderRadius:'12px', objectFit:'cover', border:`1.5px solid ${achColor}40` }} />
                   </div>
                 ) : (
-                  <div style={{ fontSize:'2.2rem', marginBottom:'12px', height:'56px', display:'flex', alignItems:'center', justifyContent:'center' }}>{ach.icon}</div>
+                  <div style={{ marginBottom:'12px', height:'56px', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <EmojiIcon emoji={ach.icon} size={32} color={achColor} />
+                  </div>
                 )}
                 <div style={{ fontFamily:'Poppins', fontWeight:800, fontSize:'1.5rem', color: achColor, marginBottom:'6px' }}>{ach.value}</div>
                 <h4 style={{ fontFamily:'Poppins', fontWeight:700, fontSize:'0.9rem', color: isDark?'#F1F5F9':'#0F172A', marginBottom:'6px' }}>{ach.title}</h4>

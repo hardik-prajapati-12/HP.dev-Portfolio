@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiArrowLeft, FiCheck, FiCpu, FiDatabase, FiLayers, FiGlobe, FiChevronRight, FiSettings, FiBriefcase } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
+import EmojiIcon from '../components/EmojiIcon';
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logo-dark.png';
 
@@ -303,11 +304,11 @@ export default function ServiceDetails() {
             
             {/* Title section */}
             <div>
-              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: serviceImage ? 'transparent' : `${serviceColor}15`, border: serviceImage ? 'none' : `1px solid ${serviceColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', marginBottom: '20px', overflow: 'hidden' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: serviceImage ? 'transparent' : `${serviceColor}15`, border: serviceImage ? 'none' : `1px solid ${serviceColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', overflow: 'hidden' }}>
                 {serviceImage ? (
                   <img src={serviceImage} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  icon
+                  <EmojiIcon emoji={icon} size={28} color={serviceColor} />
                 )}
               </div>
               <h1 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: 'clamp(2rem, 5vw, 2.7rem)', color: isDark ? '#FFFFFF' : '#0F172A', letterSpacing: '-0.02em', marginBottom: '16px', lineHeight: 1.2 }}>
@@ -482,7 +483,7 @@ export default function ServiceDetails() {
                           {siblingImage ? (
                             <img src={siblingImage} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                           ) : (
-                            <span>{item.icon}</span>
+                            <EmojiIcon emoji={item.icon} size={14} color={siblingColor} />
                           )}
                         </div>
                         <span>{item.title}</span>

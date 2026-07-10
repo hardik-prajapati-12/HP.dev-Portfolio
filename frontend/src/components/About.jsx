@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import CountUpModule from 'react-countup';
 import { useInView } from 'react-intersection-observer';
-import { FiCode } from 'react-icons/fi';
+import { FiCode, FiPhone } from 'react-icons/fi';
+import EmojiIcon from './EmojiIcon';
 import { useTheme } from '../context/ThemeContext';
 import { PERSONAL_INFO, STATS, EDUCATION } from '../data/portfolioData';
 import { useState, useEffect } from 'react';
@@ -174,7 +175,7 @@ export default function About() {
             <motion.a href="#contact" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 26px', borderRadius: '8px', border: isDark ? '1.5px solid rgba(255,255,255,0.15)' : '1.5px solid rgba(0,0,0,0.12)', background: 'transparent', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none', marginBottom: '40px', transition: 'all 0.2s' }}
             >
-              📞 More About Me
+              <FiPhone size={15} /> More About Me
             </motion.a>
 
             {/* Education sub-list */}
@@ -195,7 +196,7 @@ export default function About() {
                   {edu.image && edu.image.trim() !== '' ? (
                     <img src={edu.image} alt={edu.degree} style={{ width: '30px', height: '30px', objectFit: 'contain', borderRadius: '4px', flexShrink: 0 }} />
                   ) : (
-                    <span style={{ fontSize: '1.4rem', minWidth: '30px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>{edu.icon}</span>
+                    <span style={{ minWidth: '30px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}><EmojiIcon emoji={edu.icon} size={20} color={edu.color || '#10B981'} /></span>
                   )}
                   <div>
                     <p style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: isDark ? '#F1F5F9' : '#0F172A' }}>{edu.degree}</p>
@@ -237,11 +238,11 @@ export default function About() {
                   style={{ padding: '28px 24px', borderRadius: '16px', background: cardBg, border: cardBorder, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '16px', transition: 'all 0.25s' }}
                 >
                   {/* Icon container */}
-                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: stat.image ? 'transparent' : `${color}12`, border: stat.image ? 'none' : `1px solid ${color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', overflow: 'hidden' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: stat.image ? 'transparent' : `${color}12`, border: stat.image ? 'none' : `1px solid ${color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                     {stat.image && stat.image.trim() !== '' ? (
                       <img src={stat.image} alt={stat.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      stat.icon
+                      <EmojiIcon emoji={stat.icon} size={20} color={color} />
                     )}
                   </div>
 

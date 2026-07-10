@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { FiSearch, FiCalendar, FiArrowRight, FiClock } from 'react-icons/fi';
+import { FiSearch, FiCalendar, FiArrowRight, FiClock, FiStar } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 
@@ -205,8 +205,8 @@ export default function Blog({ initialTag = '', standalone = false }) {
                   {blog.category}
                 </span>
                 {blog.featured && (
-                  <span style={{ position: 'absolute', top: '12px', right: '12px', padding: '3px 12px', borderRadius: '20px', background: 'rgba(245,158,11,0.95)', color: 'white', fontSize: '0.72rem', fontWeight: 700 }}>
-                    ⭐ Featured
+                  <span style={{ position: 'absolute', top: '12px', right: '12px', padding: '3px 12px', borderRadius: '20px', background: 'rgba(245,158,11,0.95)', color: 'white', fontSize: '0.72rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <FiStar size={10} style={{ fill: 'white' }} /> Featured
                   </span>
                 )}
               </div>

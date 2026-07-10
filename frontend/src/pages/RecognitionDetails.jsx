@@ -5,6 +5,7 @@ import { FiArrowLeft, FiAward, FiCalendar, FiCheckCircle, FiExternalLink, FiShie
 import { useTheme } from '../context/ThemeContext';
 import { CERTIFICATIONS, ACHIEVEMENTS } from '../data/portfolioData';
 import axios from 'axios';
+import EmojiIcon from '../components/EmojiIcon';
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logo-dark.png';
 // Helper to provide descriptive details and skills if db items are missing them
@@ -222,13 +223,13 @@ export default function RecognitionDetails() {
             
             {/* Title section */}
             <div>
-              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: (type === 'achievement' && item.image) ? 'transparent' : `${themeColor}15`, border: (type === 'achievement' && item.image) ? 'none' : `1px solid ${themeColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.2rem', marginBottom: '20px', overflow: 'hidden' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: (type === 'achievement' && item.image) ? 'transparent' : `${themeColor}15`, border: (type === 'achievement' && item.image) ? 'none' : `1px solid ${themeColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', overflow: 'hidden' }}>
                 {type === 'achievement' && item.image ? (
                   <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : item.logo ? (
                   <img src={item.logo} alt={item.issuer} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  badgeVal
+                  <EmojiIcon emoji={badgeVal} size={30} color={themeColor} />
                 )}
               </div>
               <h1 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: 'clamp(2rem, 5vw, 2.7rem)', color: isDark ? '#FFFFFF' : '#0F172A', letterSpacing: '-0.02em', marginBottom: '16px', lineHeight: 1.2 }}>

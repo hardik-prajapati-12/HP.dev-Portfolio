@@ -191,8 +191,16 @@ function AppRoutes() {
   const [publicSettings, setPublicSettings] = useState(null);
   const [settingsLoading, setSettingsLoading] = useState(true);
 
+  // Safety timeout: force-render the app if API calls hang too long (backend down)
   useEffect(() => {
-    axios.get('/api/settings/public')
+    const safetyTimer = setTimeout(() => {
+      setSettingsLoading(false);
+    }, 6000);
+    return () => clearTimeout(safetyTimer);
+  }, []);
+
+  useEffect(() => {
+    axios.get('/api/settings/public', { timeout: 5000 })
       .then(res => {
         setPublicSettings(res.data);
       })
@@ -215,7 +223,8 @@ function AppRoutes() {
     }
   }, [publicSettings, location.pathname]);
 
-  if (settingsLoading || checking) {
+  // Don't block render if checking is taking too long — only block briefly
+  if (settingsLoading && checking) {
     return <div style={{ background: '#0B1120', minHeight: '100vh' }} />;
   }
 

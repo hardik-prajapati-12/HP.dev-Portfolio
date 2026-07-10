@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend } from 'react-icons/fi';
+import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend, FiStar, FiMessageSquare } from 'react-icons/fi';
+import EmojiIcon from '../components/EmojiIcon';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
 import { useAdminSession } from '../context/AdminSessionContext';
@@ -2074,65 +2075,28 @@ export default function AdminDashboard() {
 
               {/* ── Row 1: Primary Stats ── */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
-                <DashboardStatCard icon="🚀" label="Projects" value={data.projects.length} color="#10B981" isDark={isDark} badge="✔ Published" badgeColor="#10B981" badgeIcon="📈" />
-                <DashboardStatCard icon="📝" label="Blog Posts" value={data.blogs.length} color="#8B5CF6" isDark={isDark} />
-                <DashboardStatCard icon="🏆" label="Certifications" value={data.certifications.length} color="#F59E0B" isDark={isDark} />
-                <DashboardStatCard icon="👥" label="Testimonials" value={data.testimonials.length} color="#EC4899" isDark={isDark} badge="✔ Approved" badgeColor="#10B981" />
-                <DashboardStatCard icon="⚡" label="Skills" value={data.skills.length} color="#06B6D4" isDark={isDark} />
+                <DashboardStatCard icon={<FiFolder size={18} />} label="Projects" value={data.projects.length} color="#10B981" isDark={isDark} badge="✔ Published" badgeColor="#10B981" badgeIcon={<FiTrendingUp size={12} />} />
+                <DashboardStatCard icon={<FiFileText size={18} />} label="Blog Posts" value={data.blogs.length} color="#8B5CF6" isDark={isDark} />
+                <DashboardStatCard icon={<FiAward size={18} />} label="Certifications" value={data.certifications.length} color="#F59E0B" isDark={isDark} />
+                <DashboardStatCard icon={<FiUsers size={18} />} label="Testimonials" value={data.testimonials.length} color="#EC4899" isDark={isDark} badge="✔ Approved" badgeColor="#10B981" />
+                <DashboardStatCard icon={<FiCpu size={18} />} label="Skills" value={data.skills.length} color="#06B6D4" isDark={isDark} />
               </div>
 
               {/* ── Row 2: Secondary Stats ── */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
-                <DashboardStatCard icon="💼" label="Experience" value={data.experience.length} color="#8B5CF6" isDark={isDark} />
-                <DashboardStatCard icon="🎓" label="Education" value={data.education.length} color="#10B981" isDark={isDark} />
-                <DashboardStatCard icon="🔧" label="Services" value={data.services.length} color="#3B82F6" isDark={isDark} />
-                <DashboardStatCard icon="✉️" label="Messages" value={data.messages.length} color="#06B6D4" isDark={isDark} />
-                <DashboardStatCard icon="📋" label="Unread Messages" value={data.messages.filter(m => !m.read).length} color="#6366F1" isDark={isDark} badge={data.messages.filter(m => !m.read).length > 0 ? '● New' : null} badgeColor="#EF4444" />
+                <DashboardStatCard icon={<FiBriefcase size={18} />} label="Experience" value={data.experience.length} color="#8B5CF6" isDark={isDark} />
+                <DashboardStatCard icon={<FiBookOpen size={18} />} label="Education" value={data.education.length} color="#10B981" isDark={isDark} />
+                <DashboardStatCard icon={<FiSettings size={18} />} label="Services" value={data.services.length} color="#3B82F6" isDark={isDark} />
+                <DashboardStatCard icon={<FiMail size={18} />} label="Messages" value={data.messages.length} color="#06B6D4" isDark={isDark} />
+                <DashboardStatCard icon={<FiMessageSquare size={18} />} label="Unread Messages" value={data.messages.filter(m => !m.read).length} color="#6366F1" isDark={isDark} badge={data.messages.filter(m => !m.read).length > 0 ? '● New' : null} badgeColor="#EF4444" />
               </div>
 
               {/* ── Row 3: Tertiary Stats ── */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '32px' }}>
-                <DashboardStatCard icon="🏅" label="Achievements" value={data.achievements.length} color="#F59E0B" isDark={isDark} />
-                <DashboardStatCard icon="⭐" label="Featured Projects" value={data.projects.filter(p => p.featured).length} color="#EAB308" isDark={isDark} />
-                <DashboardStatCard icon="🚫" label="Draft Posts" value={data.blogs.filter(b => !b.published).length} color="#EF4444" isDark={isDark} />
-                <DashboardStatCard icon="🔢" label="Stat Cards" value={data.stats?.length || 0} color="#6366F1" isDark={isDark} />
-              </div>
-
-              {/* ── Quick Actions ── */}
-              <div style={{ padding: '28px', borderRadius: '16px', background: cardBg, border: cardBorder }}>
-                <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.05rem', color: textMain, marginBottom: '20px' }}>Quick Actions</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
-                  {[
-                    { label: 'Add Project', emoji: '🚀', type: 'project', color: '#10B981' },
-                    { label: 'New Blog Post', emoji: '📝', type: 'blog', color: '#8B5CF6' },
-                    { label: 'Add Skill', emoji: '⚡', type: 'skill', color: '#06B6D4' },
-                    { label: 'Add Experience', emoji: '💼', type: 'experience', color: '#8B5CF6' },
-                    { label: 'Add Education', emoji: '🎓', type: 'education', color: '#10B981' },
-                    { label: 'Add Service', emoji: '🔧', type: 'service', color: '#F59E0B' },
-                    { label: 'Add Achievement', emoji: '🏆', type: 'achievement', color: '#EC4899' },
-                    { label: 'Add Testimonial', emoji: '👥', type: 'testimonial', color: '#EC4899' },
-                    { label: 'Add Certification', emoji: '🏅', type: 'certification', color: '#F59E0B' },
-                    { label: 'Add Stat Card', emoji: '🔢', type: 'stat', color: '#6366F1' },
-                  ].map(btn => (
-                    <button key={btn.type} onClick={() => openCreateModal(btn.type)}
-                      style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                        padding: '12px 16px', borderRadius: '10px',
-                        border: `1px solid ${btn.color}30`,
-                        background: `${btn.color}10`,
-                        color: btn.color,
-                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem',
-                        cursor: 'pointer', transition: 'all 0.2s',
-                        whiteSpace: 'nowrap',
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.background = `${btn.color}20`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = `${btn.color}10`; e.currentTarget.style.transform = 'translateY(0)'; }}
-                    >
-                      <span style={{ fontSize: '1rem' }}>{btn.emoji}</span>
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
+                <DashboardStatCard icon={<FiTrendingUp size={18} />} label="Achievements" value={data.achievements.length} color="#F59E0B" isDark={isDark} />
+                <DashboardStatCard icon={<FiStar size={18} />} label="Featured Projects" value={data.projects.filter(p => p.featured).length} color="#EAB308" isDark={isDark} />
+                <DashboardStatCard icon={<FiEyeOff size={18} />} label="Draft Posts" value={data.blogs.filter(b => !b.published).length} color="#EF4444" isDark={isDark} />
+                <DashboardStatCard icon={<FiHash size={18} />} label="Stat Cards" value={data.stats?.length || 0} color="#6366F1" isDark={isDark} />
               </div>
             </motion.div>
           )}
@@ -2528,11 +2492,11 @@ export default function AdminDashboard() {
                       {b.image && b.image.trim() !== '' ? (
                         <img src={b.image} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
                       ) : (
-                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📝</div>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}><FiFileText size={18} /></div>
                       )}
                       <div>
                         <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{b.title}</span>
-                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}><span style={{ textTransform: 'uppercase' }}>{b.category}</span> {b.featured && '⭐'} · {b.readTime || '5 min read'}</span>
+                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}><span style={{ textTransform: 'uppercase' }}>{b.category}</span> {b.featured && <FiStar size={12} color="#F59E0B" style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '4px', marginRight: '4px' }} />} · {b.readTime || '5 min read'}</span>
                       </div>
                     </div>
                   )} />
@@ -2798,7 +2762,7 @@ export default function AdminDashboard() {
                         transition: 'all 0.2s',
                       }}
                     >
-                      <span style={{ fontSize: '1rem' }}>{tab.emoji}</span>
+                      <EmojiIcon emoji={tab.emoji} size={16} color={isActive ? '#6366F1' : textMuted} />
                       {tab.label}
                     </button>
                   );
@@ -2809,7 +2773,7 @@ export default function AdminDashboard() {
                 {/* 1. GENERAL TAB */}
                 {settingsTab === 'general' && (
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px' }}>⚙️ General Settings</h3>
+                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiSettings size={20} /> General Settings</h3>
                     <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '20px' }}>
                       Configure general site behavior, branding text, analytics tracking, and maintenance mode status.
                     </p>
@@ -2854,7 +2818,7 @@ export default function AdminDashboard() {
                 {/* 2. SMTP TAB */}
                 {settingsTab === 'smtp' && (
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px' }}>📧 Email / SMTP Settings</h3>
+                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiMail size={20} /> Email / SMTP Settings</h3>
                     <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '4px' }}>
                       Configure your outgoing email server so the portfolio site can send contact message receipts.
                     </p>
@@ -2937,7 +2901,7 @@ export default function AdminDashboard() {
                         alignItems: 'center',
                         gap: '12px'
                       }}>
-                        <span style={{ fontSize: '1.25rem' }}>📊</span>
+                        <FiBarChart2 size={20} color={textMain} />
                         <h3 style={{
                           fontFamily: 'Poppins',
                           fontWeight: 700,
@@ -3023,6 +2987,7 @@ export default function AdminDashboard() {
                 {settingsTab === 'visibility' && (
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+                      <FiEye size={20} color={textMain} />
                       <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: 0 }}>👁️ Section Visibility</h3>
                     </div>
                     <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '24px', lineHeight: 1.6 }}>

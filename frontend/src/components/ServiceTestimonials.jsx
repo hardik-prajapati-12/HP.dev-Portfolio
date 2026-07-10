@@ -5,6 +5,7 @@ import { FiChevronLeft, FiChevronRight, FiStar } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { SERVICES, TESTIMONIALS } from '../data/portfolioData';
 import axios from 'axios';
+import EmojiIcon from './EmojiIcon';
 
 const getThemeColor = (color) => {
   return color || '#6366F1';
@@ -54,11 +55,11 @@ export function Services() {
                 style={{ padding:'30px', borderRadius:'20px', background: isDark?'rgba(255,255,255,0.02)':'#F8FAFC', border: isDark?'1px solid rgba(255,255,255,0.05)':'1px solid #E2E8F0', transition:'all 0.3s', position:'relative', overflow:'hidden' }}
               >
                 <div style={{ position:'absolute', top:0, right:0, width:'120px', height:'120px', borderRadius:'50%', background:`radial-gradient(circle,${mappedColor}15,transparent 70%)`, transform:'translate(30%,-30%)', pointerEvents:'none' }} />
-                <div style={{ width:'56px', height:'56px', borderRadius:'14px', background: svc.image ? 'transparent' : `${mappedColor}12`, border: svc.image ? 'none' : `1px solid ${mappedColor}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.6rem', marginBottom: '18px', overflow: 'hidden' }}>
+                <div style={{ width:'56px', height:'56px', borderRadius:'14px', background: svc.image ? 'transparent' : `${mappedColor}12`, border: svc.image ? 'none' : `1px solid ${mappedColor}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px', overflow: 'hidden' }}>
                   {svc.image && svc.image.trim() !== '' ? (
                     <img src={svc.image} alt={svc.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
-                    svc.icon
+                    <EmojiIcon emoji={svc.icon} size={24} color={mappedColor} />
                   )}
                 </div>
                 <h3 style={{ fontFamily:'Poppins', fontWeight:700, fontSize:'1.1rem', color: isDark?'#F1F5F9':'#0F172A', marginBottom:'10px' }}>{svc.title}</h3>

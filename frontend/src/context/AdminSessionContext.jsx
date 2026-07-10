@@ -20,7 +20,7 @@ export function AdminSessionProvider({ children }) {
     }
 
     try {
-      const res = await adminApi.get('/api/auth/me', token);
+      const res = await adminApi.get('/api/auth/me', token, { timeout: 5000 });
       const isValidAdmin = res.data?.user?.role === 'admin';
       setIsAdmin(isValidAdmin);
       if (isValidAdmin) {
