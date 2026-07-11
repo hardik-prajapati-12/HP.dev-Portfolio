@@ -1708,7 +1708,7 @@ export default function AdminDashboard() {
         profile: prof.data,
         stats: Array.isArray(st.data) ? st.data : [],
         projectCategories: Array.isArray(pCats.data) ? pCats.data : [],
-        blogCategories: Array.isArray(bCats.data) ? bCats.data : [],
+        blogCategories: Array.isArray(bCats.data) ? bCats.data : (bCats.data?.data || []),
         experienceTypes: Array.isArray(expTypes.data) ? expTypes.data : [],
         skillCategories: Array.isArray(skCats.data) ? skCats.data : [],
       };
