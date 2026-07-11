@@ -11,18 +11,23 @@ This platform not only showcases your professional skills, projects, certificati
 ### 🖥️ Frontend & UI/UX
 - **Dynamic Theming**: Smooth dark mode and light mode switching.
 - **Micro-Animations**: Fluid transitions and hover effects powered by `Framer Motion`.
-- **Responsive Layout**: Pixel-perfect grid layout matching all mobile, tablet, and desktop screens.
+- **Pixel-Perfect Responsiveness**: Flex layouts and automated grid system adjustments ensure a gorgeous presentation across mobile screens (down to Galaxy Fold), tablets (iPad Mini), laptops, and high-DPI PC monitors.
 - **Custom Cursor & Loading Screen**: Sleek entry animation with custom loading states.
 - **Section Controls**: Dynamically toggle sections (About, Skills, Projects, Services, Experience, Blogs, Testimonials, Contact) on or off from the Admin Panel.
 
 ### ⚙️ Admin Dashboard (Control Center)
 - **Content Management (CRUD)**: Manage all profile data, skills, projects, experiences, services, blogs, testimonials, and certifications directly.
+- **Live Search & Filter**: Integrated search bars in all lists (Skills, Projects, Services, Certifications, Blogs, Tags, Categories, and blog comments) to query data instantly in real-time.
+- **Custom Delete Popups**: Standard browser alerts are replaced with custom theme-aware frosted-glass delete confirmation cards.
 - **Visitor Analytics**: Interactive analytics charts using `Recharts` for page views, unique visits, and geographical/device statistics.
 - **Maintenance Mode Switch**: Instantly lock/unlock the site with a custom maintenance message.
 - **Global Settings Panel**: Change the site title, logos, social links, contact email, and visibility settings in real-time.
 
 ### 🤖 Advanced Integrations
-- **AI Chatbot**: An embedded OpenAI-powered assistant trained to answer questions about you, your skills, and your portfolio.
+- **AI Chatbot**: An embedded assistant trained to answer questions about you.
+  * **Similarity Q&A Matcher**: Uses tokenized Jaccard Similarity to compare and reply with custom Q&A answers created in the Admin Panel if user queries are highly related.
+  * **Admin Button Configuration**: Manage custom button responses (Skills, Projects, Services) directly from the dashboard.
+- **Cloudinary Storage**: Direct image hosting to Cloudinary with automatic local disk buffer cleanups and seamless filesystem fallbacks.
 - **Contact Notifications**: SMTP integration with `Nodemailer` for immediate email notification whenever a visitor fills out the contact form.
 - **Payment Processing**: Integrated structures for Stripe and Razorpay payment support.
 
@@ -42,7 +47,7 @@ This platform not only showcases your professional skills, projects, certificati
 - **Runtime Environment**: [Node.js](https://nodejs.org/)
 - **Framework**: [Express.js](https://expressjs.com/)
 - **Database**: [MongoDB](https://www.mongodb.com/) (via [Mongoose](https://mongoosejs.com/))
-- **File Uploads**: [Multer](https://github.com/expressjs/multer)
+- **File & Cloud Storage**: [Multer](https://github.com/expressjs/multer) & [Cloudinary SDK](https://cloudinary.com/)
 - **Security**: [Helmet](https://helmetjs.github.io/), CORS, and rate-limiting middleware
 - **Email Dispatch**: [Nodemailer](https://nodemailer.com/)
 - **AI Integration**: [OpenAI Node.js SDK](https://github.com/openai/openai-node)
@@ -112,13 +117,14 @@ npm run install-all
    - `ADMIN_ACCESS_KEY` & `ADMIN_ALLOWED_IPS`: Keys and controls to restrict/secure admin login.
    - `SMTP_USER` & `SMTP_PASS`: Your Gmail/SMTP credentials for the contact form notifications.
    - `OPENAI_API_KEY`: Your OpenAI API key for training and powering the chatbot.
+   - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`: Cloudinary API parameters for cloud storage support.
 
 #### **Frontend Setup**
 1. Copy the frontend environment example file:
    ```bash
    cp frontend/.env.example frontend/.env
    ```
-2. Open `frontend/.env` and set the backend base URL (usually `http://localhost:5000/api` during local development):
+2. Open `frontend/.env` and set the backend base URL:
    ```env
    VITE_API_URL=http://localhost:5000/api
    ```
