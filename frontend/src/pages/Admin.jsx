@@ -147,27 +147,27 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
     : { position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(10px)', padding: '20px' };
   const panelStyle = isPage
     ? {
-        width: '100%',
-        maxWidth: '1080px',
-        overflow: 'visible',
-        background: isDark ? '#111827' : '#FFFFFF',
-        border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0',
-        borderRadius: '20px',
-        padding: '24px',
-        boxShadow: isDark ? '0 18px 50px rgba(0,0,0,0.24)' : '0 18px 50px rgba(15,23,42,0.08)',
-        boxSizing: 'border-box'
-      }
+      width: '100%',
+      maxWidth: '1080px',
+      overflow: 'visible',
+      background: isDark ? '#111827' : '#FFFFFF',
+      border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0',
+      borderRadius: '20px',
+      padding: '24px',
+      boxShadow: isDark ? '0 18px 50px rgba(0,0,0,0.24)' : '0 18px 50px rgba(15,23,42,0.08)',
+      boxSizing: 'border-box'
+    }
     : {
-        width: '100%',
-        maxWidth: '580px',
-        maxHeight: '85vh',
-        overflowY: 'auto',
-        background: isDark ? '#111827' : '#FFFFFF',
-        border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0',
-        borderRadius: '20px',
-        padding: '32px',
-        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)'
-      };
+      width: '100%',
+      maxWidth: '580px',
+      maxHeight: '85vh',
+      overflowY: 'auto',
+      background: isDark ? '#111827' : '#FFFFFF',
+      border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0',
+      borderRadius: '20px',
+      padding: '32px',
+      boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)'
+    };
 
   return (
     <div style={shellStyle}>
@@ -289,14 +289,14 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                           setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
                         }} style={{ border: 'none', background: 'none', color: '#EF4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600 }}><FiTrash2 size={13} /> Remove</button>
                       </div>
-                      
+
                       <label style={{ ...labelStyle, fontSize: '0.72rem' }}>Diagram Label</label>
                       <input style={inputStyle} value={diagram.label || ''} onChange={e => {
                         const newDiags = [...form.caseStudyArchitectureDiagrams];
                         newDiags[idx] = { ...newDiags[idx], label: e.target.value };
                         setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
                       }} placeholder="e.g. System Flow" required />
-                      
+
                       <ImageUpload label="Diagram Image" value={diagram.imageUrl || ''} onChange={(url) => {
                         const newDiags = [...form.caseStudyArchitectureDiagrams];
                         newDiags[idx] = { ...newDiags[idx], imageUrl: url };
@@ -869,7 +869,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
             <>
               <label style={labelStyle}>Category Name</label>
               <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
-              
+
               <label style={labelStyle}>Category Color</label>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <div style={{ flex: 1 }}>
@@ -891,7 +891,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
             <>
               <label style={labelStyle}>Category Name</label>
               <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
-              
+
               <label style={labelStyle}>Category Color</label>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <div style={{ flex: 1 }}>
@@ -2130,6 +2130,10 @@ export default function AdminDashboard() {
     paddingRight: '40px',
     cursor: 'pointer',
   };
+  const optionStyle = {
+    background: isDark ? '#1F2937' : '#FFFFFF',
+    color: isDark ? '#F1F5F9' : '#0F172A',
+  };
   const profileLabelStyle = { fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.78rem', color: textMuted, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' };
 
   return (
@@ -2380,1219 +2384,1219 @@ export default function AdminDashboard() {
           ) : (
             <>
 
-          {/* ════ DASHBOARD ════ */}
-          {section === 'dashboard' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <p style={{ fontFamily: 'Inter', fontSize: '0.9rem', color: textMuted, marginBottom: '24px' }}>Welcome back, Hardik! Here's an overview of your portfolio.</p>
+              {/* ════ DASHBOARD ════ */}
+              {section === 'dashboard' && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.9rem', color: textMuted, marginBottom: '24px' }}>Welcome back, Hardik! Here's an overview of your portfolio.</p>
 
-              {/* ── Row 1: Primary Stats ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
-                <DashboardStatCard icon={<FiFolder size={18} />} label="Projects" value={data.projects.length} color="#10B981" isDark={isDark} badge="✔ Published" badgeColor="#10B981" badgeIcon={<FiTrendingUp size={12} />} />
-                <DashboardStatCard icon={<FiFileText size={18} />} label="Blog Posts" value={data.blogs.length} color="#8B5CF6" isDark={isDark} />
-                <DashboardStatCard icon={<FiAward size={18} />} label="Certifications" value={data.certifications.length} color="#F59E0B" isDark={isDark} />
-                <DashboardStatCard icon={<FiUsers size={18} />} label="Testimonials" value={data.testimonials.length} color="#EC4899" isDark={isDark} badge="✔ Approved" badgeColor="#10B981" />
-                <DashboardStatCard icon={<FiCpu size={18} />} label="Skills" value={data.skills.length} color="#06B6D4" isDark={isDark} />
-              </div>
-
-              {/* ── Row 2: Secondary Stats ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
-                <DashboardStatCard icon={<FiBriefcase size={18} />} label="Experience" value={data.experience.length} color="#8B5CF6" isDark={isDark} />
-                <DashboardStatCard icon={<FiBookOpen size={18} />} label="Education" value={data.education.length} color="#10B981" isDark={isDark} />
-                <DashboardStatCard icon={<FiSettings size={18} />} label="Services" value={data.services.length} color="#3B82F6" isDark={isDark} />
-                <DashboardStatCard icon={<FiMail size={18} />} label="Messages" value={data.messages.length} color="#06B6D4" isDark={isDark} />
-                <DashboardStatCard icon={<FiMessageSquare size={18} />} label="Unread Messages" value={data.messages.filter(m => !m.read).length} color="#6366F1" isDark={isDark} badge={data.messages.filter(m => !m.read).length > 0 ? '● New' : null} badgeColor="#EF4444" />
-              </div>
-
-              {/* ── Row 3: Tertiary Stats ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '32px' }}>
-                <DashboardStatCard icon={<FiTrendingUp size={18} />} label="Achievements" value={data.achievements.length} color="#F59E0B" isDark={isDark} />
-                <DashboardStatCard icon={<FiStar size={18} />} label="Featured Projects" value={data.projects.filter(p => p.featured).length} color="#EAB308" isDark={isDark} />
-                <DashboardStatCard icon={<FiEyeOff size={18} />} label="Draft Posts" value={data.blogs.filter(b => !b.published).length} color="#EF4444" isDark={isDark} />
-                <DashboardStatCard icon={<FiHash size={18} />} label="Stat Cards" value={data.stats?.length || 0} color="#6366F1" isDark={isDark} />
-              </div>
-            </motion.div>
-          )}
-
-          {/* ════ ACTIVITY ════ */}
-          {section === 'activity' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>Track all recent activities across your portfolio — messages, comments, and testimonials.</p>
-
-              {/* Filter Tabs */}
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                {['all', 'message', 'comment', 'testimonial'].map(f => (
-                  <button
-                    key={f}
-                    onClick={() => setActivityFilter(f)}
-                    style={{
-                      padding: '8px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer',
-                      fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem',
-                      background: activityFilter === f
-                        ? 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15))'
-                        : (isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'),
-                      color: activityFilter === f ? '#6366F1' : textMuted,
-                      transition: 'all 0.2s ease',
-                      textTransform: 'capitalize',
-                    }}
-                    onMouseEnter={e => { if (activityFilter !== f) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'; }}
-                    onMouseLeave={e => { if (activityFilter !== f) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'; }}
-                  >
-                    {f === 'all' ? 'All Activity' : f === 'message' ? '✉️ Messages' : f === 'comment' ? '💬 Comments' : '⭐ Testimonials'}
-                  </button>
-                ))}
-              </div>
-
-              {/* Activity Timeline */}
-              <div style={{ background: cardBg, border: cardBorder, borderRadius: '20px', overflow: 'hidden' }}>
-                {allNotifications.filter(n => activityFilter === 'all' || n.type === activityFilter).length === 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter' }}>
-                    <FiActivity size={36} style={{ marginBottom: '12px', opacity: 0.3 }} />
-                    <p style={{ margin: 0 }}>No activity to show{activityFilter !== 'all' ? ` for ${activityFilter}s` : ''}.</p>
+                  {/* ── Row 1: Primary Stats ── */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
+                    <DashboardStatCard icon={<FiFolder size={18} />} label="Projects" value={data.projects.length} color="#10B981" isDark={isDark} badge="✔ Published" badgeColor="#10B981" badgeIcon={<FiTrendingUp size={12} />} />
+                    <DashboardStatCard icon={<FiFileText size={18} />} label="Blog Posts" value={data.blogs.length} color="#8B5CF6" isDark={isDark} />
+                    <DashboardStatCard icon={<FiAward size={18} />} label="Certifications" value={data.certifications.length} color="#F59E0B" isDark={isDark} />
+                    <DashboardStatCard icon={<FiUsers size={18} />} label="Testimonials" value={data.testimonials.length} color="#EC4899" isDark={isDark} badge="✔ Approved" badgeColor="#10B981" />
+                    <DashboardStatCard icon={<FiCpu size={18} />} label="Skills" value={data.skills.length} color="#06B6D4" isDark={isDark} />
                   </div>
-                ) : (
-                  <div style={{ position: 'relative' }}>
-                    {/* Timeline line */}
-                    <div style={{ position: 'absolute', left: '32px', top: '24px', bottom: '24px', width: '2px', background: isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.1)', borderRadius: '1px' }} />
 
-                    {allNotifications.filter(n => activityFilter === 'all' || n.type === activityFilter).map((notif, idx) => {
-                      const iconColor = notif.type === 'message' ? '#06B6D4' : notif.type === 'comment' ? '#8B5CF6' : '#EC4899';
-                      const iconBg = notif.type === 'message' ? 'rgba(6,182,212,0.12)' : notif.type === 'comment' ? 'rgba(139,92,246,0.12)' : 'rgba(236,72,153,0.12)';
-                      const timeAgo = (date) => {
-                        const diff = Date.now() - new Date(date).getTime();
-                        const mins = Math.floor(diff / 60000);
-                        if (mins < 1) return 'Just now';
-                        if (mins < 60) return `${mins}m ago`;
-                        const hrs = Math.floor(mins / 60);
-                        if (hrs < 24) return `${hrs}h ago`;
-                        const days = Math.floor(hrs / 24);
-                        if (days < 7) return `${days}d ago`;
-                        return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                      };
+                  {/* ── Row 2: Secondary Stats ── */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
+                    <DashboardStatCard icon={<FiBriefcase size={18} />} label="Experience" value={data.experience.length} color="#8B5CF6" isDark={isDark} />
+                    <DashboardStatCard icon={<FiBookOpen size={18} />} label="Education" value={data.education.length} color="#10B981" isDark={isDark} />
+                    <DashboardStatCard icon={<FiSettings size={18} />} label="Services" value={data.services.length} color="#3B82F6" isDark={isDark} />
+                    <DashboardStatCard icon={<FiMail size={18} />} label="Messages" value={data.messages.length} color="#06B6D4" isDark={isDark} />
+                    <DashboardStatCard icon={<FiMessageSquare size={18} />} label="Unread Messages" value={data.messages.filter(m => !m.read).length} color="#6366F1" isDark={isDark} badge={data.messages.filter(m => !m.read).length > 0 ? '● New' : null} badgeColor="#EF4444" />
+                  </div>
 
-                      return (
-                        <div
-                          key={`activity-${notif.type}-${notif.id}`}
-                          onClick={() => handleActivityClick(notif)}
-                          style={{
-                            display: 'flex', gap: '16px', padding: '18px 24px 18px 16px',
-                            cursor: 'pointer', position: 'relative',
-                            borderBottom: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F8FAFC',
-                            background: !notif.read ? (isDark ? 'rgba(99,102,241,0.03)' : 'rgba(99,102,241,0.015)') : 'transparent',
-                            transition: 'all 0.2s ease',
-                          }}
-                          onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.03)'; e.currentTarget.style.paddingLeft = '20px'; }}
-                          onMouseLeave={e => { e.currentTarget.style.background = !notif.read ? (isDark ? 'rgba(99,102,241,0.03)' : 'rgba(99,102,241,0.015)') : 'transparent'; e.currentTarget.style.paddingLeft = '16px'; }}
-                        >
-                          {/* Timeline dot */}
-                          <div style={{
-                            width: '40px', height: '40px', borderRadius: '12px', flexShrink: 0,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: iconBg, color: iconColor, zIndex: 1,
-                            boxShadow: !notif.read ? `0 0 12px ${iconColor}30` : 'none',
-                          }}>
-                            {notif.type === 'message' ? <FiMail size={18} /> : notif.type === 'comment' ? <FiMessageSquare size={18} /> : <FiStar size={18} />}
-                          </div>
+                  {/* ── Row 3: Tertiary Stats ── */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '32px' }}>
+                    <DashboardStatCard icon={<FiTrendingUp size={18} />} label="Achievements" value={data.achievements.length} color="#F59E0B" isDark={isDark} />
+                    <DashboardStatCard icon={<FiStar size={18} />} label="Featured Projects" value={data.projects.filter(p => p.featured).length} color="#EAB308" isDark={isDark} />
+                    <DashboardStatCard icon={<FiEyeOff size={18} />} label="Draft Posts" value={data.blogs.filter(b => !b.published).length} color="#EF4444" isDark={isDark} />
+                    <DashboardStatCard icon={<FiHash size={18} />} label="Stat Cards" value={data.stats?.length || 0} color="#6366F1" isDark={isDark} />
+                  </div>
+                </motion.div>
+              )}
 
-                          {/* Content */}
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.85rem', color: textMain, textTransform: 'capitalize' }}>
-                                  New {notif.type}
-                                </span>
-                                {!notif.read && <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#6366F1', display: 'inline-block', boxShadow: '0 0 6px rgba(99,102,241,0.5)' }} />}
-                              </div>
-                              <span style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted, whiteSpace: 'nowrap' }}>{timeAgo(notif.date)}</span>
-                            </div>
-                            <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#CBD5E1' : '#475569', margin: '0 0 4px 0', lineHeight: 1.5 }}>
-                              {notif.from && <strong style={{ color: textMain }}>{notif.from}</strong>}
-                              {notif.from && ' — '}
-                              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'inline' }}>{notif.title}</span>
-                            </p>
-                            <span style={{
-                              display: 'inline-flex', alignItems: 'center', gap: '4px',
-                              fontFamily: 'Inter', fontSize: '0.72rem', fontWeight: 600,
-                              color: iconColor,
-                              background: iconBg,
-                              padding: '3px 10px', borderRadius: '6px',
-                              textTransform: 'capitalize',
-                            }}>
-                              {notif.type === 'message' ? <FiMail size={11} /> : notif.type === 'comment' ? <FiMessageSquare size={11} /> : <FiStar size={11} />}
-                              {notif.type}
-                            </span>
-                          </div>
+              {/* ════ ACTIVITY ════ */}
+              {section === 'activity' && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>Track all recent activities across your portfolio — messages, comments, and testimonials.</p>
 
-                          {/* Actions */}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }} onClick={e => e.stopPropagation()}>
-                            <button
-                              title={`Delete ${notif.type}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteNotification(notif);
-                              }}
+                  {/* Filter Tabs */}
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                    {['all', 'message', 'comment', 'testimonial'].map(f => (
+                      <button
+                        key={f}
+                        onClick={() => setActivityFilter(f)}
+                        style={{
+                          padding: '8px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                          fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem',
+                          background: activityFilter === f
+                            ? 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15))'
+                            : (isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'),
+                          color: activityFilter === f ? '#6366F1' : textMuted,
+                          transition: 'all 0.2s ease',
+                          textTransform: 'capitalize',
+                        }}
+                        onMouseEnter={e => { if (activityFilter !== f) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'; }}
+                        onMouseLeave={e => { if (activityFilter !== f) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'; }}
+                      >
+                        {f === 'all' ? 'All Activity' : f === 'message' ? '✉️ Messages' : f === 'comment' ? '💬 Comments' : '⭐ Testimonials'}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Activity Timeline */}
+                  <div style={{ background: cardBg, border: cardBorder, borderRadius: '20px', overflow: 'hidden' }}>
+                    {allNotifications.filter(n => activityFilter === 'all' || n.type === activityFilter).length === 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter' }}>
+                        <FiActivity size={36} style={{ marginBottom: '12px', opacity: 0.3 }} />
+                        <p style={{ margin: 0 }}>No activity to show{activityFilter !== 'all' ? ` for ${activityFilter}s` : ''}.</p>
+                      </div>
+                    ) : (
+                      <div style={{ position: 'relative' }}>
+                        {/* Timeline line */}
+                        <div style={{ position: 'absolute', left: '32px', top: '24px', bottom: '24px', width: '2px', background: isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.1)', borderRadius: '1px' }} />
+
+                        {allNotifications.filter(n => activityFilter === 'all' || n.type === activityFilter).map((notif, idx) => {
+                          const iconColor = notif.type === 'message' ? '#06B6D4' : notif.type === 'comment' ? '#8B5CF6' : '#EC4899';
+                          const iconBg = notif.type === 'message' ? 'rgba(6,182,212,0.12)' : notif.type === 'comment' ? 'rgba(139,92,246,0.12)' : 'rgba(236,72,153,0.12)';
+                          const timeAgo = (date) => {
+                            const diff = Date.now() - new Date(date).getTime();
+                            const mins = Math.floor(diff / 60000);
+                            if (mins < 1) return 'Just now';
+                            if (mins < 60) return `${mins}m ago`;
+                            const hrs = Math.floor(mins / 60);
+                            if (hrs < 24) return `${hrs}h ago`;
+                            const days = Math.floor(hrs / 24);
+                            if (days < 7) return `${days}d ago`;
+                            return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                          };
+
+                          return (
+                            <div
+                              key={`activity-${notif.type}-${notif.id}`}
+                              onClick={() => handleActivityClick(notif)}
                               style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-                                background: 'rgba(239, 68, 68, 0.08)', color: '#EF4444',
+                                display: 'flex', gap: '16px', padding: '18px 24px 18px 16px',
+                                cursor: 'pointer', position: 'relative',
+                                borderBottom: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F8FAFC',
+                                background: !notif.read ? (isDark ? 'rgba(99,102,241,0.03)' : 'rgba(99,102,241,0.015)') : 'transparent',
                                 transition: 'all 0.2s ease',
-                                opacity: 0.6,
                               }}
-                              onMouseEnter={e => {
-                                e.currentTarget.style.opacity = 1;
-                                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
-                              }}
-                              onMouseLeave={e => {
-                                e.currentTarget.style.opacity = 0.6;
-                                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)';
-                              }}
+                              onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.03)'; e.currentTarget.style.paddingLeft = '20px'; }}
+                              onMouseLeave={e => { e.currentTarget.style.background = !notif.read ? (isDark ? 'rgba(99,102,241,0.03)' : 'rgba(99,102,241,0.015)') : 'transparent'; e.currentTarget.style.paddingLeft = '16px'; }}
                             >
-                              <FiTrash2 size={15} />
-                            </button>
-                            <div style={{ display: 'flex', alignItems: 'center', color: textMuted, opacity: 0.4 }}>
-                              <FiArrowRight size={16} />
+                              {/* Timeline dot */}
+                              <div style={{
+                                width: '40px', height: '40px', borderRadius: '12px', flexShrink: 0,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                background: iconBg, color: iconColor, zIndex: 1,
+                                boxShadow: !notif.read ? `0 0 12px ${iconColor}30` : 'none',
+                              }}>
+                                {notif.type === 'message' ? <FiMail size={18} /> : notif.type === 'comment' ? <FiMessageSquare size={18} /> : <FiStar size={18} />}
+                              </div>
+
+                              {/* Content */}
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.85rem', color: textMain, textTransform: 'capitalize' }}>
+                                      New {notif.type}
+                                    </span>
+                                    {!notif.read && <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#6366F1', display: 'inline-block', boxShadow: '0 0 6px rgba(99,102,241,0.5)' }} />}
+                                  </div>
+                                  <span style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted, whiteSpace: 'nowrap' }}>{timeAgo(notif.date)}</span>
+                                </div>
+                                <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#CBD5E1' : '#475569', margin: '0 0 4px 0', lineHeight: 1.5 }}>
+                                  {notif.from && <strong style={{ color: textMain }}>{notif.from}</strong>}
+                                  {notif.from && ' — '}
+                                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'inline' }}>{notif.title}</span>
+                                </p>
+                                <span style={{
+                                  display: 'inline-flex', alignItems: 'center', gap: '4px',
+                                  fontFamily: 'Inter', fontSize: '0.72rem', fontWeight: 600,
+                                  color: iconColor,
+                                  background: iconBg,
+                                  padding: '3px 10px', borderRadius: '6px',
+                                  textTransform: 'capitalize',
+                                }}>
+                                  {notif.type === 'message' ? <FiMail size={11} /> : notif.type === 'comment' ? <FiMessageSquare size={11} /> : <FiStar size={11} />}
+                                  {notif.type}
+                                </span>
+                              </div>
+
+                              {/* Actions */}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }} onClick={e => e.stopPropagation()}>
+                                <button
+                                  title={`Delete ${notif.type}`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteNotification(notif);
+                                  }}
+                                  style={{
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                                    background: 'rgba(239, 68, 68, 0.08)', color: '#EF4444',
+                                    transition: 'all 0.2s ease',
+                                    opacity: 0.6,
+                                  }}
+                                  onMouseEnter={e => {
+                                    e.currentTarget.style.opacity = 1;
+                                    e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
+                                  }}
+                                  onMouseLeave={e => {
+                                    e.currentTarget.style.opacity = 0.6;
+                                    e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)';
+                                  }}
+                                >
+                                  <FiTrash2 size={15} />
+                                </button>
+                                <div style={{ display: 'flex', alignItems: 'center', color: textMuted, opacity: 0.4 }}>
+                                  <FiArrowRight size={16} />
+                                </div>
+                              </div>
                             </div>
-                          </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ════ HERO SECTION ════ */}
+              {section === 'hero' && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>Manage the hero content and the interactive laptop mockup text shown on the home page.</p>
+                  <div style={{ padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
+                    {/* ── Hero Section Fields ── */}
+                    <div>
+                      <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '1.1rem' }}>🏠</span> Hero Section Config
+                      </h4>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                        <div style={{ gridColumn: '1 / -1' }}>
+                          <label style={profileLabelStyle}>Sub Hero Title</label>
+                          <input style={profileInputStyle} value={profileForm.heroTitle || ''} onChange={e => setProfileForm({ ...profileForm, heroTitle: e.target.value })} placeholder="Full Stack Developer & Software Engineer" />
                         </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-
-          {/* ════ HERO SECTION ════ */}
-          {section === 'hero' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>Manage the hero content and the interactive laptop mockup text shown on the home page.</p>
-              <div style={{ padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
-                {/* ── Hero Section Fields ── */}
-                <div>
-                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '1.1rem' }}>🏠</span> Hero Section Config
-                  </h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={profileLabelStyle}>Sub Hero Title</label>
-                      <input style={profileInputStyle} value={profileForm.heroTitle || ''} onChange={e => setProfileForm({ ...profileForm, heroTitle: e.target.value })} placeholder="Full Stack Developer & Software Engineer" />
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={profileLabelStyle}>Hero Description</label>
-                      <textarea style={{ ...profileInputStyle, height: '80px', resize: 'vertical' }} value={profileForm.heroDesc || ''} onChange={e => setProfileForm({ ...profileForm, heroDesc: e.target.value })} placeholder="I build scalable, high-performance web applications..." />
-                    </div>
-                    <div>
-                      <label style={profileLabelStyle}>Resume URL</label>
-                      <input style={profileInputStyle} value={profileForm.resumeUrl || ''} onChange={e => setProfileForm({ ...profileForm, resumeUrl: e.target.value })} />
-                    </div>
-                    <div>
-                      <label style={profileLabelStyle}>Roles (comma-separated)</label>
-                      <input style={profileInputStyle} value={profileForm.roles || ''} onChange={e => setProfileForm({ ...profileForm, roles: e.target.value })} placeholder="MERN Stack Developer, Full Stack Engineer" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* ── Laptop Screen Fields ── */}
-                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
-                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '1.1rem' }}>💻</span> Laptop Screen Content
-                  </h4>
-                  <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '16px' }}>Customize the code editor mockup shown inside the interactive laptop on the homepage.</p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    <div>
-                      <label style={profileLabelStyle}>Screen Name</label>
-                      <input style={profileInputStyle} value={profileForm.laptopName || ''} onChange={e => setProfileForm({ ...profileForm, laptopName: e.target.value })} placeholder="Hardik Prajapati" />
-                    </div>
-                    <div>
-                      <label style={profileLabelStyle}>Screen Job Title</label>
-                      <input style={profileInputStyle} value={profileForm.laptopTitle || ''} onChange={e => setProfileForm({ ...profileForm, laptopTitle: e.target.value })} placeholder="Full Stack Engineer" />
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={profileLabelStyle}>Screen Skills (comma-separated)</label>
-                      <input style={profileInputStyle} value={profileForm.laptopSkills || ''} onChange={e => setProfileForm({ ...profileForm, laptopSkills: e.target.value })} placeholder="React, Node.js, Express, MongoDB, Java, AI/ML, DSA" />
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={profileLabelStyle}>Screen Passion</label>
-                      <input style={profileInputStyle} value={profileForm.laptopPassion || ''} onChange={e => setProfileForm({ ...profileForm, laptopPassion: e.target.value })} placeholder="Turning ideas into impact" />
-                    </div>
-                  </div>
-                </div>
-                <div style={{ marginTop: '16px' }}>
-                  <label style={profileLabelStyle}>Bio</label>
-                  <textarea style={{ ...profileInputStyle, height: '100px', resize: 'vertical' }} value={profileForm.bio || ''} onChange={e => setProfileForm({ ...profileForm, bio: e.target.value })} />
-                </div>
-                <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
-                  <button onClick={handleProfileSave} style={{ padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
-                    Save Hero Config
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ════ PROFILE / ABOUT ════ */}
-          {section === 'profile' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>Manage your personal info displayed across the portfolio (Hero, About, Footer, Contact).</p>
-              <div style={{ padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                  <div>
-                    <label style={profileLabelStyle}>Full Name</label>
-                    <input style={profileInputStyle} value={profileForm.name || ''} onChange={e => setProfileForm({ ...profileForm, name: e.target.value })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>Job Title</label>
-                    <input style={profileInputStyle} value={profileForm.title || ''} onChange={e => setProfileForm({ ...profileForm, title: e.target.value })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>Email</label>
-                    <input style={profileInputStyle} value={profileForm.email || ''} onChange={e => setProfileForm({ ...profileForm, email: e.target.value })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>Phone</label>
-                    <input style={profileInputStyle} value={profileForm.phone || ''} onChange={e => setProfileForm({ ...profileForm, phone: e.target.value })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>Location</label>
-                    <input style={profileInputStyle} value={profileForm.location || ''} onChange={e => setProfileForm({ ...profileForm, location: e.target.value })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>Years of Experience</label>
-                    <input type="number" style={profileInputStyle} value={profileForm.yearsExp || ''} onChange={e => setProfileForm({ ...profileForm, yearsExp: Number(e.target.value) })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>GitHub URL</label>
-                    <input style={profileInputStyle} value={profileForm.github || ''} onChange={e => setProfileForm({ ...profileForm, github: e.target.value })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>LinkedIn URL</label>
-                    <input style={profileInputStyle} value={profileForm.linkedin || ''} onChange={e => setProfileForm({ ...profileForm, linkedin: e.target.value })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>X (Twitter) URL</label>
-                    <input style={profileInputStyle} value={profileForm.twitter || ''} onChange={e => setProfileForm({ ...profileForm, twitter: e.target.value })} />
-                  </div>
-                  <div style={{ gridColumn: '1 / -1' }}>
-                    <ImageUpload label="Profile Photo" value={profileForm.avatar || ''} onChange={(url) => setProfileForm({ ...profileForm, avatar: url })} token={token} isDark={isDark} labelStyle={profileLabelStyle} />
-                  </div>
-                </div>
-                <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
-                  <button onClick={handleProfileSave} style={{ padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
-                    Save Profile
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ════ PROJECTS ════ */}
-          {section === 'projects' && (
-            <div>
-              {/* Sub-tabs */}
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                <button onClick={() => setProjectsSubTab('projects')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: projectsSubTab === 'projects' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: projectsSubTab === 'projects' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: projectsSubTab === 'projects' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  <FiFolder size={14} /> Projects
-                </button>
-                <button onClick={() => setProjectsSubTab('categories')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: projectsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: projectsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: projectsSubTab === 'categories' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  🏷️ Project Categories
-                </button>
-              </div>
-
-              {projectsSubTab === 'projects' ? (
-                <CrudList items={data.projects} type="project" label="projects" onAdd={() => openCreateModal('project')} onEdit={(item) => openEditModal('project', item)} onDelete={(p) => handleDelete('project', p._id)} isDark={isDark}
-                  renderItem={(p, tm, tmut) => (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      {p.image && p.image.trim() !== '' ? (
-                        <img src={p.image} alt={p.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
-                      ) : (
-                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📁</div>
-                      )}
-                      <div>
-                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{p.title}</span>
-                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut, textTransform: 'uppercase' }}>{p.category}</span> {p.featured && '⭐'}
+                        <div style={{ gridColumn: '1 / -1' }}>
+                          <label style={profileLabelStyle}>Hero Description</label>
+                          <textarea style={{ ...profileInputStyle, height: '80px', resize: 'vertical' }} value={profileForm.heroDesc || ''} onChange={e => setProfileForm({ ...profileForm, heroDesc: e.target.value })} placeholder="I build scalable, high-performance web applications..." />
+                        </div>
+                        <div>
+                          <label style={profileLabelStyle}>Resume URL</label>
+                          <input style={profileInputStyle} value={profileForm.resumeUrl || ''} onChange={e => setProfileForm({ ...profileForm, resumeUrl: e.target.value })} />
+                        </div>
+                        <div>
+                          <label style={profileLabelStyle}>Roles (comma-separated)</label>
+                          <input style={profileInputStyle} value={profileForm.roles || ''} onChange={e => setProfileForm({ ...profileForm, roles: e.target.value })} placeholder="MERN Stack Developer, Full Stack Engineer" />
+                        </div>
                       </div>
                     </div>
-                  )} />
-              ) : (
-                <CrudList items={data.projectCategories} type="projectCategory" label="project categories" onAdd={() => openCreateModal('projectCategory')} onEdit={(item) => openEditModal('projectCategory', item)} onDelete={(c) => handleDelete('projectCategory', c._id)} isDark={isDark}
-                  renderItem={(c, tm, tmut) => (
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />
-                      {c.name}
-                    </span>
-                  )}
-                />
+
+                    {/* ── Laptop Screen Fields ── */}
+                    <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+                      <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '1.1rem' }}>💻</span> Laptop Screen Content
+                      </h4>
+                      <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '16px' }}>Customize the code editor mockup shown inside the interactive laptop on the homepage.</p>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                        <div>
+                          <label style={profileLabelStyle}>Screen Name</label>
+                          <input style={profileInputStyle} value={profileForm.laptopName || ''} onChange={e => setProfileForm({ ...profileForm, laptopName: e.target.value })} placeholder="Hardik Prajapati" />
+                        </div>
+                        <div>
+                          <label style={profileLabelStyle}>Screen Job Title</label>
+                          <input style={profileInputStyle} value={profileForm.laptopTitle || ''} onChange={e => setProfileForm({ ...profileForm, laptopTitle: e.target.value })} placeholder="Full Stack Engineer" />
+                        </div>
+                        <div style={{ gridColumn: '1 / -1' }}>
+                          <label style={profileLabelStyle}>Screen Skills (comma-separated)</label>
+                          <input style={profileInputStyle} value={profileForm.laptopSkills || ''} onChange={e => setProfileForm({ ...profileForm, laptopSkills: e.target.value })} placeholder="React, Node.js, Express, MongoDB, Java, AI/ML, DSA" />
+                        </div>
+                        <div style={{ gridColumn: '1 / -1' }}>
+                          <label style={profileLabelStyle}>Screen Passion</label>
+                          <input style={profileInputStyle} value={profileForm.laptopPassion || ''} onChange={e => setProfileForm({ ...profileForm, laptopPassion: e.target.value })} placeholder="Turning ideas into impact" />
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ marginTop: '16px' }}>
+                      <label style={profileLabelStyle}>Bio</label>
+                      <textarea style={{ ...profileInputStyle, height: '100px', resize: 'vertical' }} value={profileForm.bio || ''} onChange={e => setProfileForm({ ...profileForm, bio: e.target.value })} />
+                    </div>
+                    <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
+                      <button onClick={handleProfileSave} style={{ padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                        Save Hero Config
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
               )}
-            </div>
-          )}
 
-          {/* ════ SKILLS ════ */}
-          {section === 'skills' && (
-            <div>
-              {/* Sub-tabs */}
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                <button onClick={() => setSkillsSubTab('skills')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: skillsSubTab === 'skills' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: skillsSubTab === 'skills' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: skillsSubTab === 'skills' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  <FiCpu size={14} /> Skills
-                </button>
-                <button onClick={() => setSkillsSubTab('categories')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: skillsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: skillsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: skillsSubTab === 'categories' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  🏷️ Skill Categories
-                </button>
-              </div>
+              {/* ════ PROFILE / ABOUT ════ */}
+              {section === 'profile' && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>Manage your personal info displayed across the portfolio (Hero, About, Footer, Contact).</p>
+                  <div style={{ padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                      <div>
+                        <label style={profileLabelStyle}>Full Name</label>
+                        <input style={profileInputStyle} value={profileForm.name || ''} onChange={e => setProfileForm({ ...profileForm, name: e.target.value })} />
+                      </div>
+                      <div>
+                        <label style={profileLabelStyle}>Job Title</label>
+                        <input style={profileInputStyle} value={profileForm.title || ''} onChange={e => setProfileForm({ ...profileForm, title: e.target.value })} />
+                      </div>
+                      <div>
+                        <label style={profileLabelStyle}>Email</label>
+                        <input style={profileInputStyle} value={profileForm.email || ''} onChange={e => setProfileForm({ ...profileForm, email: e.target.value })} />
+                      </div>
+                      <div>
+                        <label style={profileLabelStyle}>Phone</label>
+                        <input style={profileInputStyle} value={profileForm.phone || ''} onChange={e => setProfileForm({ ...profileForm, phone: e.target.value })} />
+                      </div>
+                      <div>
+                        <label style={profileLabelStyle}>Location</label>
+                        <input style={profileInputStyle} value={profileForm.location || ''} onChange={e => setProfileForm({ ...profileForm, location: e.target.value })} />
+                      </div>
+                      <div>
+                        <label style={profileLabelStyle}>Years of Experience</label>
+                        <input type="number" style={profileInputStyle} value={profileForm.yearsExp || ''} onChange={e => setProfileForm({ ...profileForm, yearsExp: Number(e.target.value) })} />
+                      </div>
+                      <div>
+                        <label style={profileLabelStyle}>GitHub URL</label>
+                        <input style={profileInputStyle} value={profileForm.github || ''} onChange={e => setProfileForm({ ...profileForm, github: e.target.value })} />
+                      </div>
+                      <div>
+                        <label style={profileLabelStyle}>LinkedIn URL</label>
+                        <input style={profileInputStyle} value={profileForm.linkedin || ''} onChange={e => setProfileForm({ ...profileForm, linkedin: e.target.value })} />
+                      </div>
+                      <div>
+                        <label style={profileLabelStyle}>X (Twitter) URL</label>
+                        <input style={profileInputStyle} value={profileForm.twitter || ''} onChange={e => setProfileForm({ ...profileForm, twitter: e.target.value })} />
+                      </div>
+                      <div style={{ gridColumn: '1 / -1' }}>
+                        <ImageUpload label="Profile Photo" value={profileForm.avatar || ''} onChange={(url) => setProfileForm({ ...profileForm, avatar: url })} token={token} isDark={isDark} labelStyle={profileLabelStyle} />
+                      </div>
+                    </div>
+                    <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
+                      <button onClick={handleProfileSave} style={{ padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                        Save Profile
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
 
-              {skillsSubTab === 'skills' ? (
-                <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(s) => handleDelete('skill', s._id)} isDark={isDark}
-                  renderItem={(s, tm, tmut) => {
-                    const iconDetails = getSkillIconDetails(s.name, isDark) || {
-                      icon: <FiCpu />,
-                      color: '#6366F1'
-                    };
-                    return (
-                      <>
-                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          {s.image && s.image.trim() !== '' ? (
-                            <img src={s.image} alt={s.name} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+              {/* ════ PROJECTS ════ */}
+              {section === 'projects' && (
+                <div>
+                  {/* Sub-tabs */}
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                    <button onClick={() => setProjectsSubTab('projects')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: projectsSubTab === 'projects' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: projectsSubTab === 'projects' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: projectsSubTab === 'projects' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      <FiFolder size={14} /> Projects
+                    </button>
+                    <button onClick={() => setProjectsSubTab('categories')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: projectsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: projectsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: projectsSubTab === 'categories' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      🏷️ Project Categories
+                    </button>
+                  </div>
+
+                  {projectsSubTab === 'projects' ? (
+                    <CrudList items={data.projects} type="project" label="projects" onAdd={() => openCreateModal('project')} onEdit={(item) => openEditModal('project', item)} onDelete={(p) => handleDelete('project', p._id)} isDark={isDark}
+                      renderItem={(p, tm, tmut) => (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          {p.image && p.image.trim() !== '' ? (
+                            <img src={p.image} alt={p.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
                           ) : (
-                            <span style={{ display: 'inline-flex', alignItems: 'center', minWidth: '20px', justifyContent: 'center', fontSize: '1.15rem', color: iconDetails.color }}>
-                              {iconDetails.icon}
-                            </span>
+                            <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📁</div>
                           )}
-                          {s.name}
+                          <div>
+                            <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{p.title}</span>
+                            <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut, textTransform: 'uppercase' }}>{p.category}</span> {p.featured && '⭐'}
+                          </div>
+                        </div>
+                      )} />
+                  ) : (
+                    <CrudList items={data.projectCategories} type="projectCategory" label="project categories" onAdd={() => openCreateModal('projectCategory')} onEdit={(item) => openEditModal('projectCategory', item)} onDelete={(c) => handleDelete('projectCategory', c._id)} isDark={isDark}
+                      renderItem={(c, tm, tmut) => (
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />
+                          {c.name}
                         </span>
-                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{s.category}</span>
-                      </>
-                    );
-                  }}
-                />
-              ) : (
-                <CrudList items={data.skillCategories} type="skillCategory" label="skill categories" onAdd={() => openCreateModal('skillCategory')} onEdit={(item) => openEditModal('skillCategory', item)} onDelete={(cat) => handleDelete('skillCategory', cat._id)} isDark={isDark}
-                  renderItem={(cat, tm, tmut) => (
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      🏷️ {cat.name}
-                    </span>
+                      )}
+                    />
                   )}
-                />
+                </div>
               )}
-            </div>
-          )}
 
-          {/* ════ EXPERIENCE ════ */}
-          {section === 'experience' && (
-            <div>
-              {/* Sub-tabs */}
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                <button onClick={() => setExperienceSubTab('experiences')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: experienceSubTab === 'experiences' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: experienceSubTab === 'experiences' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: experienceSubTab === 'experiences' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  <FiBriefcase size={14} /> Experiences
-                </button>
-                <button onClick={() => setExperienceSubTab('types')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: experienceSubTab === 'types' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: experienceSubTab === 'types' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: experienceSubTab === 'types' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  <FiLayers size={14} /> Experience Types
-                </button>
-              </div>
+              {/* ════ SKILLS ════ */}
+              {section === 'skills' && (
+                <div>
+                  {/* Sub-tabs */}
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                    <button onClick={() => setSkillsSubTab('skills')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: skillsSubTab === 'skills' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: skillsSubTab === 'skills' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: skillsSubTab === 'skills' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      <FiCpu size={14} /> Skills
+                    </button>
+                    <button onClick={() => setSkillsSubTab('categories')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: skillsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: skillsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: skillsSubTab === 'categories' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      🏷️ Skill Categories
+                    </button>
+                  </div>
 
-              {experienceSubTab === 'experiences' ? (
-                <CrudList items={data.experience} type="experience" label="experience entries" onAdd={() => openCreateModal('experience')} onEdit={(item) => openEditModal('experience', item)} onDelete={(e) => handleDelete('experience', e._id)} isDark={isDark}
+                  {skillsSubTab === 'skills' ? (
+                    <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(s) => handleDelete('skill', s._id)} isDark={isDark}
+                      renderItem={(s, tm, tmut) => {
+                        const iconDetails = getSkillIconDetails(s.name, isDark) || {
+                          icon: <FiCpu />,
+                          color: '#6366F1'
+                        };
+                        return (
+                          <>
+                            <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              {s.image && s.image.trim() !== '' ? (
+                                <img src={s.image} alt={s.name} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                              ) : (
+                                <span style={{ display: 'inline-flex', alignItems: 'center', minWidth: '20px', justifyContent: 'center', fontSize: '1.15rem', color: iconDetails.color }}>
+                                  {iconDetails.icon}
+                                </span>
+                              )}
+                              {s.name}
+                            </span>
+                            <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{s.category}</span>
+                          </>
+                        );
+                      }}
+                    />
+                  ) : (
+                    <CrudList items={data.skillCategories} type="skillCategory" label="skill categories" onAdd={() => openCreateModal('skillCategory')} onEdit={(item) => openEditModal('skillCategory', item)} onDelete={(cat) => handleDelete('skillCategory', cat._id)} isDark={isDark}
+                      renderItem={(cat, tm, tmut) => (
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          🏷️ {cat.name}
+                        </span>
+                      )}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* ════ EXPERIENCE ════ */}
+              {section === 'experience' && (
+                <div>
+                  {/* Sub-tabs */}
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                    <button onClick={() => setExperienceSubTab('experiences')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: experienceSubTab === 'experiences' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: experienceSubTab === 'experiences' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: experienceSubTab === 'experiences' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      <FiBriefcase size={14} /> Experiences
+                    </button>
+                    <button onClick={() => setExperienceSubTab('types')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: experienceSubTab === 'types' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: experienceSubTab === 'types' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: experienceSubTab === 'types' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      <FiLayers size={14} /> Experience Types
+                    </button>
+                  </div>
+
+                  {experienceSubTab === 'experiences' ? (
+                    <CrudList items={data.experience} type="experience" label="experience entries" onAdd={() => openCreateModal('experience')} onEdit={(item) => openEditModal('experience', item)} onDelete={(e) => handleDelete('experience', e._id)} isDark={isDark}
+                      renderItem={(e, tm, tmut) => (
+                        <>
+                          <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            {e.image && e.image.trim() !== '' ? (
+                              <img src={e.image} alt={e.company} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                            ) : (
+                              <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
+                                {e.icon || '💼'}
+                              </span>
+                            )}
+                            {e.title}
+                          </span>
+                          <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{e.company} · {e.year} · {e.type}</span>
+                        </>
+                      )}
+                    />
+                  ) : (
+                    <CrudList items={data.experienceTypes} type="experienceType" label="experience types" onAdd={() => openCreateModal('experienceType')} onEdit={(item) => openEditModal('experienceType', item)} onDelete={(t) => handleDelete('experienceType', t._id)} isDark={isDark}
+                      renderItem={(t, tm, tmut) => (
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <FiLayers size={14} color="#6366F1" />
+                          {t.name}
+                        </span>
+                      )}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* ════ EDUCATION ════ */}
+              {section === 'education' && (
+                <CrudList items={data.education} type="education" label="education entries" onAdd={() => openCreateModal('education')} onEdit={(item) => openEditModal('education', item)} onDelete={(edu) => handleDelete('education', edu._id)} isDark={isDark}
                   renderItem={(e, tm, tmut) => (
                     <>
                       <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {e.image && e.image.trim() !== '' ? (
-                          <img src={e.image} alt={e.company} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                          <img src={e.image} alt={e.institution} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
                         ) : (
                           <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
-                            {e.icon || '💼'}
+                            {e.icon || '🎓'}
                           </span>
                         )}
-                        {e.title}
+                        {e.degree}
+                        <span style={{ fontSize: '0.75rem', fontWeight: 500, color: tmut, marginLeft: '6px' }}>(Order: {e.order || 0}{e.currentlyPursuing ? ' · Pursuing' : ''})</span>
                       </span>
-                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{e.company} · {e.year} · {e.type}</span>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{e.institution} · {e.year}</span>
                     </>
                   )}
                 />
-              ) : (
-                <CrudList items={data.experienceTypes} type="experienceType" label="experience types" onAdd={() => openCreateModal('experienceType')} onEdit={(item) => openEditModal('experienceType', item)} onDelete={(t) => handleDelete('experienceType', t._id)} isDark={isDark}
-                  renderItem={(t, tm, tmut) => (
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <FiLayers size={14} color="#6366F1" />
-                      {t.name}
-                    </span>
+              )}
+
+              {/* ════ SERVICES ════ */}
+              {section === 'services' && (
+                <CrudList items={data.services} type="service" label="services" onAdd={() => openCreateModal('service')} onEdit={(item) => openEditModal('service', item)} onDelete={(s) => handleDelete('service', s._id)} isDark={isDark}
+                  renderItem={(s, tm, tmut) => (
+                    <>
+                      <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {s.image && s.image.trim() !== '' ? (
+                          <img src={s.image} alt={s.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                        ) : (
+                          <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {s.icon || '🚀'}
+                          </span>
+                        )}
+                        {s.title}
+                      </span>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{s.desc?.substring(0, 60)}...</span>
+                    </>
                   )}
                 />
               )}
-            </div>
-          )}
 
-          {/* ════ EDUCATION ════ */}
-          {section === 'education' && (
-            <CrudList items={data.education} type="education" label="education entries" onAdd={() => openCreateModal('education')} onEdit={(item) => openEditModal('education', item)} onDelete={(edu) => handleDelete('education', edu._id)} isDark={isDark}
-              renderItem={(e, tm, tmut) => (
-                <>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {e.image && e.image.trim() !== '' ? (
-                      <img src={e.image} alt={e.institution} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
-                    ) : (
-                      <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {e.icon || '🎓'}
+              {/* ════ ACHIEVEMENTS ════ */}
+              {section === 'achievements' && (
+                <CrudList items={data.achievements} type="achievement" label="achievements" onAdd={() => openCreateModal('achievement')} onEdit={(item) => openEditModal('achievement', item)} onDelete={(a) => handleDelete('achievement', a._id)} isDark={isDark}
+                  renderItem={(a, tm, tmut) => (
+                    <>
+                      <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {a.image && a.image.trim() !== '' ? (
+                          <img src={a.image} alt={a.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                        ) : (
+                          <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {a.icon || '🏆'}
+                          </span>
+                        )}
+                        {a.title}
                       </span>
-                    )}
-                    {e.degree}
-                    <span style={{ fontSize: '0.75rem', fontWeight: 500, color: tmut, marginLeft: '6px' }}>(Order: {e.order || 0}{e.currentlyPursuing ? ' · Pursuing' : ''})</span>
-                  </span>
-                  <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{e.institution} · {e.year}</span>
-                </>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{a.value} · {a.desc?.substring(0, 50)}...</span>
+                    </>
+                  )}
+                />
               )}
-            />
-          )}
 
-          {/* ════ SERVICES ════ */}
-          {section === 'services' && (
-            <CrudList items={data.services} type="service" label="services" onAdd={() => openCreateModal('service')} onEdit={(item) => openEditModal('service', item)} onDelete={(s) => handleDelete('service', s._id)} isDark={isDark}
-              renderItem={(s, tm, tmut) => (
-                <>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {s.image && s.image.trim() !== '' ? (
-                      <img src={s.image} alt={s.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
-                    ) : (
-                      <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {s.icon || '🚀'}
+              {/* ════ STATS ════ */}
+              {section === 'stats' && (
+                <CrudList items={data.stats} type="stat" label="stats/counters" onAdd={() => openCreateModal('stat')} onEdit={(item) => openEditModal('stat', item)} onDelete={(s) => handleDelete('stat', s._id)} isDark={isDark}
+                  renderItem={(s, tm, tmut) => (
+                    <>
+                      <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {s.image && s.image.trim() !== '' ? (
+                          <img src={s.image} alt={s.label} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                        ) : (
+                          <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {s.icon || '🚀'}
+                          </span>
+                        )}
+                        {s.value}{s.suffix} · {s.label}
+                        <span style={{ fontSize: '0.75rem', fontWeight: 500, color: tmut, marginLeft: '6px' }}>(Order: {s.order || 0})</span>
                       </span>
-                    )}
-                    {s.title}
-                  </span>
-                  <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{s.desc?.substring(0, 60)}...</span>
-                </>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{s.description?.substring(0, 60)}...</span>
+                    </>
+                  )}
+                />
               )}
-            />
-          )}
 
-          {/* ════ ACHIEVEMENTS ════ */}
-          {section === 'achievements' && (
-            <CrudList items={data.achievements} type="achievement" label="achievements" onAdd={() => openCreateModal('achievement')} onEdit={(item) => openEditModal('achievement', item)} onDelete={(a) => handleDelete('achievement', a._id)} isDark={isDark}
-              renderItem={(a, tm, tmut) => (
-                <>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {a.image && a.image.trim() !== '' ? (
-                      <img src={a.image} alt={a.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
-                    ) : (
-                      <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {a.icon || '🏆'}
-                      </span>
-                    )}
-                    {a.title}
-                  </span>
-                  <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{a.value} · {a.desc?.substring(0, 50)}...</span>
-                </>
-              )}
-            />
-          )}
+              {/* ════ BLOGS ════ */}
+              {section === 'blogs' && (
+                <div>
+                  {/* Sub-tabs */}
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                    <button onClick={() => setBlogsSubTab('blogs')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: blogsSubTab === 'blogs' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: blogsSubTab === 'blogs' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: blogsSubTab === 'blogs' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      <FiFileText size={14} /> Blogs
+                    </button>
+                    <button onClick={() => setBlogsSubTab('tags')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: blogsSubTab === 'tags' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: blogsSubTab === 'tags' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: blogsSubTab === 'tags' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      <FiHash size={14} /> Blog Tags
+                    </button>
+                    <button onClick={() => setBlogsSubTab('categories')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: blogsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: blogsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: blogsSubTab === 'categories' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      🏷️ Blog Categories
+                    </button>
+                    <button onClick={() => setBlogsSubTab('comments')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                        border: blogsSubTab === 'comments' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                        background: blogsSubTab === 'comments' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                        color: blogsSubTab === 'comments' ? '#6366F1' : textMuted,
+                        fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                    >
+                      <FiMessageSquare size={14} /> Blog Comments
+                    </button>
+                  </div>
 
-          {/* ════ STATS ════ */}
-          {section === 'stats' && (
-            <CrudList items={data.stats} type="stat" label="stats/counters" onAdd={() => openCreateModal('stat')} onEdit={(item) => openEditModal('stat', item)} onDelete={(s) => handleDelete('stat', s._id)} isDark={isDark}
-              renderItem={(s, tm, tmut) => (
-                <>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {s.image && s.image.trim() !== '' ? (
-                      <img src={s.image} alt={s.label} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
-                    ) : (
-                      <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {s.icon || '🚀'}
-                      </span>
-                    )}
-                    {s.value}{s.suffix} · {s.label}
-                    <span style={{ fontSize: '0.75rem', fontWeight: 500, color: tmut, marginLeft: '6px' }}>(Order: {s.order || 0})</span>
-                  </span>
-                  <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{s.description?.substring(0, 60)}...</span>
-                </>
-              )}
-            />
-          )}
-
-          {/* ════ BLOGS ════ */}
-          {section === 'blogs' && (
-            <div>
-              {/* Sub-tabs */}
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                <button onClick={() => setBlogsSubTab('blogs')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: blogsSubTab === 'blogs' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: blogsSubTab === 'blogs' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: blogsSubTab === 'blogs' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  <FiFileText size={14} /> Blogs
-                </button>
-                <button onClick={() => setBlogsSubTab('tags')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: blogsSubTab === 'tags' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: blogsSubTab === 'tags' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: blogsSubTab === 'tags' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  <FiHash size={14} /> Blog Tags
-                </button>
-                <button onClick={() => setBlogsSubTab('categories')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: blogsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: blogsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: blogsSubTab === 'categories' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  🏷️ Blog Categories
-                </button>
-                <button onClick={() => setBlogsSubTab('comments')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
-                    border: blogsSubTab === 'comments' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
-                    background: blogsSubTab === 'comments' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
-                    color: blogsSubTab === 'comments' ? '#6366F1' : textMuted,
-                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
-                  }}
-                >
-                  <FiMessageSquare size={14} /> Blog Comments
-                </button>
-              </div>
-
-              {blogsSubTab === 'blogs' ? (
-                <CrudList items={data.blogs} type="blog" label="blog posts" onAdd={() => openCreateModal('blog')} onEdit={(item) => openEditModal('blog', item)} onDelete={(b) => handleDelete('blog', b._id)} isDark={isDark}
-                  renderItem={(b, tm, tmut) => (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      {b.image && b.image.trim() !== '' ? (
-                        <img src={b.image} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
+                  {blogsSubTab === 'blogs' ? (
+                    <CrudList items={data.blogs} type="blog" label="blog posts" onAdd={() => openCreateModal('blog')} onEdit={(item) => openEditModal('blog', item)} onDelete={(b) => handleDelete('blog', b._id)} isDark={isDark}
+                      renderItem={(b, tm, tmut) => (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          {b.image && b.image.trim() !== '' ? (
+                            <img src={b.image} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
+                          ) : (
+                            <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}><FiFileText size={18} /></div>
+                          )}
+                          <div>
+                            <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{b.title}</span>
+                            <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}><span style={{ textTransform: 'uppercase' }}>{b.category}</span> {b.featured && <FiStar size={12} color="#F59E0B" style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '4px', marginRight: '4px' }} />} · {b.readTime || '5 min read'}</span>
+                          </div>
+                        </div>
+                      )} />
+                  ) : blogsSubTab === 'tags' ? (
+                    <CrudList items={data.tags} type="tag" label="tags" onAdd={() => openCreateModal('tag')} onEdit={(item) => openEditModal('tag', item)} onDelete={(tg) => handleRemoveTag(tg.tag)} isDark={isDark}
+                      renderItem={(tg, tm, tmut) => (
+                        <>
+                          <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <FiHash size={14} color="#6366F1" />
+                            {tg.tag}
+                          </span>
+                          <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>used in {tg.count} posts</span>
+                        </>
+                      )}
+                    />
+                  ) : blogsSubTab === 'categories' ? (
+                    <CrudList items={data.blogCategories} type="blogCategory" label="blog categories" onAdd={() => openCreateModal('blogCategory')} onEdit={(item) => openEditModal('blogCategory', item)} onDelete={(c) => handleDelete('blogCategory', c._id)} isDark={isDark}
+                      renderItem={(c, tm, tmut) => (
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />
+                          {c.name}
+                        </span>
+                      )}
+                    />
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      {data.comments.length === 0 ? (
+                        <div style={{ padding: '40px', textAlign: 'center', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>
+                          No comments to moderate.
+                        </div>
                       ) : (
-                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}><FiFileText size={18} /></div>
+                        data.comments.map(c => {
+                          const blog = data.blogs.find(b => b._id === c.blogId);
+                          return (
+                            <div
+                              key={c._id}
+                              style={{
+                                padding: '20px',
+                                borderRadius: '16px',
+                                background: cardBg,
+                                border: cardBorder,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '12px',
+                                transition: 'transform 0.2s',
+                              }}
+                              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                            >
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
+                                <div>
+                                  <h5 style={{ margin: '0 0 2px 0', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain }}>
+                                    {c.name} <span style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '0.78rem', color: textMuted, marginLeft: '6px' }}>({c.email})</span>
+                                  </h5>
+                                  <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted }}>
+                                    Posted on: <strong style={{ color: '#6366F1' }}>{blog ? blog.title : 'Deleted Blog Post'}</strong> · {new Date(c.createdAt).toLocaleString()}
+                                  </p>
+                                </div>
+                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                  <button
+                                    onClick={() => handleApproveComment(c._id, !c.approved)}
+                                    style={{
+                                      padding: '6px 12px',
+                                      borderRadius: '8px',
+                                      border: 'none',
+                                      cursor: 'pointer',
+                                      fontFamily: 'Poppins',
+                                      fontWeight: 600,
+                                      fontSize: '0.75rem',
+                                      background: c.approved ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+                                      color: c.approved ? '#10B981' : '#F59E0B',
+                                      transition: 'all 0.2s',
+                                    }}
+                                  >
+                                    {c.approved ? '✓ Approved' : '⏳ Pending'}
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteComment(c._id)}
+                                    style={{
+                                      padding: '6px 10px',
+                                      borderRadius: '8px',
+                                      border: 'none',
+                                      cursor: 'pointer',
+                                      background: 'rgba(239, 68, 68, 0.1)',
+                                      color: '#EF4444',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      transition: 'all 0.2s',
+                                    }}
+                                    title="Delete Comment"
+                                  >
+                                    <FiTrash2 size={13} />
+                                  </button>
+                                </div>
+                              </div>
+                              <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.88rem', color: isDark ? '#CBD5E1' : '#475569', lineHeight: 1.5, background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', padding: '12px 16px', borderRadius: '10px', border: cardBorder, whiteSpace: 'pre-wrap' }}>
+                                {c.content}
+                              </p>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ════ TESTIMONIALS ════ */}
+              {section === 'testimonials' && (
+                <CrudList items={data.testimonials} type="testimonial" label="testimonials" onAdd={() => openCreateModal('testimonial')} onEdit={(item) => openEditModal('testimonial', item)} onDelete={(t) => handleDelete('testimonial', t._id)} isDark={isDark}
+                  renderItem={(t, tm, tmut) => (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      {t.avatar && t.avatar.trim() !== '' ? (
+                        <img src={t.avatar} alt={t.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '50%', flexShrink: 0 }} />
+                      ) : (
+                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${t.name}`} alt={t.name} style={{ width: '48px', height: '48px', borderRadius: '50%', flexShrink: 0 }} />
                       )}
                       <div>
-                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{b.title}</span>
-                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}><span style={{ textTransform: 'uppercase' }}>{b.category}</span> {b.featured && <FiStar size={12} color="#F59E0B" style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '4px', marginRight: '4px' }} />} · {b.readTime || '5 min read'}</span>
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{t.name}</span>
+                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{t.role} {t.company && `at ${t.company}`} · ⭐ {t.rating}</span>
                       </div>
                     </div>
                   )} />
-              ) : blogsSubTab === 'tags' ? (
-                <CrudList items={data.tags} type="tag" label="tags" onAdd={() => openCreateModal('tag')} onEdit={(item) => openEditModal('tag', item)} onDelete={(tg) => handleRemoveTag(tg.tag)} isDark={isDark}
-                  renderItem={(tg, tm, tmut) => (
+              )}
+
+              {/* ════ CERTIFICATIONS ════ */}
+              {section === 'certifications' && (
+                <CrudList items={data.certifications} type="certification" label="certifications" onAdd={() => openCreateModal('certification')} onEdit={(item) => openEditModal('certification', item)} onDelete={(c) => handleDelete('certification', c._id)} isDark={isDark}
+                  renderItem={(c, tm, tmut) => (
                     <>
                       <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <FiHash size={14} color="#6366F1" />
-                        {tg.tag}
+                        {c.logo && c.logo.trim() !== '' ? (
+                          <img src={c.logo} alt={c.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                        ) : (
+                          <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {c.badge || '🏆'}
+                          </span>
+                        )}
+                        {c.title}
                       </span>
-                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>used in {tg.count} posts</span>
+                      <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{c.issuer} · {c.date ? new Date(c.date).toLocaleDateString() : ''}</span>
                     </>
                   )}
                 />
-              ) : blogsSubTab === 'categories' ? (
-                <CrudList items={data.blogCategories} type="blogCategory" label="blog categories" onAdd={() => openCreateModal('blogCategory')} onEdit={(item) => openEditModal('blogCategory', item)} onDelete={(c) => handleDelete('blogCategory', c._id)} isDark={isDark}
-                  renderItem={(c, tm, tmut) => (
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />
-                      {c.name}
-                    </span>
-                  )}
-                />
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {data.comments.length === 0 ? (
-                    <div style={{ padding: '40px', textAlign: 'center', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>
-                      No comments to moderate.
+              )}
+
+              {/* ════ MESSAGES (INBOX) ════ */}
+              {section === 'messages' && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '16px' }}>{data.messages.length} messages received</p>
+                  {data.messages.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>No messages yet. Messages sent via the contact form will appear here.</div>
+                  ) : (
+                    <div className="inbox-container" style={{ display: 'flex', gap: '0', borderRadius: '20px', background: cardBg, border: cardBorder, overflow: 'hidden', height: 'calc(100vh - 260px)', minHeight: '500px' }}>
+                      {/* ── Left: Message List ── */}
+                      <div style={{ width: '340px', minWidth: '340px', borderRight: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0', overflowY: 'auto', flexShrink: 0 }}>
+                        {data.messages.map(m => {
+                          const isActive = selectedMessage?._id === m._id;
+                          return (
+                            <div
+                              key={m._id}
+                              onClick={() => { setSelectedMessage(m); setShowReplyForm(false); setReplyForm({ subject: `Re: ${m.subject}`, message: '' }); if (!m.read) handleMarkAsRead(m._id); }}
+                              style={{
+                                padding: '16px 20px',
+                                cursor: 'pointer',
+                                borderBottom: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F5F9',
+                                background: isActive ? (isDark ? 'rgba(99,102,241,0.08)' : 'rgba(99,102,241,0.04)') : 'transparent',
+                                borderLeft: isActive ? '3px solid #6366F1' : '3px solid transparent',
+                                transition: 'all 0.15s ease',
+                              }}
+                              onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.02)' : '#FAFBFC'; }}
+                              onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+                            >
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                                <span style={{ fontFamily: 'Poppins', fontWeight: m.read ? 500 : 700, fontSize: '0.88rem', color: textMain, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '180px' }}>{m.name}</span>
+                                <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: textMuted, whiteSpace: 'nowrap' }}>{new Date(m.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                              </div>
+                              <p style={{ fontFamily: 'Inter', fontWeight: m.read ? 400 : 600, fontSize: '0.82rem', color: textMain, margin: '0 0 4px 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.subject}</p>
+                              <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.message}</p>
+                              <div style={{ display: 'flex', gap: '6px', marginTop: '6px', alignItems: 'center' }}>
+                                {!m.read && <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366F1', display: 'inline-block' }} />}
+                                {m.replied && <span style={{ fontFamily: 'Inter', fontSize: '0.7rem', color: '#10B981', fontWeight: 600 }}>✓ Replied</span>}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* ── Right: Message Detail Pane ── */}
+                      <div className="inbox-right-pane" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
+                        {!selectedMessage ? (
+                          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: textMuted, fontFamily: 'Inter', fontSize: '0.9rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                              <FiMail size={40} style={{ marginBottom: '12px', opacity: 0.3 }} />
+                              <p style={{ margin: 0 }}>Select a message to view details</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="inbox-scroll" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', minHeight: 0 }}>
+                            {/* Header */}
+                            <div style={{ padding: '24px 28px 16px', borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F1F5F9', flexShrink: 0 }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                <div>
+                                  <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: '0 0 4px 0' }}>{selectedMessage.name}</h3>
+                                  <span style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: '#6366F1' }}>{selectedMessage.email}</span>
+                                </div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                  <button onClick={() => { setShowReplyForm(!showReplyForm); if (!showReplyForm) setReplyForm({ subject: `Re: ${selectedMessage.subject}`, message: '' }); }} style={{ padding: '8px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: showReplyForm ? 'rgba(239,68,68,0.1)' : 'rgba(99,102,241,0.08)', color: showReplyForm ? '#EF4444' : '#6366F1', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem' }}>
+                                    {showReplyForm ? <><FiX size={14} /> Cancel</> : <><FiCornerUpLeft size={14} /> Reply</>}
+                                  </button>
+                                  <button onClick={() => { handleDelete('message', selectedMessage._id); setSelectedMessage(null); }} style={{ padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }} title="Delete">
+                                    <FiTrash2 size={14} />
+                                  </button>
+                                </div>
+                              </div>
+                              <div style={{ marginTop: '8px', marginBottom: showReplyForm ? '8px' : '16px', transition: 'margin 0.3s ease-in-out' }}>
+                                <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', color: textMain, margin: 0 }}>{selectedMessage.subject}</p>
+                                <span style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>{new Date(selectedMessage.createdAt).toLocaleString()}</span>
+                              </div>
+                            </div>
+
+                            {/* Message Body — dynamic sizing */}
+                            <div style={{
+                              padding: '20px 28px',
+                              ...(showReplyForm
+                                ? { flex: '0 0 auto', height: '100px', overflowY: 'auto' }
+                                : { flex: 1, minHeight: '140px' }),
+                              transition: 'all 0.3s ease-in-out',
+                            }}>
+                              <p style={{ fontFamily: 'Inter', fontSize: '0.9rem', color: textMuted, lineHeight: 1.7, margin: 0, whiteSpace: 'pre-wrap' }}>{selectedMessage.message}</p>
+                            </div>
+
+                            {/* Admin Reply Display Card */}
+                            {(selectedMessage.replied || selectedMessage.replyMessage) && (
+                              <div style={{
+                                margin: '0 28px 16px',
+                                padding: '16px 20px',
+                                borderRadius: '12px',
+                                background: isDark ? 'rgba(16,185,129,0.06)' : 'rgba(16,185,129,0.04)',
+                                border: isDark ? '1px solid rgba(16,185,129,0.15)' : '1px solid rgba(16,185,129,0.12)',
+                                flexShrink: 0,
+                              }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                                  <FiCornerUpLeft size={14} color="#10B981" />
+                                  <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.82rem', color: '#10B981' }}>Your Reply</span>
+                                  {selectedMessage.repliedAt && (
+                                    <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: textMuted, marginLeft: 'auto' }}>
+                                      {new Date(selectedMessage.repliedAt).toLocaleString()}
+                                    </span>
+                                  )}
+                                </div>
+                                {selectedMessage.replySubject && (
+                                  <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', color: textMain, margin: '0 0 6px 0' }}>{selectedMessage.replySubject}</p>
+                                )}
+                                <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: textMuted, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{selectedMessage.replyMessage}</p>
+                              </div>
+                            )}
+
+                            {/* Reply Compose Form */}
+                            <AnimatePresence>
+                              {showReplyForm && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: 'auto' }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  style={{ padding: '0 28px 24px', flexShrink: 0 }}
+                                >
+                                  <div style={{ padding: '20px', borderRadius: '14px', background: isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.03)', border: isDark ? '1px solid rgba(99,102,241,0.15)' : '1px solid rgba(99,102,241,0.1)' }}>
+                                    <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain, margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                      <FiSend size={14} color="#6366F1" /> Compose Reply
+                                    </h4>
+                                    <div style={{ marginBottom: '12px' }}>
+                                      <label style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '6px', display: 'block' }}>Subject</label>
+                                      <input
+                                        value={replyForm.subject}
+                                        onChange={e => setReplyForm({ ...replyForm, subject: e.target.value })}
+                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: textMain, fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', boxSizing: 'border-box' }}
+                                      />
+                                    </div>
+                                    <div style={{ marginBottom: '16px' }}>
+                                      <label style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '6px', display: 'block' }}>Message</label>
+                                      <textarea
+                                        value={replyForm.message}
+                                        onChange={e => setReplyForm({ ...replyForm, message: e.target.value })}
+                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: textMain, fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', height: '120px', resize: 'vertical', boxSizing: 'border-box' }}
+                                      />
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                                      <button onClick={() => { setShowReplyForm(false); setReplyForm({ subject: '', message: '' }); }} style={{ padding: '10px 20px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: 'transparent', color: textMuted, fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>
+                                        Cancel
+                                      </button>
+                                      <button onClick={() => handleReply(selectedMessage._id)} style={{ padding: '10px 22px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', boxShadow: '0 4px 14px rgba(99,102,241,0.3)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <FiSend size={14} /> Send Reply
+                                      </button>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  ) : (
-                    data.comments.map(c => {
-                      const blog = data.blogs.find(b => b._id === c.blogId);
-                      return (
-                        <div
-                          key={c._id}
-                          style={{
-                            padding: '20px',
-                            borderRadius: '16px',
-                            background: cardBg,
-                            border: cardBorder,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '12px',
-                            transition: 'transform 0.2s',
-                          }}
-                          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
-                        >
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
-                            <div>
-                              <h5 style={{ margin: '0 0 2px 0', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain }}>
-                                {c.name} <span style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '0.78rem', color: textMuted, marginLeft: '6px' }}>({c.email})</span>
-                              </h5>
-                              <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted }}>
-                                Posted on: <strong style={{ color: '#6366F1' }}>{blog ? blog.title : 'Deleted Blog Post'}</strong> · {new Date(c.createdAt).toLocaleString()}
-                              </p>
-                            </div>
-                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                              <button
-                                onClick={() => handleApproveComment(c._id, !c.approved)}
-                                style={{
-                                  padding: '6px 12px',
-                                  borderRadius: '8px',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                  fontFamily: 'Poppins',
-                                  fontWeight: 600,
-                                  fontSize: '0.75rem',
-                                  background: c.approved ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
-                                  color: c.approved ? '#10B981' : '#F59E0B',
-                                  transition: 'all 0.2s',
-                                }}
-                              >
-                                {c.approved ? '✓ Approved' : '⏳ Pending'}
-                              </button>
-                              <button
-                                onClick={() => handleDeleteComment(c._id)}
-                                style={{
-                                  padding: '6px 10px',
-                                  borderRadius: '8px',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                  background: 'rgba(239, 68, 68, 0.1)',
-                                  color: '#EF4444',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  transition: 'all 0.2s',
-                                }}
-                                title="Delete Comment"
-                              >
-                                <FiTrash2 size={13} />
-                              </button>
-                            </div>
-                          </div>
-                          <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.88rem', color: isDark ? '#CBD5E1' : '#475569', lineHeight: 1.5, background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', padding: '12px 16px', borderRadius: '10px', border: cardBorder, whiteSpace: 'pre-wrap' }}>
-                            {c.content}
-                          </p>
-                        </div>
-                      );
-                    })
                   )}
-                </div>
+                </motion.div>
               )}
-            </div>
-          )}
 
-          {/* ════ TESTIMONIALS ════ */}
-          {section === 'testimonials' && (
-            <CrudList items={data.testimonials} type="testimonial" label="testimonials" onAdd={() => openCreateModal('testimonial')} onEdit={(item) => openEditModal('testimonial', item)} onDelete={(t) => handleDelete('testimonial', t._id)} isDark={isDark}
-              renderItem={(t, tm, tmut) => (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {t.avatar && t.avatar.trim() !== '' ? (
-                    <img src={t.avatar} alt={t.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '50%', flexShrink: 0 }} />
-                  ) : (
-                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${t.name}`} alt={t.name} style={{ width: '48px', height: '48px', borderRadius: '50%', flexShrink: 0 }} />
-                  )}
-                  <div>
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'block' }}>{t.name}</span>
-                    <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{t.role} {t.company && `at ${t.company}`} · ⭐ {t.rating}</span>
-                  </div>
-                </div>
-              )} />
-          )}
+              {/* ════ SETTINGS ════ */}
+              {section === 'settings' && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>
+                    Manage website general settings and outbound mail SMTP server configurations.
+                  </p>
 
-          {/* ════ CERTIFICATIONS ════ */}
-          {section === 'certifications' && (
-            <CrudList items={data.certifications} type="certification" label="certifications" onAdd={() => openCreateModal('certification')} onEdit={(item) => openEditModal('certification', item)} onDelete={(c) => handleDelete('certification', c._id)} isDark={isDark}
-              renderItem={(c, tm, tmut) => (
-                <>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {c.logo && c.logo.trim() !== '' ? (
-                      <img src={c.logo} alt={c.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
-                    ) : (
-                      <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {c.badge || '🏆'}
-                      </span>
-                    )}
-                    {c.title}
-                  </span>
-                  <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{c.issuer} · {c.date ? new Date(c.date).toLocaleDateString() : ''}</span>
-                </>
-              )}
-            />
-          )}
-
-          {/* ════ MESSAGES (INBOX) ════ */}
-          {section === 'messages' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', flexDirection: 'column' }}>
-              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '16px' }}>{data.messages.length} messages received</p>
-              {data.messages.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>No messages yet. Messages sent via the contact form will appear here.</div>
-              ) : (
-                <div className="inbox-container" style={{ display: 'flex', gap: '0', borderRadius: '20px', background: cardBg, border: cardBorder, overflow: 'hidden', height: 'calc(100vh - 260px)', minHeight: '500px' }}>
-                  {/* ── Left: Message List ── */}
-                  <div style={{ width: '340px', minWidth: '340px', borderRight: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0', overflowY: 'auto', flexShrink: 0 }}>
-                    {data.messages.map(m => {
-                      const isActive = selectedMessage?._id === m._id;
+                  {/* Settings Sub-Tab Bar */}
+                  <div style={{ display: 'flex', gap: '8px', borderBottom: cardBorder, paddingBottom: '12px', marginBottom: '24px', overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                    {[
+                      { id: 'general', label: 'General', emoji: '⚙️' },
+                      { id: 'visibility', label: 'Section Visibility', emoji: '👁️' },
+                      { id: 'smtp', label: 'SMTP Configuration', emoji: '📧' },
+                      { id: 'system', label: 'System Info', emoji: '📊' },
+                    ].map(tab => {
+                      const isActive = settingsTab === tab.id;
                       return (
-                        <div
-                          key={m._id}
-                          onClick={() => { setSelectedMessage(m); setShowReplyForm(false); setReplyForm({ subject: `Re: ${m.subject}`, message: '' }); if (!m.read) handleMarkAsRead(m._id); }}
+                        <button
+                          key={tab.id}
+                          onClick={() => setSettingsTab(tab.id)}
+                          className="admin-action-item"
                           style={{
-                            padding: '16px 20px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '10px 16px',
+                            borderRadius: '8px',
+                            border: isActive ? '1px solid rgba(99,102,241,0.25)' : '1px solid transparent',
                             cursor: 'pointer',
-                            borderBottom: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F5F9',
-                            background: isActive ? (isDark ? 'rgba(99,102,241,0.08)' : 'rgba(99,102,241,0.04)') : 'transparent',
-                            borderLeft: isActive ? '3px solid #6366F1' : '3px solid transparent',
-                            transition: 'all 0.15s ease',
+                            fontFamily: 'Poppins',
+                            fontWeight: 600,
+                            fontSize: '0.85rem',
+                            background: isActive ? 'linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.12))' : 'transparent',
+                            color: isActive ? '#6366F1' : textMuted,
+                            transition: 'all 0.2s',
                           }}
-                          onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.02)' : '#FAFBFC'; }}
-                          onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
                         >
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                            <span style={{ fontFamily: 'Poppins', fontWeight: m.read ? 500 : 700, fontSize: '0.88rem', color: textMain, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '180px' }}>{m.name}</span>
-                            <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: textMuted, whiteSpace: 'nowrap' }}>{new Date(m.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                          </div>
-                          <p style={{ fontFamily: 'Inter', fontWeight: m.read ? 400 : 600, fontSize: '0.82rem', color: textMain, margin: '0 0 4px 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.subject}</p>
-                          <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.message}</p>
-                          <div style={{ display: 'flex', gap: '6px', marginTop: '6px', alignItems: 'center' }}>
-                            {!m.read && <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366F1', display: 'inline-block' }} />}
-                            {m.replied && <span style={{ fontFamily: 'Inter', fontSize: '0.7rem', color: '#10B981', fontWeight: 600 }}>✓ Replied</span>}
-                          </div>
-                        </div>
+                          <EmojiIcon emoji={tab.emoji} size={16} color={isActive ? '#6366F1' : textMuted} />
+                          {tab.label}
+                        </button>
                       );
                     })}
                   </div>
 
-                  {/* ── Right: Message Detail Pane ── */}
-                  <div className="inbox-right-pane" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
-                    {!selectedMessage ? (
-                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: textMuted, fontFamily: 'Inter', fontSize: '0.9rem' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                          <FiMail size={40} style={{ marginBottom: '12px', opacity: 0.3 }} />
-                          <p style={{ margin: 0 }}>Select a message to view details</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="inbox-scroll" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', minHeight: 0 }}>
-                        {/* Header */}
-                        <div style={{ padding: '24px 28px 16px', borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F1F5F9', flexShrink: 0 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                            <div>
-                              <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: '0 0 4px 0' }}>{selectedMessage.name}</h3>
-                              <span style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: '#6366F1' }}>{selectedMessage.email}</span>
-                            </div>
-                            <div style={{ display: 'flex', gap: '8px' }}>
-                              <button onClick={() => { setShowReplyForm(!showReplyForm); if (!showReplyForm) setReplyForm({ subject: `Re: ${selectedMessage.subject}`, message: '' }); }} style={{ padding: '8px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: showReplyForm ? 'rgba(239,68,68,0.1)' : 'rgba(99,102,241,0.08)', color: showReplyForm ? '#EF4444' : '#6366F1', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem' }}>
-                                {showReplyForm ? <><FiX size={14} /> Cancel</> : <><FiCornerUpLeft size={14} /> Reply</>}
-                              </button>
-                              <button onClick={() => { handleDelete('message', selectedMessage._id); setSelectedMessage(null); }} style={{ padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }} title="Delete">
-                                <FiTrash2 size={14} />
-                              </button>
+                  <div style={{ padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
+                    {/* 1. GENERAL TAB */}
+                    {settingsTab === 'general' && (
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                        <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiSettings size={20} /> General Settings</h3>
+                        <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '20px' }}>
+                          Configure general site behavior, branding text, analytics tracking, and maintenance mode status.
+                        </p>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                          <div>
+                            <label style={profileLabelStyle}>Site Title</label>
+                            <input style={profileInputStyle} placeholder="HP.dev" value={settingsForm.siteTitle || ''} onChange={e => setSettingsForm({ ...settingsForm, siteTitle: e.target.value })} />
+                          </div>
+                          <div>
+                            <label style={profileLabelStyle}>Logo Text</label>
+                            <input style={profileInputStyle} placeholder="HP.dev" value={settingsForm.siteLogoText || ''} onChange={e => setSettingsForm({ ...settingsForm, siteLogoText: e.target.value })} />
+                          </div>
+                          <div style={{ gridColumn: '1 / -1' }}>
+                            <label style={profileLabelStyle}>Google Analytics ID</label>
+                            <input style={profileInputStyle} placeholder="G-XXXXXXXXXX" value={settingsForm.googleAnalyticsId || ''} onChange={e => setSettingsForm({ ...settingsForm, googleAnalyticsId: e.target.value })} />
+                          </div>
+
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
+                            <label style={profileLabelStyle}>Maintenance Mode</label>
+                            <div style={{ display: 'flex', alignItems: 'center', height: '44px', gap: '8px' }}>
+                              <input type="checkbox" id="maintenanceModeCheck" checked={!!settingsForm.maintenanceMode} onChange={e => setSettingsForm({ ...settingsForm, maintenanceMode: e.target.checked })} style={{ cursor: 'pointer', width: '18px', height: '18px', accentColor: '#6366F1' }} />
+                              <label htmlFor="maintenanceModeCheck" style={{ fontFamily: 'Inter', fontSize: '0.88rem', color: textMain, cursor: 'pointer', userSelect: 'none' }}>
+                                Enable Maintenance Mode (stops public visitors from browsing)
+                              </label>
                             </div>
                           </div>
-                          <div style={{ marginTop: '8px', marginBottom: showReplyForm ? '8px' : '16px', transition: 'margin 0.3s ease-in-out' }}>
-                            <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', color: textMain, margin: 0 }}>{selectedMessage.subject}</p>
-                            <span style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>{new Date(selectedMessage.createdAt).toLocaleString()}</span>
-                          </div>
-                        </div>
 
-                        {/* Message Body — dynamic sizing */}
-                        <div style={{
-                          padding: '20px 28px',
-                          ...(showReplyForm
-                            ? { flex: '0 0 auto', height: '100px', overflowY: 'auto' }
-                            : { flex: 1, minHeight: '140px' }),
-                          transition: 'all 0.3s ease-in-out',
-                        }}>
-                          <p style={{ fontFamily: 'Inter', fontSize: '0.9rem', color: textMuted, lineHeight: 1.7, margin: 0, whiteSpace: 'pre-wrap' }}>{selectedMessage.message}</p>
-                        </div>
-
-                        {/* Admin Reply Display Card */}
-                        {(selectedMessage.replied || selectedMessage.replyMessage) && (
-                          <div style={{
-                            margin: '0 28px 16px',
-                            padding: '16px 20px',
-                            borderRadius: '12px',
-                            background: isDark ? 'rgba(16,185,129,0.06)' : 'rgba(16,185,129,0.04)',
-                            border: isDark ? '1px solid rgba(16,185,129,0.15)' : '1px solid rgba(16,185,129,0.12)',
-                            flexShrink: 0,
-                          }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                              <FiCornerUpLeft size={14} color="#10B981" />
-                              <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.82rem', color: '#10B981' }}>Your Reply</span>
-                              {selectedMessage.repliedAt && (
-                                <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: textMuted, marginLeft: 'auto' }}>
-                                  {new Date(selectedMessage.repliedAt).toLocaleString()}
-                                </span>
-                              )}
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
+                            <label style={profileLabelStyle}>Visitor Logging</label>
+                            <div style={{ display: 'flex', alignItems: 'center', height: '44px', gap: '8px' }}>
+                              <input type="checkbox" id="visitorLoggingCheck" checked={!!settingsForm.enableVisitorLogging} onChange={e => setSettingsForm({ ...settingsForm, enableVisitorLogging: e.target.checked })} style={{ cursor: 'pointer', width: '18px', height: '18px', accentColor: '#6366F1' }} />
+                              <label htmlFor="visitorLoggingCheck" style={{ fontFamily: 'Inter', fontSize: '0.88rem', color: textMain, cursor: 'pointer', userSelect: 'none' }}>
+                                Enable Visitor Analytics Logging
+                              </label>
                             </div>
-                            {selectedMessage.replySubject && (
-                              <p style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', color: textMain, margin: '0 0 6px 0' }}>{selectedMessage.replySubject}</p>
-                            )}
-                            <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: textMuted, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{selectedMessage.replyMessage}</p>
                           </div>
-                        )}
-
-                        {/* Reply Compose Form */}
-                        <AnimatePresence>
-                          {showReplyForm && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              style={{ padding: '0 28px 24px', flexShrink: 0 }}
-                            >
-                              <div style={{ padding: '20px', borderRadius: '14px', background: isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.03)', border: isDark ? '1px solid rgba(99,102,241,0.15)' : '1px solid rgba(99,102,241,0.1)' }}>
-                                <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain, margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <FiSend size={14} color="#6366F1" /> Compose Reply
-                                </h4>
-                                <div style={{ marginBottom: '12px' }}>
-                                  <label style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '6px', display: 'block' }}>Subject</label>
-                                  <input
-                                    value={replyForm.subject}
-                                    onChange={e => setReplyForm({ ...replyForm, subject: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: textMain, fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', boxSizing: 'border-box' }}
-                                  />
-                                </div>
-                                <div style={{ marginBottom: '16px' }}>
-                                  <label style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '6px', display: 'block' }}>Message</label>
-                                  <textarea
-                                    value={replyForm.message}
-                                    onChange={e => setReplyForm({ ...replyForm, message: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: textMain, fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', height: '120px', resize: 'vertical', boxSizing: 'border-box' }}
-                                  />
-                                </div>
-                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                                  <button onClick={() => { setShowReplyForm(false); setReplyForm({ subject: '', message: '' }); }} style={{ padding: '10px 20px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0', background: 'transparent', color: textMuted, fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>
-                                    Cancel
-                                  </button>
-                                  <button onClick={() => handleReply(selectedMessage._id)} style={{ padding: '10px 22px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', boxShadow: '0 4px 14px rgba(99,102,241,0.3)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <FiSend size={14} /> Send Reply
-                                  </button>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
+                        </div>
+                      </motion.div>
                     )}
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          )}
 
-          {/* ════ SETTINGS ════ */}
-          {section === 'settings' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>
-                Manage website general settings and outbound mail SMTP server configurations.
-              </p>
+                    {/* 2. SMTP TAB */}
+                    {settingsTab === 'smtp' && (
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                        <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiMail size={20} /> Email / SMTP Settings</h3>
+                        <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '4px' }}>
+                          Configure your outgoing email server so the portfolio site can send contact message receipts.
+                        </p>
+                        <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: '#10B981', marginBottom: '20px', fontWeight: 500 }}>
+                          Gmail tip: Use <strong>smtp.gmail.com</strong>, port <strong>587</strong>, encryption <strong>TLS</strong>, and an <strong>App Password</strong> (not your regular password).
+                        </p>
 
-              {/* Settings Sub-Tab Bar */}
-              <div style={{ display: 'flex', gap: '8px', borderBottom: cardBorder, paddingBottom: '12px', marginBottom: '24px', overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                {[
-                  { id: 'general', label: 'General', emoji: '⚙️' },
-                  { id: 'visibility', label: 'Section Visibility', emoji: '👁️' },
-                  { id: 'smtp', label: 'SMTP Configuration', emoji: '📧' },
-                  { id: 'system', label: 'System Info', emoji: '📊' },
-                ].map(tab => {
-                  const isActive = settingsTab === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setSettingsTab(tab.id)}
-                      className="admin-action-item"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '10px 16px',
-                        borderRadius: '8px',
-                        border: isActive ? '1px solid rgba(99,102,241,0.25)' : '1px solid transparent',
-                        cursor: 'pointer',
-                        fontFamily: 'Poppins',
-                        fontWeight: 600,
-                        fontSize: '0.85rem',
-                        background: isActive ? 'linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.12))' : 'transparent',
-                        color: isActive ? '#6366F1' : textMuted,
-                        transition: 'all 0.2s',
-                      }}
-                    >
-                      <EmojiIcon emoji={tab.emoji} size={16} color={isActive ? '#6366F1' : textMuted} />
-                      {tab.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div style={{ padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
-                {/* 1. GENERAL TAB */}
-                {settingsTab === 'general' && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiSettings size={20} /> General Settings</h3>
-                    <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '20px' }}>
-                      Configure general site behavior, branding text, analytics tracking, and maintenance mode status.
-                    </p>
-                    
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                      <div>
-                        <label style={profileLabelStyle}>Site Title</label>
-                        <input style={profileInputStyle} placeholder="HP.dev" value={settingsForm.siteTitle || ''} onChange={e => setSettingsForm({ ...settingsForm, siteTitle: e.target.value })} />
-                      </div>
-                      <div>
-                        <label style={profileLabelStyle}>Logo Text</label>
-                        <input style={profileInputStyle} placeholder="HP.dev" value={settingsForm.siteLogoText || ''} onChange={e => setSettingsForm({ ...settingsForm, siteLogoText: e.target.value })} />
-                      </div>
-                      <div style={{ gridColumn: '1 / -1' }}>
-                        <label style={profileLabelStyle}>Google Analytics ID</label>
-                        <input style={profileInputStyle} placeholder="G-XXXXXXXXXX" value={settingsForm.googleAnalyticsId || ''} onChange={e => setSettingsForm({ ...settingsForm, googleAnalyticsId: e.target.value })} />
-                      </div>
-                      
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
-                        <label style={profileLabelStyle}>Maintenance Mode</label>
-                        <div style={{ display: 'flex', alignItems: 'center', height: '44px', gap: '8px' }}>
-                          <input type="checkbox" id="maintenanceModeCheck" checked={!!settingsForm.maintenanceMode} onChange={e => setSettingsForm({ ...settingsForm, maintenanceMode: e.target.checked })} style={{ cursor: 'pointer', width: '18px', height: '18px', accentColor: '#6366F1' }} />
-                          <label htmlFor="maintenanceModeCheck" style={{ fontFamily: 'Inter', fontSize: '0.88rem', color: textMain, cursor: 'pointer', userSelect: 'none' }}>
-                            Enable Maintenance Mode (stops public visitors from browsing)
-                          </label>
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
-                        <label style={profileLabelStyle}>Visitor Logging</label>
-                        <div style={{ display: 'flex', alignItems: 'center', height: '44px', gap: '8px' }}>
-                          <input type="checkbox" id="visitorLoggingCheck" checked={!!settingsForm.enableVisitorLogging} onChange={e => setSettingsForm({ ...settingsForm, enableVisitorLogging: e.target.checked })} style={{ cursor: 'pointer', width: '18px', height: '18px', accentColor: '#6366F1' }} />
-                          <label htmlFor="visitorLoggingCheck" style={{ fontFamily: 'Inter', fontSize: '0.88rem', color: textMain, cursor: 'pointer', userSelect: 'none' }}>
-                            Enable Visitor Analytics Logging
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* 2. SMTP TAB */}
-                {settingsTab === 'smtp' && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiMail size={20} /> Email / SMTP Settings</h3>
-                    <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '4px' }}>
-                      Configure your outgoing email server so the portfolio site can send contact message receipts.
-                    </p>
-                    <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: '#10B981', marginBottom: '20px', fontWeight: 500 }}>
-                      Gmail tip: Use <strong>smtp.gmail.com</strong>, port <strong>587</strong>, encryption <strong>TLS</strong>, and an <strong>App Password</strong> (not your regular password).
-                    </p>
-                    
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                      <div>
-                        <label style={profileLabelStyle}>SMTP Host</label>
-                        <input style={profileInputStyle} placeholder="smtp.gmail.com" value={settingsForm.smtpHost || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpHost: e.target.value })} />
-                      </div>
-                      <div>
-                        <label style={profileLabelStyle}>SMTP Port</label>
-                        <input type="number" style={profileInputStyle} placeholder="587" value={settingsForm.smtpPort || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpPort: e.target.value === '' ? '' : Number(e.target.value) })} />
-                      </div>
-                      <div>
-                        <label style={profileLabelStyle}>SMTP Username (your email)</label>
-                        <input style={profileInputStyle} placeholder="user@gmail.com" value={settingsForm.smtpUser || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpUser: e.target.value })} />
-                      </div>
-                      <div>
-                        <label style={profileLabelStyle}>SMTP Password / App Password</label>
-                        <div style={{ position: 'relative' }}>
-                          <input type={showSmtpPass ? 'text' : 'password'} style={{ ...profileInputStyle, paddingRight: '48px' }} placeholder="••••••••••••" value={settingsForm.smtpPass || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpPass: e.target.value })} />
-                          <button
-                            type="button"
-                            onClick={() => setShowSmtpPass(v => !v)}
-                            style={{
-                              position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
-                              background: 'none', border: 'none', cursor: 'pointer',
-                              color: '#94A3B8',
-                              display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              padding: '4px',
-                              borderRadius: '6px',
-                              transition: 'color 0.2s',
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.color = '#6366F1'}
-                            onMouseLeave={e => e.currentTarget.style.color = '#94A3B8'}
-                            title={showSmtpPass ? 'Hide password' : 'Show password'}
-                          >
-                            {showSmtpPass ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-                          </button>
-                        </div>
-                      </div>
-                      <div>
-                        <label style={profileLabelStyle}>From Name</label>
-                        <input style={profileInputStyle} placeholder="HP.dev" value={settingsForm.smtpFromName || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpFromName: e.target.value })} />
-                      </div>
-                      <div>
-                        <label style={profileLabelStyle}>From Email Address</label>
-                        <input style={profileInputStyle} placeholder="no-reply@example.com" value={settingsForm.smtpFrom || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpFrom: e.target.value })} />
-                      </div>
-                      <div>
-                        <label style={profileLabelStyle}>Encryption</label>
-                        <select style={profileSelectStyle} value={settingsForm.smtpEncryption || 'tls'} onChange={e => setSettingsForm({ ...settingsForm, smtpEncryption: e.target.value })}>
-                          <option value="tls" style={optionStyle}>TLS / STARTTLS (port 587) — Recommended</option>
-                          <option value="ssl" style={optionStyle}>SSL (port 465)</option>
-                          <option value="none" style={optionStyle}>None / No Encryption</option>
-                        </select>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* 3. SYSTEM INFO TAB */}
-                {settingsTab === 'system' && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <div style={{
-                      borderRadius: '16px',
-                      background: isDark ? 'rgba(255,255,255,0.02)' : '#FFFFFF',
-                      border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0',
-                      overflow: 'hidden',
-                      boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.2)' : '0 4px 20px rgba(0,0,0,0.02)'
-                    }}>
-                      {/* Panel Header */}
-                      <div style={{
-                        padding: '18px 24px',
-                        borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F1F5F9',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px'
-                      }}>
-                        <FiBarChart2 size={20} color={textMain} />
-                        <h3 style={{
-                          fontFamily: 'Poppins',
-                          fontWeight: 700,
-                          fontSize: '1.05rem',
-                          color: textMain,
-                          margin: 0
-                        }}>
-                          System Info
-                        </h3>
-                      </div>
-
-                      {/* Panel Body */}
-                      <div style={{ padding: '8px 24px' }}>
-                        {loadingSystemInfo ? (
-                          <div style={{ padding: '40px 0', textAlign: 'center', color: textMuted, fontFamily: 'Inter', fontSize: '0.9rem' }}>
-                            Loading system statistics...
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                          <div>
+                            <label style={profileLabelStyle}>SMTP Host</label>
+                            <input style={profileInputStyle} placeholder="smtp.gmail.com" value={settingsForm.smtpHost || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpHost: e.target.value })} />
                           </div>
-                        ) : !systemInfo ? (
-                          <div style={{ padding: '40px 0', textAlign: 'center', color: '#EF4444', fontFamily: 'Inter', fontSize: '0.9rem' }}>
-                            Failed to load system details.
+                          <div>
+                            <label style={profileLabelStyle}>SMTP Port</label>
+                            <input type="number" style={profileInputStyle} placeholder="587" value={settingsForm.smtpPort || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpPort: e.target.value === '' ? '' : Number(e.target.value) })} />
                           </div>
-                        ) : (
-                          <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            {[
-                              { label: 'Node.js Version', value: systemInfo.nodeVersion },
-                              { label: 'Server', value: systemInfo.server },
-                              { label: 'Database', value: systemInfo.database },
-                              { label: 'Uploads Folder', value: systemInfo.uploadsFolder, isBadge: true },
-                              { label: 'Sessions', value: systemInfo.sessions, isBadge: true },
-                            ].map((row, index, arr) => (
-                              <div
-                                key={row.label}
+                          <div>
+                            <label style={profileLabelStyle}>SMTP Username (your email)</label>
+                            <input style={profileInputStyle} placeholder="user@gmail.com" value={settingsForm.smtpUser || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpUser: e.target.value })} />
+                          </div>
+                          <div>
+                            <label style={profileLabelStyle}>SMTP Password / App Password</label>
+                            <div style={{ position: 'relative' }}>
+                              <input type={showSmtpPass ? 'text' : 'password'} style={{ ...profileInputStyle, paddingRight: '48px' }} placeholder="••••••••••••" value={settingsForm.smtpPass || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpPass: e.target.value })} />
+                              <button
+                                type="button"
+                                onClick={() => setShowSmtpPass(v => !v)}
                                 style={{
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center',
-                                  padding: '18px 0',
-                                  borderBottom: index === arr.length - 1 ? 'none' : (isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F5F9')
+                                  position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
+                                  background: 'none', border: 'none', cursor: 'pointer',
+                                  color: '#94A3B8',
+                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                  padding: '4px',
+                                  borderRadius: '6px',
+                                  transition: 'color 0.2s',
                                 }}
+                                onMouseEnter={e => e.currentTarget.style.color = '#6366F1'}
+                                onMouseLeave={e => e.currentTarget.style.color = '#94A3B8'}
+                                title={showSmtpPass ? 'Hide password' : 'Show password'}
                               >
-                                <span style={{
-                                  fontFamily: 'Inter',
-                                  fontSize: '0.88rem',
-                                  color: isDark ? '#94A3B8' : '#475569',
-                                  fontWeight: 500
-                                }}>
-                                  {row.label}
-                                </span>
-                                
-                                {row.isBadge ? (
-                                  <span style={{
-                                    fontFamily: 'Inter',
-                                    fontSize: '0.78rem',
-                                    fontWeight: 700,
-                                    background: row.value.includes('NOT') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-                                    color: row.value.includes('NOT') ? '#EF4444' : '#10B981',
-                                    padding: '4px 12px',
-                                    borderRadius: '12px',
-                                    letterSpacing: '0.02em'
-                                  }}>
-                                    {row.value}
-                                  </span>
-                                ) : (
-                                  <span style={{
-                                    fontFamily: 'Inter',
-                                    fontSize: '0.88rem',
-                                    color: textMain,
-                                    fontWeight: 600
-                                  }}>
-                                    {row.value}
-                                  </span>
-                                )}
-                              </div>
-                            ))}
+                                {showSmtpPass ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                              </button>
+                            </div>
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
+                          <div>
+                            <label style={profileLabelStyle}>From Name</label>
+                            <input style={profileInputStyle} placeholder="HP.dev" value={settingsForm.smtpFromName || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpFromName: e.target.value })} />
+                          </div>
+                          <div>
+                            <label style={profileLabelStyle}>From Email Address</label>
+                            <input style={profileInputStyle} placeholder="no-reply@example.com" value={settingsForm.smtpFrom || ''} onChange={e => setSettingsForm({ ...settingsForm, smtpFrom: e.target.value })} />
+                          </div>
+                          <div>
+                            <label style={profileLabelStyle}>Encryption</label>
+                            <select style={profileSelectStyle} value={settingsForm.smtpEncryption || 'tls'} onChange={e => setSettingsForm({ ...settingsForm, smtpEncryption: e.target.value })}>
+                              <option value="tls" style={optionStyle}>TLS / STARTTLS (port 587) — Recommended</option>
+                              <option value="ssl" style={optionStyle}>SSL (port 465)</option>
+                              <option value="none" style={optionStyle}>None / No Encryption</option>
+                            </select>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
 
-                {/* 4. SECTION VISIBILITY TAB */}
-                {settingsTab === 'visibility' && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
-                      <FiEye size={20} color={textMain} />
-                      <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: 0 }}>👁️ Section Visibility</h3>
-                    </div>
-                    <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '24px', lineHeight: 1.6 }}>
-                      Control which sections are visible on the public website. Hidden sections will also be removed from the navigation bar. Toggle a section off to hide it, and toggle it back on to make it visible again.
-                    </p>
+                    {/* 3. SYSTEM INFO TAB */}
+                    {settingsTab === 'system' && (
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                        <div style={{
+                          borderRadius: '16px',
+                          background: isDark ? 'rgba(255,255,255,0.02)' : '#FFFFFF',
+                          border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0',
+                          overflow: 'hidden',
+                          boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.2)' : '0 4px 20px rgba(0,0,0,0.02)'
+                        }}>
+                          {/* Panel Header */}
+                          <div style={{
+                            padding: '18px 24px',
+                            borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F1F5F9',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px'
+                          }}>
+                            <FiBarChart2 size={20} color={textMain} />
+                            <h3 style={{
+                              fontFamily: 'Poppins',
+                              fontWeight: 700,
+                              fontSize: '1.05rem',
+                              color: textMain,
+                              margin: 0
+                            }}>
+                              System Info
+                            </h3>
+                          </div>
 
-                    <style>{`
+                          {/* Panel Body */}
+                          <div style={{ padding: '8px 24px' }}>
+                            {loadingSystemInfo ? (
+                              <div style={{ padding: '40px 0', textAlign: 'center', color: textMuted, fontFamily: 'Inter', fontSize: '0.9rem' }}>
+                                Loading system statistics...
+                              </div>
+                            ) : !systemInfo ? (
+                              <div style={{ padding: '40px 0', textAlign: 'center', color: '#EF4444', fontFamily: 'Inter', fontSize: '0.9rem' }}>
+                                Failed to load system details.
+                              </div>
+                            ) : (
+                              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                {[
+                                  { label: 'Node.js Version', value: systemInfo.nodeVersion },
+                                  { label: 'Server', value: systemInfo.server },
+                                  { label: 'Database', value: systemInfo.database },
+                                  { label: 'Uploads Folder', value: systemInfo.uploadsFolder, isBadge: true },
+                                  { label: 'Sessions', value: systemInfo.sessions, isBadge: true },
+                                ].map((row, index, arr) => (
+                                  <div
+                                    key={row.label}
+                                    style={{
+                                      display: 'flex',
+                                      justifyContent: 'space-between',
+                                      alignItems: 'center',
+                                      padding: '18px 0',
+                                      borderBottom: index === arr.length - 1 ? 'none' : (isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F5F9')
+                                    }}
+                                  >
+                                    <span style={{
+                                      fontFamily: 'Inter',
+                                      fontSize: '0.88rem',
+                                      color: isDark ? '#94A3B8' : '#475569',
+                                      fontWeight: 500
+                                    }}>
+                                      {row.label}
+                                    </span>
+
+                                    {row.isBadge ? (
+                                      <span style={{
+                                        fontFamily: 'Inter',
+                                        fontSize: '0.78rem',
+                                        fontWeight: 700,
+                                        background: row.value.includes('NOT') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                                        color: row.value.includes('NOT') ? '#EF4444' : '#10B981',
+                                        padding: '4px 12px',
+                                        borderRadius: '12px',
+                                        letterSpacing: '0.02em'
+                                      }}>
+                                        {row.value}
+                                      </span>
+                                    ) : (
+                                      <span style={{
+                                        fontFamily: 'Inter',
+                                        fontSize: '0.88rem',
+                                        color: textMain,
+                                        fontWeight: 600
+                                      }}>
+                                        {row.value}
+                                      </span>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {/* 4. SECTION VISIBILITY TAB */}
+                    {settingsTab === 'visibility' && (
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+                          <FiEye size={20} color={textMain} />
+                          <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: 0 }}>Section Visibility</h3>
+                        </div>
+                        <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '24px', lineHeight: 1.6 }}>
+                          Control which sections are visible on the public website. Hidden sections will also be removed from the navigation bar. Toggle a section off to hide it, and toggle it back on to make it visible again.
+                        </p>
+
+                        <style>{`
                       .visibility-toggle-track {
                         position: relative;
                         width: 52px;
@@ -3632,195 +3636,195 @@ export default function AdminDashboard() {
                       }
                     `}</style>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      {[
-                        { key: 'about', label: 'About', emoji: '👤', desc: 'About Me section with bio, education & profile info' },
-                        { key: 'skills', label: 'Skills', emoji: '⚡', desc: 'Technical skills & expertise showcase' },
-                        { key: 'projects', label: 'Projects', emoji: '🚀', desc: 'Featured projects portfolio' },
-                        { key: 'experience', label: 'Experience', emoji: '💼', desc: 'Work experience timeline' },
-                        { key: 'services', label: 'Services', emoji: '🔧', desc: 'Services you offer to clients' },
-                        { key: 'certifications', label: 'Certifications', emoji: '🏆', desc: 'Certifications & awards section' },
-                        { key: 'blog', label: 'Blog', emoji: '📝', desc: 'Blog posts & articles' },
-                        { key: 'testimonials', label: 'Testimonials', emoji: '👥', desc: 'Client testimonials & reviews' },
-                        { key: 'contact', label: 'Contact', emoji: '✉️', desc: 'Contact form & information' },
-                      ].map(sec => {
-                        const isOn = settingsForm.visibleSections?.[sec.key] !== false;
-                        return (
-                          <div
-                            key={sec.key}
-                            className="visibility-section-card"
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                          {[
+                            { key: 'about', label: 'About', emoji: '👤', desc: 'About Me section with bio, education & profile info' },
+                            { key: 'skills', label: 'Skills', emoji: '⚡', desc: 'Technical skills & expertise showcase' },
+                            { key: 'projects', label: 'Projects', emoji: '🚀', desc: 'Featured projects portfolio' },
+                            { key: 'experience', label: 'Experience', emoji: '💼', desc: 'Work experience timeline' },
+                            { key: 'services', label: 'Services', emoji: '🔧', desc: 'Services you offer to clients' },
+                            { key: 'certifications', label: 'Certifications', emoji: '🏆', desc: 'Certifications & awards section' },
+                            { key: 'blog', label: 'Blog', emoji: '📝', desc: 'Blog posts & articles' },
+                            { key: 'testimonials', label: 'Testimonials', emoji: '👥', desc: 'Client testimonials & reviews' },
+                            { key: 'contact', label: 'Contact', emoji: '✉️', desc: 'Contact form & information' },
+                          ].map(sec => {
+                            const isOn = settingsForm.visibleSections?.[sec.key] !== false;
+                            return (
+                              <div
+                                key={sec.key}
+                                className="visibility-section-card"
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                  padding: '18px 20px',
+                                  borderRadius: '14px',
+                                  background: isDark
+                                    ? (isOn ? 'rgba(255,255,255,0.03)' : 'rgba(239,68,68,0.04)')
+                                    : (isOn ? '#FAFBFC' : 'rgba(239,68,68,0.03)'),
+                                  border: isDark
+                                    ? (isOn ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(239,68,68,0.15)')
+                                    : (isOn ? '1px solid #E2E8F0' : '1px solid rgba(239,68,68,0.12)'),
+                                  gap: '16px',
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: 0 }}>
+                                  <div style={{
+                                    width: '42px',
+                                    height: '42px',
+                                    borderRadius: '12px',
+                                    background: isDark
+                                      ? (isOn ? 'rgba(99,102,241,0.12)' : 'rgba(239,68,68,0.08)')
+                                      : (isOn ? 'rgba(99,102,241,0.08)' : 'rgba(239,68,68,0.06)'),
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '1.15rem',
+                                    flexShrink: 0,
+                                    transition: 'background 0.3s',
+                                  }}>
+                                    {sec.key === 'about' ? <FiUser size={18} color="#6366F1" /> :
+                                      sec.key === 'skills' ? <FiCpu size={18} color="#6366F1" /> :
+                                        sec.key === 'projects' ? <FiFolder size={18} color="#6366F1" /> :
+                                          sec.key === 'experience' ? <FiBriefcase size={18} color="#6366F1" /> :
+                                            sec.key === 'services' ? <FiLayers size={18} color="#6366F1" /> :
+                                              sec.key === 'certifications' ? <FiAward size={18} color="#6366F1" /> :
+                                                sec.key === 'blog' ? <FiFileText size={18} color="#6366F1" /> :
+                                                  sec.key === 'testimonials' ? <FiUsers size={18} color="#6366F1" /> :
+                                                    sec.key === 'contact' ? <FiMail size={18} color="#6366F1" /> : sec.emoji}
+                                  </div>
+                                  <div style={{ minWidth: 0 }}>
+                                    <div style={{
+                                      fontFamily: 'Poppins',
+                                      fontWeight: 700,
+                                      fontSize: '0.92rem',
+                                      color: isOn ? textMain : (isDark ? '#94A3B8' : '#94A3B8'),
+                                      marginBottom: '2px',
+                                      transition: 'color 0.3s',
+                                    }}>
+                                      {sec.label}
+                                    </div>
+                                    <div style={{
+                                      fontFamily: 'Inter',
+                                      fontSize: '0.78rem',
+                                      color: textMuted,
+                                      lineHeight: 1.4,
+                                    }}>
+                                      {sec.desc}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+                                  <span style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 700,
+                                    padding: '4px 10px',
+                                    borderRadius: '8px',
+                                    letterSpacing: '0.03em',
+                                    background: isOn ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+                                    color: isOn ? '#10B981' : '#EF4444',
+                                    transition: 'all 0.3s',
+                                  }}>
+                                    {isOn ? 'Visible' : 'Hidden'}
+                                  </span>
+
+                                  <button
+                                    type="button"
+                                    className="visibility-toggle-track"
+                                    onClick={() => {
+                                      setSettingsForm(prev => ({
+                                        ...prev,
+                                        visibleSections: {
+                                          ...prev.visibleSections,
+                                          [sec.key]: !isOn,
+                                        },
+                                      }));
+                                    }}
+                                    style={{
+                                      background: isOn
+                                        ? 'linear-gradient(135deg, #6366F1, #8B5CF6)'
+                                        : (isDark ? 'rgba(255,255,255,0.1)' : '#CBD5E1'),
+                                    }}
+                                    title={isOn ? `Hide ${sec.label} section` : `Show ${sec.label} section`}
+                                  >
+                                    <div
+                                      className="visibility-toggle-thumb"
+                                      style={{ left: isOn ? '27px' : '3px' }}
+                                    />
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        <div style={{
+                          marginTop: '20px',
+                          padding: '14px 18px',
+                          borderRadius: '12px',
+                          background: isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.04)',
+                          border: isDark ? '1px solid rgba(99,102,241,0.12)' : '1px solid rgba(99,102,241,0.1)',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '10px',
+                        }}>
+                          <span style={{ fontSize: '1rem', marginTop: '1px' }}>💡</span>
+                          <p style={{
+                            fontFamily: 'Inter',
+                            fontSize: '0.8rem',
+                            color: isDark ? '#A5B4FC' : '#6366F1',
+                            lineHeight: 1.6,
+                            margin: 0,
+                          }}>
+                            <strong>Tip:</strong> Hidden sections are only removed from the public website. You can still manage their content from this admin panel. Click <strong>Save Settings</strong> below to apply your changes.
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {/* Shared Save button at the bottom of the active settings tab */}
+                    {settingsTab !== 'system' && (
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '32px', borderTop: cardBorder, paddingTop: '24px' }}>
+                        {settingsTab === 'smtp' && (
+                          <button
+                            onClick={handleTestSmtp}
+                            disabled={testingSmtp}
                             style={{
-                              display: 'flex',
+                              padding: '12px 24px',
+                              borderRadius: '10px',
+                              border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                              background: 'transparent',
+                              color: textMain,
+                              fontFamily: 'Poppins',
+                              fontWeight: 700,
+                              fontSize: '0.9rem',
+                              cursor: testingSmtp ? 'not-allowed' : 'pointer',
+                              opacity: testingSmtp ? 0.7 : 1,
+                              transition: 'all 0.2s',
+                              display: 'inline-flex',
                               alignItems: 'center',
-                              justifyContent: 'space-between',
-                              padding: '18px 20px',
-                              borderRadius: '14px',
-                              background: isDark
-                                ? (isOn ? 'rgba(255,255,255,0.03)' : 'rgba(239,68,68,0.04)')
-                                : (isOn ? '#FAFBFC' : 'rgba(239,68,68,0.03)'),
-                              border: isDark
-                                ? (isOn ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(239,68,68,0.15)')
-                                : (isOn ? '1px solid #E2E8F0' : '1px solid rgba(239,68,68,0.12)'),
-                              gap: '16px',
+                              gap: '8px'
+                            }}
+                            onMouseEnter={e => {
+                              if (!testingSmtp) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9';
+                            }}
+                            onMouseLeave={e => {
+                              e.currentTarget.style.background = 'transparent';
                             }}
                           >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: 0 }}>
-                              <div style={{
-                                width: '42px',
-                                height: '42px',
-                                borderRadius: '12px',
-                                background: isDark
-                                  ? (isOn ? 'rgba(99,102,241,0.12)' : 'rgba(239,68,68,0.08)')
-                                  : (isOn ? 'rgba(99,102,241,0.08)' : 'rgba(239,68,68,0.06)'),
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '1.15rem',
-                                flexShrink: 0,
-                                transition: 'background 0.3s',
-                              }}>
-                                {sec.key === 'about' ? <FiUser size={18} color="#6366F1" /> :
-                                 sec.key === 'skills' ? <FiCpu size={18} color="#6366F1" /> :
-                                 sec.key === 'projects' ? <FiFolder size={18} color="#6366F1" /> :
-                                 sec.key === 'experience' ? <FiBriefcase size={18} color="#6366F1" /> :
-                                 sec.key === 'services' ? <FiLayers size={18} color="#6366F1" /> :
-                                 sec.key === 'certifications' ? <FiAward size={18} color="#6366F1" /> :
-                                 sec.key === 'blog' ? <FiFileText size={18} color="#6366F1" /> :
-                                 sec.key === 'testimonials' ? <FiUsers size={18} color="#6366F1" /> :
-                                 sec.key === 'contact' ? <FiMail size={18} color="#6366F1" /> : sec.emoji}
-                              </div>
-                              <div style={{ minWidth: 0 }}>
-                                <div style={{
-                                  fontFamily: 'Poppins',
-                                  fontWeight: 700,
-                                  fontSize: '0.92rem',
-                                  color: isOn ? textMain : (isDark ? '#94A3B8' : '#94A3B8'),
-                                  marginBottom: '2px',
-                                  transition: 'color 0.3s',
-                                }}>
-                                  {sec.label}
-                                </div>
-                                <div style={{
-                                  fontFamily: 'Inter',
-                                  fontSize: '0.78rem',
-                                  color: textMuted,
-                                  lineHeight: 1.4,
-                                }}>
-                                  {sec.desc}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-                              <span style={{
-                                fontFamily: 'Inter',
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                padding: '4px 10px',
-                                borderRadius: '8px',
-                                letterSpacing: '0.03em',
-                                background: isOn ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
-                                color: isOn ? '#10B981' : '#EF4444',
-                                transition: 'all 0.3s',
-                              }}>
-                                {isOn ? 'Visible' : 'Hidden'}
-                              </span>
-
-                              <button
-                                type="button"
-                                className="visibility-toggle-track"
-                                onClick={() => {
-                                  setSettingsForm(prev => ({
-                                    ...prev,
-                                    visibleSections: {
-                                      ...prev.visibleSections,
-                                      [sec.key]: !isOn,
-                                    },
-                                  }));
-                                }}
-                                style={{
-                                  background: isOn
-                                    ? 'linear-gradient(135deg, #6366F1, #8B5CF6)'
-                                    : (isDark ? 'rgba(255,255,255,0.1)' : '#CBD5E1'),
-                                }}
-                                title={isOn ? `Hide ${sec.label} section` : `Show ${sec.label} section`}
-                              >
-                                <div
-                                  className="visibility-toggle-thumb"
-                                  style={{ left: isOn ? '27px' : '3px' }}
-                                />
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    <div style={{
-                      marginTop: '20px',
-                      padding: '14px 18px',
-                      borderRadius: '12px',
-                      background: isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.04)',
-                      border: isDark ? '1px solid rgba(99,102,241,0.12)' : '1px solid rgba(99,102,241,0.1)',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '10px',
-                    }}>
-                      <span style={{ fontSize: '1rem', marginTop: '1px' }}>💡</span>
-                      <p style={{
-                        fontFamily: 'Inter',
-                        fontSize: '0.8rem',
-                        color: isDark ? '#A5B4FC' : '#6366F1',
-                        lineHeight: 1.6,
-                        margin: 0,
-                      }}>
-                        <strong>Tip:</strong> Hidden sections are only removed from the public website. You can still manage their content from this admin panel. Click <strong>Save Settings</strong> below to apply your changes.
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Shared Save button at the bottom of the active settings tab */}
-                {settingsTab !== 'system' && (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '32px', borderTop: cardBorder, paddingTop: '24px' }}>
-                    {settingsTab === 'smtp' && (
-                      <button
-                        onClick={handleTestSmtp}
-                        disabled={testingSmtp}
-                        style={{
-                          padding: '12px 24px',
-                          borderRadius: '10px',
-                          border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
-                          background: 'transparent',
-                          color: textMain,
-                          fontFamily: 'Poppins',
-                          fontWeight: 700,
-                          fontSize: '0.9rem',
-                          cursor: testingSmtp ? 'not-allowed' : 'pointer',
-                          opacity: testingSmtp ? 0.7 : 1,
-                          transition: 'all 0.2s',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '8px'
-                        }}
-                        onMouseEnter={e => {
-                          if (!testingSmtp) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9';
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        {testingSmtp ? '🔌 Testing...' : '🔌 Test Connection'}
-                      </button>
+                            {testingSmtp ? '🔌 Testing...' : '🔌 Test Connection'}
+                          </button>
+                        )}
+                        <button onClick={handleSettingsSave} style={{ padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                          Save Settings
+                        </button>
+                      </div>
                     )}
-                    <button onClick={handleSettingsSave} style={{ padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
-                      Save Settings
-                    </button>
                   </div>
-                )}
-              </div>
-            </motion.div>
-          )}
+                </motion.div>
+              )}
             </>
           )}
         </div>
