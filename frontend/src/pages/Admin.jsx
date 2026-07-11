@@ -484,10 +484,10 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                 </div>
                 <div>
                   <label style={labelStyle}>Theme Color (Hex)</label>
-                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
                     <div style={{ flex: 1 }}>
                       <input
-                        style={{ ...inputStyle, marginBottom: 0 }}
+                        style={{ ...inputStyle, marginBottom: 0, height: '44px', boxSizing: 'border-box' }}
                         value={form.color || ''}
                         onChange={e => setForm({ ...form, color: e.target.value })}
                         placeholder="#6366F1"
@@ -496,6 +496,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                     <div
                       style={{
                         width: '44px',
+                        minWidth: '44px',
                         height: '44px',
                         borderRadius: '8px',
                         background: form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1',
@@ -507,7 +508,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                         alignItems: 'center',
                         justifyContent: 'center',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                        marginBottom: '12px',
+                        flexShrink: 0,
                       }}
                       title="Choose Color"
                     >
@@ -588,7 +589,6 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                   <input style={inputStyle} value={form.year || ''} onChange={e => setForm({ ...form, year: e.target.value })} placeholder="2023 – Present" required />
                 </div>
               </div>
-
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Type</label>
@@ -603,6 +603,60 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                 <div>
                   <label style={labelStyle}>Icon (Emoji)</label>
                   <input style={inputStyle} value={form.icon || ''} onChange={e => setForm({ ...form, icon: e.target.value })} placeholder="💼" />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <label style={labelStyle}>Theme Color (Hex)</label>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
+                    <div style={{ flex: 1 }}>
+                      <input
+                        style={{ ...inputStyle, marginBottom: 0, height: '44px', boxSizing: 'border-box' }}
+                        value={form.color || ''}
+                        onChange={e => setForm({ ...form, color: e.target.value })}
+                        placeholder="#6366F1"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: '44px',
+                        minWidth: '44px',
+                        height: '44px',
+                        borderRadius: '8px',
+                        background: form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1',
+                        border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                        position: 'relative',
+                        cursor: 'pointer',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        flexShrink: 0,
+                      }}
+                      title="Choose Color"
+                    >
+                      <input
+                        type="color"
+                        value={form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1'}
+                        onChange={e => setForm({ ...form, color: e.target.value.toUpperCase() })}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          opacity: 0,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label style={labelStyle}>Display Order</label>
+                  <input type="number" style={{ ...inputStyle, height: '44px', boxSizing: 'border-box' }} value={form.order === undefined ? '' : form.order} onChange={e => setForm({ ...form, order: e.target.value === '' ? '' : Number(e.target.value) })} placeholder="0" />
                 </div>
               </div>
 
@@ -816,6 +870,60 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                 <div>
                   <label style={labelStyle}>Icon (Emoji)</label>
                   <input style={inputStyle} value={form.icon || ''} onChange={e => setForm({ ...form, icon: e.target.value })} placeholder="🏆" />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <label style={labelStyle}>Theme Color (Hex)</label>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
+                    <div style={{ flex: 1 }}>
+                      <input
+                        style={{ ...inputStyle, marginBottom: 0, height: '44px', boxSizing: 'border-box' }}
+                        value={form.color || ''}
+                        onChange={e => setForm({ ...form, color: e.target.value })}
+                        placeholder="#8B5CF6"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: '44px',
+                        minWidth: '44px',
+                        height: '44px',
+                        borderRadius: '8px',
+                        background: form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#8B5CF6',
+                        border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                        position: 'relative',
+                        cursor: 'pointer',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        flexShrink: 0,
+                      }}
+                      title="Choose Color"
+                    >
+                      <input
+                        type="color"
+                        value={form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#8B5CF6'}
+                        onChange={e => setForm({ ...form, color: e.target.value.toUpperCase() })}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          opacity: 0,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label style={labelStyle}>Display Order</label>
+                  <input type="number" style={{ ...inputStyle, height: '44px', boxSizing: 'border-box' }} value={form.order === undefined ? '' : form.order} onChange={e => setForm({ ...form, order: e.target.value === '' ? '' : Number(e.target.value) })} placeholder="0" />
                 </div>
               </div>
 
@@ -1762,10 +1870,10 @@ export default function AdminDashboard() {
     testimonial: { name: '', role: '', company: '', avatar: '', rating: 5, content: '' },
     certification: { title: '', issuer: '', date: new Date().toISOString().split('T')[0], color: '#6366F1', badge: '🏆', credentialUrl: '', description: '', skills: '', logo: '', image: '' },
     skill: { name: '', category: 'Frontend', level: 100, icon: '⚡', order: 0, image: '' },
-    experience: { title: '', company: '', year: '', type: '', description: '', tech: '', icon: '💼', image: '' },
+    experience: { title: '', company: '', year: '', type: '', description: '', tech: '', icon: '💼', image: '', color: '#6366F1', order: 0 },
     education: { degree: '', institution: '', year: '', grade: '', icon: '🎓', color: '#6366F1', order: 0, currentlyPursuing: false, image: '' },
     service: { title: '', desc: '', icon: '🚀', color: '#6366F1', image: '' },
-    achievement: { title: '', desc: '', icon: '🏆', value: '', details: '', skills: '', image: '', certificateImage: '' },
+    achievement: { title: '', desc: '', icon: '🏆', value: '', details: '', skills: '', image: '', certificateImage: '', color: '#8B5CF6', order: 0 },
     stat: { label: '', value: 0, suffix: '', icon: '🚀', description: '', order: 0, image: '' },
     projectCategory: { name: '', color: '#6366F1' },
     blogCategory: { name: '', color: '#6366F1' },
