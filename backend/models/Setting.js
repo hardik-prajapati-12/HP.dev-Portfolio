@@ -17,6 +17,10 @@ const settingSchema = new mongoose.Schema({
   googleAnalyticsId: { type: String, default: '' },
   enableVisitorLogging: { type: Boolean, default: true },
   enableChatbot: { type: Boolean, default: true },
+  chatbotName: { type: String, default: "Hardik's AI Assistant" },
+  chatbotSubtitle: { type: String, default: "Portfolio guide and inquiry assistant" },
+  chatbotWelcomeMessage: { type: String, default: "Hi, I am Hardik's portfolio assistant. Ask me about my skills, projects, services, experience, or use Message to send a direct inquiry." },
+  chatbotThemeColor: { type: String, default: "#6366F1" },
 
   // Section Visibility Settings
   visibleSections: {

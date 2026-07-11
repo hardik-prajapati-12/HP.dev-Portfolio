@@ -157,7 +157,7 @@ function PortfolioHome({ publicSettings }) {
         <ErrorBoundary name="Footer"><Footer /></ErrorBoundary>
 
         {publicSettings?.enableChatbot !== false && (
-          <ErrorBoundary name="Chatbot"><Chatbot /></ErrorBoundary>
+          <ErrorBoundary name="Chatbot"><Chatbot publicSettings={publicSettings} /></ErrorBoundary>
         )}
       </div>
     </>

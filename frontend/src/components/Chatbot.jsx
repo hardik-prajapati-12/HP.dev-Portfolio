@@ -9,6 +9,7 @@ import {
   FiSend,
   FiUser,
   FiX,
+  FiLayers,
 } from 'react-icons/fi';
 import axios from 'axios';
 import chatbotLogo from '../assets/chatbot-logo.png';
@@ -27,6 +28,7 @@ import {
 const QUICK_ACTIONS = [
   { label: 'Skills', prompt: 'Tell me about Hardik skills', icon: FiCpu },
   { label: 'Projects', prompt: 'Show featured projects', icon: FiBriefcase },
+  { label: 'Services', prompt: 'Tell me about services', icon: FiLayers },
   { label: 'Message', prompt: 'send message', icon: FiMail },
 ];
 
@@ -207,14 +209,27 @@ function CroppedChatbotLogo({ size = 46, imageWidth = 146, top = '50%', glow = f
   );
 }
 
-export default function Chatbot() {
+const hexToRgb = (hex) => {
+  if (!hex) return '99,102,241';
+  const clean = hex.replace('#', '');
+  if (clean.length !== 6) return '99,102,241';
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+  return `${r},${g},${b}`;
+};
+
+export default function Chatbot({ publicSettings }) {
   const { isDark } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+
+  const title = publicSettings?.chatbotName || "Hardik's AI Assistant";
+  const subtitle = publicSettings?.chatbotSubtitle || "Portfolio guide and inquiry assistant";
+  const welcomeMsg = publicSettings?.chatbotWelcomeMessage || "Hi, I am Hardik's portfolio assistant.\nAsk me about his skills, projects, services, experience, or use Message to send a direct inquiry.";
+  const themeColor = publicSettings?.chatbotThemeColor || "#6366F1";
+
   const [messages, setMessages] = useState(() => [
-    createMessage('bot', [
-      "Hi, I am Hardik's portfolio assistant.",
-      'Ask me about his skills, projects, services, experience, or use Message to send a direct inquiry.',
-    ]),
+    createMessage('bot', welcomeMsg.split('\n')),
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -227,6 +242,12 @@ export default function Chatbot() {
   const inputRef = useRef(null);
 
   const context = useMemo(() => buildPortfolioContext(profile), [profile]);
+
+  useEffect(() => {
+    if (publicSettings?.chatbotWelcomeMessage) {
+      setMessages([createMessage('bot', publicSettings.chatbotWelcomeMessage.split('\n'))]);
+    }
+  }, [publicSettings]);
 
   useEffect(() => {
     axios.get('/api/profile').then((res) => {
@@ -512,18 +533,18 @@ export default function Chatbot() {
                 padding: '18px 18px 16px',
                 borderBottom: colors.border,
                 background: isDark
-                  ? 'linear-gradient(135deg, rgba(99,102,241,0.18), rgba(16,185,129,0.08))'
-                  : 'linear-gradient(135deg, rgba(99,102,241,0.08), rgba(16,185,129,0.08))',
+                  ? `linear-gradient(135deg, rgba(${hexToRgb(themeColor)}, 0.18), rgba(16,185,129,0.08))`
+                  : `linear-gradient(135deg, rgba(${hexToRgb(themeColor)}, 0.08), rgba(16,185,129,0.08))`,
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <CroppedChatbotLogo size={58} imageWidth={170} top="63%" glow />
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: colors.strong }}>
-                    Hardik's AI Assistant
+                    {title}
                   </h3>
                   <p style={{ margin: '4px 0 0', color: colors.soft, fontSize: '0.78rem' }}>
-                    Portfolio guide and inquiry assistant
+                    {subtitle}
                   </p>
                 </div>
               </div>
@@ -573,12 +594,12 @@ export default function Chatbot() {
                     transition: 'border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease',
                   }}
                   onMouseEnter={(event) => {
-                    event.currentTarget.style.border = '1px solid rgba(99,102,241,0.7)';
+                    event.currentTarget.style.border = `1px solid rgba(${hexToRgb(themeColor)}, 0.7)`;
                     event.currentTarget.style.background = isDark
-                      ? 'linear-gradient(135deg, rgba(99,102,241,0.18), rgba(16,185,129,0.08))'
-                      : 'linear-gradient(135deg, rgba(99,102,241,0.1), rgba(16,185,129,0.08))';
-                    event.currentTarget.style.color = isDark ? '#FFFFFF' : '#3730A3';
-                    event.currentTarget.style.boxShadow = '0 12px 26px rgba(99,102,241,0.18)';
+                      ? `linear-gradient(135deg, rgba(${hexToRgb(themeColor)}, 0.18), rgba(16,185,129,0.08))`
+                      : `linear-gradient(135deg, rgba(${hexToRgb(themeColor)}, 0.1), rgba(16,185,129,0.08))`;
+                    event.currentTarget.style.color = isDark ? '#FFFFFF' : themeColor;
+                    event.currentTarget.style.boxShadow = `0 12px 26px rgba(${hexToRgb(themeColor)}, 0.18)`;
                   }}
                   onMouseLeave={(event) => {
                     event.currentTarget.style.border = colors.border;
@@ -623,7 +644,7 @@ export default function Chatbot() {
                         style={{
                           padding: '12px 14px',
                           borderRadius: isBot ? '16px 16px 16px 5px' : '16px 16px 5px 16px',
-                          background: isBot ? colors.raised : 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                          background: isBot ? colors.raised : `linear-gradient(135deg, ${themeColor}, ${themeColor}dd)`,
                           border: isBot ? colors.border : '1px solid transparent',
                           color: isBot ? colors.strong : colors.userText,
                           fontSize: '0.86rem',
@@ -670,7 +691,7 @@ export default function Chatbot() {
                           width: 6,
                           height: 6,
                           borderRadius: '50%',
-                          background: '#6366F1',
+                          background: themeColor,
                           display: 'block',
                         }}
                       />
@@ -747,7 +768,7 @@ export default function Chatbot() {
                     background:
                       !inputValue.trim() || isTyping
                         ? (isDark ? 'rgba(255,255,255,0.1)' : '#CBD5E1')
-                        : 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                        : `linear-gradient(135deg, ${themeColor}, ${themeColor}dd)`,
                     color: '#FFFFFF',
                     display: 'grid',
                     placeItems: 'center',

@@ -1804,6 +1804,10 @@ export default function AdminDashboard() {
     otpMaxAttempts: 5,
     enableVisitorLogging: true,
     enableChatbot: true,
+    chatbotName: "Hardik's AI Assistant",
+    chatbotSubtitle: "Portfolio guide and inquiry assistant",
+    chatbotWelcomeMessage: "Hi, I am Hardik's portfolio assistant. Ask me about my skills, projects, services, experience, or use Message to send a direct inquiry.",
+    chatbotThemeColor: "#6366F1",
     corsAllowedOrigin: '*',
     visibleSections: {
       about: true,
@@ -3573,6 +3577,97 @@ export default function AdminDashboard() {
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                               }} />
                             </label>
+                          </div>
+                        </div>
+
+                        {/* Chatbot Name / Title & Subtitle */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                          <div>
+                            <label style={profileLabelStyle}>Chatbot Name / Title</label>
+                            <input
+                              style={profileInputStyle}
+                              value={settingsForm.chatbotName || ''}
+                              onChange={e => setSettingsForm({ ...settingsForm, chatbotName: e.target.value })}
+                              placeholder="e.g. Hardik's AI Assistant"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label style={profileLabelStyle}>Chatbot Subtitle</label>
+                            <input
+                              style={profileInputStyle}
+                              value={settingsForm.chatbotSubtitle || ''}
+                              onChange={e => setSettingsForm({ ...settingsForm, chatbotSubtitle: e.target.value })}
+                              placeholder="e.g. Portfolio guide and inquiry assistant"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        {/* Chatbot Welcome Message */}
+                        <div>
+                          <label style={profileLabelStyle}>Welcome Message</label>
+                          <textarea
+                            style={{ ...profileInputStyle, height: '80px', resize: 'vertical' }}
+                            value={settingsForm.chatbotWelcomeMessage || ''}
+                            onChange={e => setSettingsForm({ ...settingsForm, chatbotWelcomeMessage: e.target.value })}
+                            placeholder="Type a friendly welcome message for visitors..."
+                            required
+                          />
+                        </div>
+
+                        {/* Chatbot Theme Color */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                          <div>
+                            <label style={profileLabelStyle}>Theme Color (Hex)</label>
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
+                              <div style={{ flex: 1 }}>
+                                <input
+                                  style={{ ...profileInputStyle, marginBottom: 0, height: '44px', boxSizing: 'border-box' }}
+                                  value={settingsForm.chatbotThemeColor || ''}
+                                  onChange={e => setSettingsForm({ ...settingsForm, chatbotThemeColor: e.target.value })}
+                                  placeholder="#6366F1"
+                                  required
+                                />
+                              </div>
+                              <div
+                                style={{
+                                  width: '44px',
+                                  minWidth: '44px',
+                                  height: '44px',
+                                  borderRadius: '8px',
+                                  background: settingsForm.chatbotThemeColor && settingsForm.chatbotThemeColor.startsWith('#') && settingsForm.chatbotThemeColor.length === 7 ? settingsForm.chatbotThemeColor : '#6366F1',
+                                  border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                                  position: 'relative',
+                                  cursor: 'pointer',
+                                  overflow: 'hidden',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                  flexShrink: 0,
+                                }}
+                                title="Choose Color"
+                              >
+                                <input
+                                  type="color"
+                                  value={settingsForm.chatbotThemeColor && settingsForm.chatbotThemeColor.startsWith('#') && settingsForm.chatbotThemeColor.length === 7 ? settingsForm.chatbotThemeColor : '#6366F1'}
+                                  onChange={e => setSettingsForm({ ...settingsForm, chatbotThemeColor: e.target.value.toUpperCase() })}
+                                  style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    opacity: 0,
+                                    cursor: 'pointer',
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            {/* Empty spacer column to keep grid layout balanced */}
                           </div>
                         </div>
 

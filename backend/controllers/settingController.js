@@ -26,6 +26,10 @@ exports.getPublicSettings = async (req, res) => {
       googleAnalyticsId: settings.googleAnalyticsId || '',
       enableVisitorLogging: settings.enableVisitorLogging !== false,
       enableChatbot: settings.enableChatbot !== false,
+      chatbotName: settings.chatbotName || "Hardik's AI Assistant",
+      chatbotSubtitle: settings.chatbotSubtitle || "Portfolio guide and inquiry assistant",
+      chatbotWelcomeMessage: settings.chatbotWelcomeMessage || "Hi, I am Hardik's portfolio assistant. Ask me about my skills, projects, services, experience, or use Message to send a direct inquiry.",
+      chatbotThemeColor: settings.chatbotThemeColor || "#6366F1",
       visibleSections: settings.visibleSections || {
         about: true,
         skills: true,
