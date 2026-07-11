@@ -55,8 +55,8 @@ exports.getMe = async (req, res, next) => {
 
 exports.updateProfile = async (req, res, next) => {
   try {
-    const { name, email } = req.body;
-    const user = await User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true }).select('-password');
+    const { name, email, avatar } = req.body;
+    const user = await User.findByIdAndUpdate(req.user._id, { name, email, avatar }, { new: true, runValidators: true }).select('-password');
     res.json({ user });
   } catch (error) {
     next(error);

@@ -71,6 +71,12 @@ exports.updateProfile = async (req, res) => {
     } else {
       profile = await Profile.create(payload);
     }
+
+    if (req.user && payload.avatar !== undefined) {
+      const User = require('../models/User');
+      await User.findByIdAndUpdate(req.user._id, { avatar: payload.avatar });
+    }
+
     res.json(profile);
   } catch (error) {
     res.status(400).json({ message: 'Error updating profile', error: error.message });
