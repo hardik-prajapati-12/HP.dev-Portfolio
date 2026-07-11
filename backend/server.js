@@ -19,7 +19,7 @@ app.set('trust proxy', 1);
 // Middleware
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://hpdev-portfolio.vercel.app',
+  origin: (origin, callback) => callback(null, true),
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Admin-Access-Key'],
 }));
