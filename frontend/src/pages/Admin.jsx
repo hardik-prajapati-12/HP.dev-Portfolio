@@ -97,6 +97,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
   const projectCategories = globalData?.projectCategories || [];
   const blogCategories = globalData?.blogCategories || [];
   const experienceTypes = globalData?.experienceTypes || [];
+  const skillCategories = globalData?.skillCategories || [];
 
   const title = data ? `Edit ${type}` : `Add New ${type}`;
   const inputStyle = {
@@ -111,6 +112,24 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
     outline: 'none',
     boxSizing: 'border-box',
     marginBottom: '12px'
+  };
+
+  const optionStyle = {
+    background: isDark ? '#1F2937' : '#FFFFFF',
+    color: isDark ? '#F1F5F9' : '#0F172A',
+  };
+
+  const selectStyle = {
+    ...inputStyle,
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    MozAppearance: 'none',
+    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='${isDark ? '%2394A3B8' : '%2364748B'}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 14px center',
+    backgroundSize: '16px',
+    paddingRight: '40px',
+    cursor: 'pointer',
   };
 
   const labelStyle = {
@@ -194,15 +213,15 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Category</label>
-                  <select style={inputStyle} value={form.category || ''} onChange={e => {
+                  <select style={selectStyle} value={form.category || ''} onChange={e => {
                     const selectedCat = projectCategories.find(c => c.name === e.target.value);
                     setForm({ ...form, category: e.target.value, categoryColor: selectedCat?.color || '#6366F1' });
                   }} required>
-                    <option value="" disabled>Select Category</option>
+                    <option value="" disabled style={optionStyle}>Select Category</option>
                     {projectCategories.map(cat => (
-                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      <option key={cat._id} value={cat.name} style={optionStyle}>{cat.name}</option>
                     ))}
-                    <option value="Uncategorized">Uncategorized</option>
+                    <option value="Uncategorized" style={optionStyle}>Uncategorized</option>
                   </select>
                 </div>
                 <div>
@@ -318,15 +337,15 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Category</label>
-                  <select style={inputStyle} value={form.category || ''} onChange={e => {
+                  <select style={selectStyle} value={form.category || ''} onChange={e => {
                     const selectedCat = blogCategories.find(c => c.name === e.target.value);
                     setForm({ ...form, category: e.target.value, categoryColor: selectedCat?.color || '#6366F1' });
                   }} required>
-                    <option value="" disabled>Select Category</option>
+                    <option value="" disabled style={optionStyle}>Select Category</option>
                     {blogCategories.map(cat => (
-                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      <option key={cat._id} value={cat.name} style={optionStyle}>{cat.name}</option>
                     ))}
-                    <option value="Uncategorized">Uncategorized</option>
+                    <option value="Uncategorized" style={optionStyle}>Uncategorized</option>
                   </select>
                 </div>
                 <div>
@@ -426,12 +445,12 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                 </div>
                 <div>
                   <label style={labelStyle}>Rating (1-5)</label>
-                  <select style={inputStyle} value={form.rating || 5} onChange={e => setForm({ ...form, rating: Number(e.target.value) })}>
-                    <option value={5}>5 Stars</option>
-                    <option value={4}>4 Stars</option>
-                    <option value={3}>3 Stars</option>
-                    <option value={2}>2 Stars</option>
-                    <option value={1}>1 Star</option>
+                  <select style={selectStyle} value={form.rating || 5} onChange={e => setForm({ ...form, rating: Number(e.target.value) })}>
+                    <option value={5} style={optionStyle}>5 Stars</option>
+                    <option value={4} style={optionStyle}>4 Stars</option>
+                    <option value={3} style={optionStyle}>3 Stars</option>
+                    <option value={2} style={optionStyle}>2 Stars</option>
+                    <option value={1} style={optionStyle}>1 Star</option>
                   </select>
                 </div>
               </div>
@@ -535,12 +554,12 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Category</label>
-                  <select style={inputStyle} value={form.category || 'Frontend'} onChange={e => setForm({ ...form, category: e.target.value })}>
-                    <option value="Frontend">Frontend</option>
-                    <option value="Backend">Backend</option>
-                    <option value="Database">Database</option>
-                    <option value="Tools">Tools</option>
-                    <option value="Learning">Always Learning</option>
+                  <select style={selectStyle} value={form.category || ''} onChange={e => setForm({ ...form, category: e.target.value })} required>
+                    <option value="" disabled style={optionStyle}>Select Category</option>
+                    {skillCategories.map(cat => (
+                      <option key={cat._id} value={cat.name} style={optionStyle}>{cat.name}</option>
+                    ))}
+                    <option value="Learning" style={optionStyle}>Always Learning</option>
                   </select>
                 </div>
                 <div>
@@ -573,12 +592,12 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={labelStyle}>Type</label>
-                  <select style={inputStyle} value={form.type || ''} onChange={e => setForm({ ...form, type: e.target.value })} required>
-                    <option value="" disabled>Select Type</option>
+                  <select style={selectStyle} value={form.type || ''} onChange={e => setForm({ ...form, type: e.target.value })} required>
+                    <option value="" disabled style={optionStyle}>Select Type</option>
                     {experienceTypes.map(t => (
-                      <option key={t._id} value={t.name}>{t.name}</option>
+                      <option key={t._id} value={t.name} style={optionStyle}>{t.name}</option>
                     ))}
-                    <option value="-">-</option>
+                    <option value="-" style={optionStyle}>-</option>
                   </select>
                 </div>
                 <div>
@@ -900,6 +919,13 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
           {type === 'tag' && (
             <>
               <label style={labelStyle}>Tag Name</label>
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+            </>
+          )}
+
+          {type === 'skillCategory' && (
+            <>
+              <label style={labelStyle}>Category Name</label>
               <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
             </>
           )}
@@ -1526,12 +1552,13 @@ export default function AdminDashboard() {
   const [accessVerified, setAccessVerified] = useState(isAdminAccessVerified());
   const [section, setSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [] });
+  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [], skillCategories: [] });
 
   // Sub-tabs state
   const [experienceSubTab, setExperienceSubTab] = useState('experiences');
   const [projectsSubTab, setProjectsSubTab] = useState('projects');
   const [blogsSubTab, setBlogsSubTab] = useState('blogs');
+  const [skillsSubTab, setSkillsSubTab] = useState('skills');
 
   const [bellOpen, setBellOpen] = useState(false);
   const [activityFilter, setActivityFilter] = useState('all');
@@ -1662,7 +1689,8 @@ export default function AdminDashboard() {
       adminApi.get('/api/projects/categories', token).catch(() => ({ data: [] })),
       adminApi.get('/api/blogs/categories', token).catch(() => ({ data: [] })),
       adminApi.get('/api/experience/types', token).catch(() => ({ data: [] })),
-    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett, pCats, bCats, expTypes]) => {
+      adminApi.get('/api/skills/categories', token).catch(() => ({ data: [] })),
+    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett, pCats, bCats, expTypes, skCats]) => {
       const newData = {
         projects: p.data.data || [],
         messages: c.data.data || [],
@@ -1681,6 +1709,7 @@ export default function AdminDashboard() {
         projectCategories: Array.isArray(pCats.data) ? pCats.data : [],
         blogCategories: Array.isArray(bCats.data) ? bCats.data : [],
         experienceTypes: Array.isArray(expTypes.data) ? expTypes.data : [],
+        skillCategories: Array.isArray(skCats.data) ? skCats.data : [],
       };
       setData(newData);
       if (prof.data && prof.data.name) {
@@ -1741,6 +1770,7 @@ export default function AdminDashboard() {
     blogCategory: { name: '', color: '#6366F1' },
     experienceType: { name: '' },
     tag: { name: '' },
+    skillCategory: { name: '' },
   };
 
   const openCreateModal = (type) => {
@@ -1790,6 +1820,7 @@ export default function AdminDashboard() {
     projectCategory: '/api/projects/categories',
     blogCategory: '/api/blogs/categories',
     experienceType: '/api/experience/types',
+    skillCategory: '/api/skills/categories',
   };
 
   const parseLines = (value) => (typeof value === 'string' ? value : '')
@@ -2086,6 +2117,18 @@ export default function AdminDashboard() {
   const textMain = isDark ? '#F1F5F9' : '#0F172A';
   const textMuted = isDark ? '#94A3B8' : '#64748B';
   const profileInputStyle = { width: '100%', padding: '12px 14px', borderRadius: '8px', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1', background: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Inter', fontSize: '0.88rem', outline: 'none', boxSizing: 'border-box' };
+  const profileSelectStyle = {
+    ...profileInputStyle,
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    MozAppearance: 'none',
+    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='${isDark ? '%2394A3B8' : '%2364748B'}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 14px center',
+    backgroundSize: '16px',
+    paddingRight: '40px',
+    cursor: 'pointer',
+  };
   const profileLabelStyle = { fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.78rem', color: textMuted, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' };
 
   return (
@@ -2699,29 +2742,67 @@ export default function AdminDashboard() {
 
           {/* ════ SKILLS ════ */}
           {section === 'skills' && (
-            <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(s) => handleDelete('skill', s._id)} isDark={isDark}
-              renderItem={(s, tm, tmut) => {
-                const iconDetails = getSkillIconDetails(s.name, isDark) || {
-                  icon: <FiCpu />,
-                  color: '#6366F1'
-                };
-                return (
-                  <>
-                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {s.image && s.image.trim() !== '' ? (
-                        <img src={s.image} alt={s.name} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
-                      ) : (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', minWidth: '20px', justifyContent: 'center', fontSize: '1.15rem', color: iconDetails.color }}>
-                          {iconDetails.icon}
+            <div>
+              {/* Sub-tabs */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                <button onClick={() => setSkillsSubTab('skills')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: skillsSubTab === 'skills' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: skillsSubTab === 'skills' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: skillsSubTab === 'skills' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiCpu size={14} /> Skills
+                </button>
+                <button onClick={() => setSkillsSubTab('categories')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: skillsSubTab === 'categories' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: skillsSubTab === 'categories' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: skillsSubTab === 'categories' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  🏷️ Skill Categories
+                </button>
+              </div>
+
+              {skillsSubTab === 'skills' ? (
+                <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(s) => handleDelete('skill', s._id)} isDark={isDark}
+                  renderItem={(s, tm, tmut) => {
+                    const iconDetails = getSkillIconDetails(s.name, isDark) || {
+                      icon: <FiCpu />,
+                      color: '#6366F1'
+                    };
+                    return (
+                      <>
+                        <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          {s.image && s.image.trim() !== '' ? (
+                            <img src={s.image} alt={s.name} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                          ) : (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', minWidth: '20px', justifyContent: 'center', fontSize: '1.15rem', color: iconDetails.color }}>
+                              {iconDetails.icon}
+                            </span>
+                          )}
+                          {s.name}
                         </span>
-                      )}
-                      {s.name}
+                        <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{s.category}</span>
+                      </>
+                    );
+                  }}
+                />
+              ) : (
+                <CrudList items={data.skillCategories} type="skillCategory" label="skill categories" onAdd={() => openCreateModal('skillCategory')} onEdit={(item) => openEditModal('skillCategory', item)} onDelete={(cat) => handleDelete('skillCategory', cat._id)} isDark={isDark}
+                  renderItem={(cat, tm, tmut) => (
+                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      🏷️ {cat.name}
                     </span>
-                    <span style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: tmut }}>{s.category}</span>
-                  </>
-                );
-              }}
-            />
+                  )}
+                />
+              )}
+            </div>
           )}
 
           {/* ════ EXPERIENCE ════ */}
@@ -3298,10 +3379,10 @@ export default function AdminDashboard() {
                       </div>
                       <div>
                         <label style={profileLabelStyle}>Encryption</label>
-                        <select style={profileInputStyle} value={settingsForm.smtpEncryption || 'tls'} onChange={e => setSettingsForm({ ...settingsForm, smtpEncryption: e.target.value })}>
-                          <option value="tls">TLS / STARTTLS (port 587) — Recommended</option>
-                          <option value="ssl">SSL (port 465)</option>
-                          <option value="none">None / No Encryption</option>
+                        <select style={profileSelectStyle} value={settingsForm.smtpEncryption || 'tls'} onChange={e => setSettingsForm({ ...settingsForm, smtpEncryption: e.target.value })}>
+                          <option value="tls" style={optionStyle}>TLS / STARTTLS (port 587) — Recommended</option>
+                          <option value="ssl" style={optionStyle}>SSL (port 465)</option>
+                          <option value="none" style={optionStyle}>None / No Encryption</option>
                         </select>
                       </div>
                     </div>
