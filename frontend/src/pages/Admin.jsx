@@ -3370,41 +3370,56 @@ export default function AdminDashboard() {
                               Toggle whether the chatbot widget is visible to visitors on the frontend site.
                             </p>
                           </div>
-                          
-                          {/* Toggle Switch */}
-                          <label style={{
-                            position: 'relative',
-                            display: 'inline-block',
-                            width: '50px',
-                            height: '26px',
-                            cursor: 'pointer'
-                          }}>
-                            <input
-                              type="checkbox"
-                              checked={!!settingsForm.enableChatbot}
-                              onChange={e => setSettingsForm({ ...settingsForm, enableChatbot: e.target.checked })}
-                              style={{ opacity: 0, width: 0, height: 0 }}
-                            />
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <span style={{
-                              position: 'absolute',
-                              inset: 0,
-                              borderRadius: '34px',
-                              background: settingsForm.enableChatbot ? '#10B981' : (isDark ? '#374151' : '#E2E8F0'),
-                              transition: 'background 0.3s',
-                            }} />
-                            <span style={{
-                              position: 'absolute',
-                              content: '""',
-                              height: '20px',
-                              width: '20px',
-                              left: settingsForm.enableChatbot ? '26px' : '4px',
-                              bottom: '3px',
-                              borderRadius: '50%',
-                              background: '#FFFFFF',
-                              transition: 'left 0.3s',
-                              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                            }} />
-                          </label>
+                              fontFamily: 'Inter',
+                              fontSize: '0.75rem',
+                              fontWeight: 700,
+                              padding: '4px 10px',
+                              borderRadius: '8px',
+                              letterSpacing: '0.03em',
+                              background: settingsForm.enableChatbot ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+                              color: settingsForm.enableChatbot ? '#10B981' : '#EF4444',
+                              transition: 'all 0.3s',
+                            }}>
+                              {settingsForm.enableChatbot ? 'Visible' : 'Hidden'}
+                            </span>
+
+                            {/* Toggle Switch */}
+                            <label style={{
+                              position: 'relative',
+                              display: 'inline-block',
+                              width: '50px',
+                              height: '26px',
+                              cursor: 'pointer'
+                            }}>
+                              <input
+                                type="checkbox"
+                                checked={!!settingsForm.enableChatbot}
+                                onChange={e => setSettingsForm({ ...settingsForm, enableChatbot: e.target.checked })}
+                                style={{ opacity: 0, width: 0, height: 0 }}
+                              />
+                              <span style={{
+                                position: 'absolute',
+                                inset: 0,
+                                borderRadius: '34px',
+                                background: settingsForm.enableChatbot ? '#10B981' : (isDark ? '#374151' : '#E2E8F0'),
+                                transition: 'background 0.3s',
+                              }} />
+                              <span style={{
+                                position: 'absolute',
+                                content: '""',
+                                height: '20px',
+                                width: '20px',
+                                left: settingsForm.enableChatbot ? '26px' : '4px',
+                                bottom: '3px',
+                                borderRadius: '50%',
+                                background: '#FFFFFF',
+                                transition: 'left 0.3s',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                              }} />
+                            </label>
+                          </div>
                         </div>
 
                       </div>
