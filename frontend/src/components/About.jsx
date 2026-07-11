@@ -175,7 +175,7 @@ export default function About() {
             <motion.a href="#contact" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 26px', borderRadius: '8px', border: isDark ? '1.5px solid rgba(255,255,255,0.15)' : '1.5px solid rgba(0,0,0,0.12)', background: 'transparent', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none', marginBottom: '40px', transition: 'all 0.2s' }}
             >
-              <FiPhone size={15} /> More About Me
+              <FiPhone size={15} color="#EF4444" /> More About Me
             </motion.a>
 
             {/* Education sub-list */}

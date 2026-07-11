@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend, FiStar, FiMessageSquare, FiBell, FiMoon, FiSun, FiActivity, FiMonitor } from 'react-icons/fi';
+import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend, FiStar, FiMessageSquare, FiBell, FiMoon, FiSun, FiActivity, FiMonitor, FiSearch } from 'react-icons/fi';
 import EmojiIcon from '../components/EmojiIcon';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
@@ -1781,29 +1781,115 @@ function ConfirmDeleteModal({ isOpen, message, onConfirm, onCancel, isDark }) {
 
 /* ─────────── GENERIC CRUD LIST ─────────── */
 function CrudList({ items, type, label, onAdd, onEdit, onDelete, renderItem, isDark }) {
+  const [searchQuery, setSearchQuery] = useState('');
   const cardBg = isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF';
   const cardBorder = isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #E2E8F0';
   const textMain = isDark ? '#F1F5F9' : '#0F172A';
   const textMuted = isDark ? '#94A3B8' : '#64748B';
 
+  const filteredItems = items.filter(item => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase().trim();
+    const fieldsToSearch = [
+      item.name,
+      item.title,
+      item.tag,
+      item.category,
+      item.description,
+      item.content,
+      item.company,
+      item.role,
+      item.institution,
+      item.degree,
+      item.label,
+      item.value
+    ];
+    return fieldsToSearch.some(field =>
+      field && String(field).toLowerCase().includes(query)
+    );
+  });
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem' }}>{items.length} {label} in database</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+        <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', margin: 0 }}>
+          {searchQuery ? `${filteredItems.length} found (${items.length} total)` : `${items.length} ${label} in database`}
+        </p>
         <button onClick={onAdd} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem' }}>
           <FiPlusCircle size={15} /> Add {type}
         </button>
       </div>
+
+      {items.length > 0 && (
+        <div style={{ position: 'relative', marginBottom: '20px' }}>
+          <input
+            type="text"
+            placeholder={`Search ${label}...`}
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '12px 16px 12px 42px',
+              borderRadius: '12px',
+              border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0',
+              background: isDark ? 'rgba(255,255,255,0.02)' : '#FBFBFE',
+              color: isDark ? '#F1F5F9' : '#0F172A',
+              fontFamily: 'Inter',
+              fontSize: '0.88rem',
+              outline: 'none',
+              boxSizing: 'border-box',
+              transition: 'all 0.2s',
+            }}
+          />
+          <FiSearch
+            size={16}
+            style={{
+              position: 'absolute',
+              left: '16px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: textMuted,
+              pointerEvents: 'none'
+            }}
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              style={{
+                position: 'absolute',
+                right: '16px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                border: 'none',
+                background: 'transparent',
+                color: textMuted,
+                cursor: 'pointer',
+                display: 'flex',
+                padding: '4px',
+                borderRadius: '50%',
+              }}
+            >
+              <FiX size={14} />
+            </button>
+          )}
+        </div>
+      )}
+
       {items.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>No {label} in database. Click Add to create one.</div>
+      ) : filteredItems.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '40px', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>
+          No matching entries found for "{searchQuery}".
+        </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {items.map((item, idx) => (
+          {filteredItems.map((item, idx) => (
             <div key={item._id || item.tag || idx} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', borderRadius: '12px', background: cardBg, border: cardBorder }}>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 {renderItem(item, textMain, textMuted)}
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
                 <button onClick={() => onEdit(item)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(99,102,241,0.08)', color: '#6366F1', display: 'flex' }}><FiEdit2 size={14} /></button>
                 <button onClick={() => onDelete(item)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }}><FiTrash2 size={14} /></button>
               </div>
@@ -1832,6 +1918,7 @@ export default function AdminDashboard() {
   const [projectsSubTab, setProjectsSubTab] = useState('projects');
   const [blogsSubTab, setBlogsSubTab] = useState('blogs');
   const [skillsSubTab, setSkillsSubTab] = useState('skills');
+  const [commentsSearchQuery, setCommentsSearchQuery] = useState('');
 
   const [bellOpen, setBellOpen] = useState(false);
   const [activityFilter, setActivityFilter] = useState('all');
@@ -3465,82 +3552,161 @@ export default function AdminDashboard() {
                     />
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      {/* Search Bar for Comments */}
+                      {data.comments.length > 0 && (
+                        <div style={{ position: 'relative', marginBottom: '8px' }}>
+                          <input
+                            type="text"
+                            placeholder="Search comments by author, email, content, or blog title..."
+                            value={commentsSearchQuery}
+                            onChange={e => setCommentsSearchQuery(e.target.value)}
+                            style={{
+                              width: '100%',
+                              padding: '12px 16px 12px 42px',
+                              borderRadius: '12px',
+                              border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0',
+                              background: isDark ? 'rgba(255,255,255,0.02)' : '#FBFBFE',
+                              color: isDark ? '#F1F5F9' : '#0F172A',
+                              fontFamily: 'Inter',
+                              fontSize: '0.88rem',
+                              outline: 'none',
+                              boxSizing: 'border-box',
+                              transition: 'all 0.2s',
+                            }}
+                          />
+                          <FiSearch
+                            size={16}
+                            style={{
+                              position: 'absolute',
+                              left: '16px',
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              color: textMuted,
+                              pointerEvents: 'none'
+                            }}
+                          />
+                          {commentsSearchQuery && (
+                            <button
+                              type="button"
+                              onClick={() => setCommentsSearchQuery('')}
+                              style={{
+                                position: 'absolute',
+                                right: '16px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                border: 'none',
+                                background: 'transparent',
+                                color: textMuted,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                padding: '4px',
+                                borderRadius: '50%',
+                              }}
+                            >
+                              <FiX size={14} />
+                            </button>
+                          )}
+                        </div>
+                      )}
+
                       {data.comments.length === 0 ? (
                         <div style={{ padding: '40px', textAlign: 'center', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>
                           No comments to moderate.
                         </div>
                       ) : (
-                        data.comments.map(c => {
-                          const blog = data.blogs.find(b => b._id === c.blogId);
-                          return (
-                            <div
-                              key={c._id}
-                              style={{
-                                padding: '20px',
-                                borderRadius: '16px',
-                                background: cardBg,
-                                border: cardBorder,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '12px',
-                                transition: 'transform 0.2s',
-                              }}
-                              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
-                            >
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
-                                <div>
-                                  <h5 style={{ margin: '0 0 2px 0', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain }}>
-                                    {c.name} <span style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '0.78rem', color: textMuted, marginLeft: '6px' }}>({c.email})</span>
-                                  </h5>
-                                  <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted }}>
-                                    Posted on: <strong style={{ color: '#6366F1' }}>{blog ? blog.title : 'Deleted Blog Post'}</strong> · {new Date(c.createdAt).toLocaleString()}
-                                  </p>
-                                </div>
-                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                  <button
-                                    onClick={() => handleApproveComment(c._id, !c.approved)}
-                                    style={{
-                                      padding: '6px 12px',
-                                      borderRadius: '8px',
-                                      border: 'none',
-                                      cursor: 'pointer',
-                                      fontFamily: 'Poppins',
-                                      fontWeight: 600,
-                                      fontSize: '0.75rem',
-                                      background: c.approved ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
-                                      color: c.approved ? '#10B981' : '#F59E0B',
-                                      transition: 'all 0.2s',
-                                    }}
-                                  >
-                                    {c.approved ? '✓ Approved' : '⏳ Pending'}
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteComment(c._id)}
-                                    style={{
-                                      padding: '6px 10px',
-                                      borderRadius: '8px',
-                                      border: 'none',
-                                      cursor: 'pointer',
-                                      background: 'rgba(239, 68, 68, 0.1)',
-                                      color: '#EF4444',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      transition: 'all 0.2s',
-                                    }}
-                                    title="Delete Comment"
-                                  >
-                                    <FiTrash2 size={13} />
-                                  </button>
-                                </div>
+                        (() => {
+                          const query = commentsSearchQuery.toLowerCase().trim();
+                          const filteredComments = data.comments.filter(c => {
+                            if (!query) return true;
+                            const blog = data.blogs.find(b => b._id === c.blogId);
+                            return (
+                              c.name?.toLowerCase().includes(query) ||
+                              c.email?.toLowerCase().includes(query) ||
+                              c.content?.toLowerCase().includes(query) ||
+                              blog?.title?.toLowerCase().includes(query)
+                            );
+                          });
+
+                          if (filteredComments.length === 0) {
+                            return (
+                              <div style={{ padding: '40px', textAlign: 'center', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>
+                                No matching comments found for "{commentsSearchQuery}".
                               </div>
-                              <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.88rem', color: isDark ? '#CBD5E1' : '#475569', lineHeight: 1.5, background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', padding: '12px 16px', borderRadius: '10px', border: cardBorder, whiteSpace: 'pre-wrap' }}>
-                                {c.content}
-                              </p>
-                            </div>
-                          );
-                        })
+                            );
+                          }
+
+                          return filteredComments.map(c => {
+                            const blog = data.blogs.find(b => b._id === c.blogId);
+                            return (
+                              <div
+                                key={c._id}
+                                style={{
+                                  padding: '20px',
+                                  borderRadius: '16px',
+                                  background: cardBg,
+                                  border: cardBorder,
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  gap: '12px',
+                                  transition: 'transform 0.2s',
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                              >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
+                                  <div>
+                                    <h5 style={{ margin: '0 0 2px 0', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain }}>
+                                      {c.name} <span style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '0.78rem', color: textMuted, marginLeft: '6px' }}>({c.email})</span>
+                                    </h5>
+                                    <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted }}>
+                                      Posted on: <strong style={{ color: '#6366F1' }}>{blog ? blog.title : 'Deleted Blog Post'}</strong> · {new Date(c.createdAt).toLocaleString()}
+                                    </p>
+                                  </div>
+                                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                    <button
+                                      onClick={() => handleApproveComment(c._id, !c.approved)}
+                                      style={{
+                                        padding: '6px 12px',
+                                        borderRadius: '8px',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        fontFamily: 'Poppins',
+                                        fontWeight: 600,
+                                        fontSize: '0.75rem',
+                                        background: c.approved ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+                                        color: c.approved ? '#10B981' : '#F59E0B',
+                                        transition: 'all 0.2s',
+                                      }}
+                                    >
+                                      {c.approved ? '✓ Approved' : '⏳ Pending'}
+                                    </button>
+                                    <button
+                                      onClick={() => handleDeleteComment(c._id)}
+                                      style={{
+                                        padding: '6px 10px',
+                                        borderRadius: '8px',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        background: 'rgba(239, 68, 68, 0.1)',
+                                        color: '#EF4444',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        transition: 'all 0.2s',
+                                      }}
+                                      title="Delete Comment"
+                                    >
+                                      <FiTrash2 size={13} />
+                                    </button>
+                                  </div>
+                                </div>
+                                <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.88rem', color: isDark ? '#CBD5E1' : '#475569', lineHeight: 1.5, background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', padding: '12px 16px', borderRadius: '10px', border: cardBorder, whiteSpace: 'pre-wrap' }}>
+                                  {c.content}
+                                </p>
+                              </div>
+                            );
+                          });
+                        })()
                       )}
                     </div>
                   )}
