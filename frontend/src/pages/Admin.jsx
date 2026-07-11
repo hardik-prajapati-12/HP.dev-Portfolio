@@ -2064,7 +2064,8 @@ export default function AdminDashboard() {
       setSection('messages');
       setSelectedMessage(notif.data);
     } else if (notif.type === 'comment') {
-      setSection('comments');
+      setSection('blogs');
+      setBlogsSubTab('comments');
     } else if (notif.type === 'testimonial') {
       setSection('testimonials');
     }
@@ -2076,7 +2077,8 @@ export default function AdminDashboard() {
       setSection('messages');
       setSelectedMessage(notif.data);
     } else if (notif.type === 'comment') {
-      setSection('comments');
+      setSection('blogs');
+      setBlogsSubTab('comments');
     } else if (notif.type === 'testimonial') {
       setSection('testimonials');
     }
@@ -2104,7 +2106,6 @@ export default function AdminDashboard() {
     { id: 'certifications', label: 'Certifications', icon: <FiAward /> },
     { id: 'achievements', label: 'Achievements', icon: <FiTrendingUp /> },
     { id: 'blogs', label: 'Blogs', icon: <FiFileText /> },
-    { id: 'comments', label: 'Comments', icon: <FiUsers /> },
     { id: 'testimonials', label: 'Testimonials', icon: <FiUsers /> },
     { id: 'messages', label: 'Messages', icon: <FiMail />, badge: data.messages.filter(m => !m.read).length },
     { id: 'settings', label: 'Settings', icon: <FiSettings /> },
@@ -2989,6 +2990,17 @@ export default function AdminDashboard() {
                 >
                   🏷️ Blog Categories
                 </button>
+                <button onClick={() => setBlogsSubTab('comments')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 18px', borderRadius: '10px',
+                    border: blogsSubTab === 'comments' ? '1.5px solid #6366F1' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #CBD5E1'),
+                    background: blogsSubTab === 'comments' ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)') : 'transparent',
+                    color: blogsSubTab === 'comments' ? '#6366F1' : textMuted,
+                    fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <FiMessageSquare size={14} /> Blog Comments
+                </button>
               </div>
 
               {blogsSubTab === 'blogs' ? (
@@ -3018,7 +3030,7 @@ export default function AdminDashboard() {
                     </>
                   )}
                 />
-              ) : (
+              ) : blogsSubTab === 'categories' ? (
                 <CrudList items={data.blogCategories} type="blogCategory" label="blog categories" onAdd={() => openCreateModal('blogCategory')} onEdit={(item) => openEditModal('blogCategory', item)} onDelete={(c) => handleDelete('blogCategory', c._id)} isDark={isDark}
                   renderItem={(c, tm, tmut) => (
                     <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -3027,6 +3039,86 @@ export default function AdminDashboard() {
                     </span>
                   )}
                 />
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {data.comments.length === 0 ? (
+                    <div style={{ padding: '40px', textAlign: 'center', color: textMuted, fontFamily: 'Inter', background: cardBg, border: cardBorder, borderRadius: '16px' }}>
+                      No comments to moderate.
+                    </div>
+                  ) : (
+                    data.comments.map(c => {
+                      const blog = data.blogs.find(b => b._id === c.blogId);
+                      return (
+                        <div
+                          key={c._id}
+                          style={{
+                            padding: '20px',
+                            borderRadius: '16px',
+                            background: cardBg,
+                            border: cardBorder,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px',
+                            transition: 'transform 0.2s',
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
+                            <div>
+                              <h5 style={{ margin: '0 0 2px 0', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', color: textMain }}>
+                                {c.name} <span style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '0.78rem', color: textMuted, marginLeft: '6px' }}>({c.email})</span>
+                              </h5>
+                              <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted }}>
+                                Posted on: <strong style={{ color: '#6366F1' }}>{blog ? blog.title : 'Deleted Blog Post'}</strong> · {new Date(c.createdAt).toLocaleString()}
+                              </p>
+                            </div>
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                              <button
+                                onClick={() => handleApproveComment(c._id, !c.approved)}
+                                style={{
+                                  padding: '6px 12px',
+                                  borderRadius: '8px',
+                                  border: 'none',
+                                  cursor: 'pointer',
+                                  fontFamily: 'Poppins',
+                                  fontWeight: 600,
+                                  fontSize: '0.75rem',
+                                  background: c.approved ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+                                  color: c.approved ? '#10B981' : '#F59E0B',
+                                  transition: 'all 0.2s',
+                                }}
+                              >
+                                {c.approved ? '✓ Approved' : '⏳ Pending'}
+                              </button>
+                              <button
+                                onClick={() => handleDeleteComment(c._id)}
+                                style={{
+                                  padding: '6px 10px',
+                                  borderRadius: '8px',
+                                  border: 'none',
+                                  cursor: 'pointer',
+                                  background: 'rgba(239, 68, 68, 0.1)',
+                                  color: '#EF4444',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  transition: 'all 0.2s',
+                                }}
+                                title="Delete Comment"
+                              >
+                                <FiTrash2 size={13} />
+                              </button>
+                            </div>
+                          </div>
+                          <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.88rem', color: isDark ? '#CBD5E1' : '#475569', lineHeight: 1.5, background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', padding: '12px 16px', borderRadius: '10px', border: cardBorder, whiteSpace: 'pre-wrap' }}>
+                            {c.content}
+                          </p>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
               )}
             </div>
           )}
