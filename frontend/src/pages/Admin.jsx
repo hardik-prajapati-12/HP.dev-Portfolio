@@ -267,6 +267,15 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
 
               <ImageUpload label="Case Study Cover Image" value={form.caseStudyImage || ''} onChange={(url) => setForm({ ...form, caseStudyImage: url })} token={token} isDark={isDark} labelStyle={labelStyle} />
 
+              <label style={labelStyle}>Case Study Title</label>
+              <input style={inputStyle} value={form.caseStudyTitle || ''} onChange={e => setForm({ ...form, caseStudyTitle: e.target.value })} placeholder="How this project is structured and delivered" />
+
+              <label style={labelStyle}>Case Study Badge</label>
+              <input style={inputStyle} value={form.caseStudyBadge || ''} onChange={e => setProfileForm ? setForm({ ...form, caseStudyBadge: e.target.value }) : setForm({ ...form, caseStudyBadge: e.target.value })} placeholder="Production-focused build" />
+
+              <label style={labelStyle}>Problem & Goal</label>
+              <textarea style={{ ...inputStyle, height: '100px', resize: 'vertical' }} value={form.caseStudyProblem || ''} onChange={e => setForm({ ...form, caseStudyProblem: e.target.value })} placeholder="Explain the project challenge, goals, and user needs..." />
+
               <div style={{ margin: '16px 0 20px', padding: '14px', borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0' }}>
                 <label style={labelStyle}>System Architecture Diagrams</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '12px' }}>
@@ -301,15 +310,6 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                   setForm({ ...form, caseStudyArchitectureDiagrams: newDiags });
                 }} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '8px', border: 'none', background: isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)', color: '#6366F1', cursor: 'pointer', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.8rem' }}><FiPlusCircle size={14} /> Add Diagram</button>
               </div>
-
-              <label style={labelStyle}>Case Study Title</label>
-              <input style={inputStyle} value={form.caseStudyTitle || ''} onChange={e => setForm({ ...form, caseStudyTitle: e.target.value })} placeholder="How this project is structured and delivered" />
-
-              <label style={labelStyle}>Case Study Badge</label>
-              <input style={inputStyle} value={form.caseStudyBadge || ''} onChange={e => setForm({ ...form, caseStudyBadge: e.target.value })} placeholder="Production-focused build" />
-
-              <label style={labelStyle}>Problem & Goal</label>
-              <textarea style={{ ...inputStyle, height: '100px', resize: 'vertical' }} value={form.caseStudyProblem || ''} onChange={e => setForm({ ...form, caseStudyProblem: e.target.value })} placeholder="Explain the project challenge, goals, and user needs..." />
 
               <label style={labelStyle}>Architecture & Flow</label>
               <textarea style={{ ...inputStyle, height: '130px', resize: 'vertical' }} value={form.caseStudyArchitecture || ''} onChange={e => setForm({ ...form, caseStudyArchitecture: e.target.value })} placeholder={'Presentation Layer: Responsive UI and navigation\nApplication Logic: Validation, state, and feature workflows\nData Layer: Database collections and storage strategy'} />
