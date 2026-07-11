@@ -312,6 +312,7 @@ export default function About() {
           }
           .profile-photo-showcase {
             min-height: 360px!important;
+            grid-column: span 1 !important;
           }
         }
       `}</style>

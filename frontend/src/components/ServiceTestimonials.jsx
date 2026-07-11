@@ -42,7 +42,7 @@ export function Services() {
           <div style={{ width:'60px', height:'4px', borderRadius:'2px', background:'linear-gradient(to right,#6366F1,#3B82F6)', margin:'20px auto 0' }} />
         </motion.div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:'24px' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,300px),1fr))', gap:'24px' }}>
           {servicesToDisplay.map((svc, i) => {
             const mappedColor = getThemeColor(svc.color);
             const serviceSlug = svc.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -140,7 +140,7 @@ export function Testimonials() {
           <div style={{ width:'60px', height:'4px', borderRadius:'2px', background:'linear-gradient(to right,#6366F1,#3B82F6)', margin:'20px auto 0' }} />
         </motion.div>
 
-        <div style={{ position:'relative', padding:'0 48px' }}>
+        <div className="testimonial-wrapper" style={{ position:'relative', padding:'0 48px' }}>
           <AnimatePresence mode="wait">
             <motion.div key={current}
               initial={{ opacity:0, x:60 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-60 }}
@@ -170,12 +170,14 @@ export function Testimonials() {
             </motion.div>
           </AnimatePresence>
 
-          <button onClick={prev} style={{ position:'absolute', left:0, top:'50%', transform:'translateY(-50%)', width:'40px', height:'40px', borderRadius:'50%', background: isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.05)', border: isDark?'1px solid rgba(255,255,255,0.1)':'1px solid #E2E8F0', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color: isDark?'#94A3B8':'#64748B' }}>
-            <FiChevronLeft />
-          </button>
-          <button onClick={next} style={{ position:'absolute', right:0, top:'50%', transform:'translateY(-50%)', width:'40px', height:'40px', borderRadius:'50%', background: isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.05)', border: isDark?'1px solid rgba(255,255,255,0.1)':'1px solid #E2E8F0', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color: isDark?'#94A3B8':'#64748B' }}>
-            <FiChevronRight />
-          </button>
+          <div className="testimonial-controls" style={{ display: 'contents' }}>
+            <button onClick={prev} className="testimonial-btn testimonial-btn-left" style={{ position:'absolute', left:0, top:'50%', transform:'translateY(-50%)', width:'40px', height:'40px', borderRadius:'50%', background: isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.05)', border: isDark?'1px solid rgba(255,255,255,0.1)':'1px solid #E2E8F0', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color: isDark?'#94A3B8':'#64748B' }}>
+              <FiChevronLeft />
+            </button>
+            <button onClick={next} className="testimonial-btn testimonial-btn-right" style={{ position:'absolute', right:0, top:'50%', transform:'translateY(-50%)', width:'40px', height:'40px', borderRadius:'50%', background: isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.05)', border: isDark?'1px solid rgba(255,255,255,0.1)':'1px solid #E2E8F0', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color: isDark?'#94A3B8':'#64748B' }}>
+              <FiChevronRight />
+            </button>
+          </div>
         </div>
 
         <div style={{ display:'flex', justifyContent:'center', gap:'8px', marginTop:'28px' }}>
@@ -186,6 +188,24 @@ export function Testimonials() {
           ))}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 600px) {
+          .testimonial-wrapper {
+            padding: 0 !important;
+          }
+          .testimonial-controls {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+          }
+          .testimonial-btn {
+            position: static !important;
+            transform: none !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

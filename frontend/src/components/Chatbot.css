@@ -27,3 +27,14 @@
 .chatbot-close-button:focus-visible {
   box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.18);
 }
+
+@media (max-width: 600px) {
+  .chatbot-aside {
+    width: calc(100vw - 24px) !important;
+    height: calc(100vh - 110px) !important;
+    min-height: auto !important;
+    bottom: 12px !important;
+    right: 12px !important;
+    border-radius: 16px !important;
+  }
+}

@@ -44,17 +44,18 @@ export function Experience() {
 
         <div style={{ position:'relative' }}>
           {/* Vertical timeline line */}
-          <div style={{ position:'absolute', left:'24px', top:0, bottom:0, width:'2px', background:'linear-gradient(to bottom,transparent,#6366F1,#3B82F6,transparent)' }} />
+          <div className="timeline-line" style={{ position:'absolute', left:'24px', top:0, bottom:0, width:'2px', background:'linear-gradient(to bottom,transparent,#6366F1,#3B82F6,transparent)' }} />
 
           <div style={{ display:'flex', flexDirection:'column', gap:'36px' }}>
             {experienceToDisplay.map((exp, i) => (
               <motion.div key={i}
                 initial={{ opacity:0, x:-40 }} whileInView={{ opacity:1, x:0 }}
                 viewport={{ once:true, amount:0 }} transition={{ delay: i*0.12, duration:0.5 }}
+                className="timeline-row"
                 style={{ display:'flex', gap:'32px', paddingLeft:'70px', position:'relative' }}
               >
                 {/* Timeline dot */}
-                <div style={{ position:'absolute', left:'12px', top:'20px', width:'26px', height:'26px', borderRadius:'50%', background: exp.image ? 'transparent' : `linear-gradient(135deg, ${exp.color || '#6366F1'}, #3B82F6)`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow: exp.image ? 'none' : `0 0 15px ${exp.color || '#6366F1'}66`, zIndex:2, overflow: 'hidden' }}>
+                <div className="timeline-dot" style={{ position:'absolute', left:'12px', top:'20px', width:'26px', height:'26px', borderRadius:'50%', background: exp.image ? 'transparent' : `linear-gradient(135deg, ${exp.color || '#6366F1'}, #3B82F6)`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow: exp.image ? 'none' : `0 0 15px ${exp.color || '#6366F1'}66`, zIndex:2, overflow: 'hidden' }}>
                   {exp.image && exp.image.trim() !== '' ? (
                     <img src={exp.image} alt={exp.company} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                   ) : (
@@ -89,6 +90,22 @@ export function Experience() {
           </div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 600px) {
+          .timeline-line {
+            left: 15px !important;
+          }
+          .timeline-row {
+            padding-left: 36px !important;
+            gap: 16px !important;
+          }
+          .timeline-dot {
+            left: 4px !important;
+            width: 22px !important;
+            height: 22px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
@@ -149,7 +166,7 @@ export function Certifications() {
           <div style={{ width:'60px', height:'4px', borderRadius:'2px', background:'linear-gradient(to right,#8B5CF6,#3B82F6)', margin:'20px auto 0' }} />
         </motion.div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:'20px', marginBottom:'56px' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,300px),1fr))', gap:'20px', marginBottom:'56px' }}>
           {certsToDisplay.map((cert, i) => (
             <motion.div key={i}
               initial={{ opacity:0, y:30 }} whileInView={{ opacity:1, y:0 }}
@@ -179,7 +196,7 @@ export function Certifications() {
         <h3 style={{ fontFamily:'Poppins', fontWeight:700, fontSize:'1.5rem', color: isDark?'#F1F5F9':'#0F172A', marginBottom:'24px', textAlign:'center' }}>
           Notable Achievements
         </h3>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))', gap:'16px' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,240px),1fr))', gap:'16px' }}>
           {achievementsToDisplay.map((ach, i) => {
             const achColor = ach.color || '#8B5CF6';
             return (

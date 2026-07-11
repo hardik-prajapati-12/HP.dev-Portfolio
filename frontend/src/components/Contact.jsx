@@ -71,7 +71,7 @@ export default function Contact() {
           <div style={{ width:'60px', height:'4px', borderRadius:'2px', background:'linear-gradient(to right,#8B5CF6,#3B82F6)', margin:'20px auto 0' }} />
         </motion.div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:'48px', alignItems:'start' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,300px),1fr))', gap:'48px', alignItems:'start' }}>
 
           {/* Info */}
           <motion.div initial={{ opacity:0, x:-40 }} whileInView={{ opacity:1, x:0 }} viewport={{ once:true, amount:0 }} transition={{ duration:0.6, delay:0.1 }}>
@@ -169,7 +169,7 @@ export default function Contact() {
             >
               <h3 style={{ fontFamily:'Poppins', fontWeight:700, fontSize:'1.2rem', color: isDark?'#F1F5F9':'#0F172A' }}>Send a Message</h3>
 
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px' }}>
+              <div className="contact-inputs-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px' }}>
                 <input placeholder="Your Name"  name="name"  value={form.name}  onChange={handleChange} required style={inputBase} />
                 <input placeholder="Your Email" name="email" type="email" value={form.email} onChange={handleChange} required style={inputBase} />
               </div>
@@ -199,6 +199,13 @@ export default function Contact() {
           </motion.div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 600px) {
+          .contact-inputs-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

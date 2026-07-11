@@ -130,7 +130,7 @@ export default function Projects() {
         </motion.div>
 
         {/* Project grid */}
-        <motion.div layout style={{ display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:'24px' }}>
+        <motion.div layout style={{ display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,320px),1fr))',gap:'24px' }}>
           <AnimatePresence>
             {filtered.map((project, i) => (
               <motion.div key={project.id || project._id} layout

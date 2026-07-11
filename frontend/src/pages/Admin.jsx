@@ -1735,6 +1735,19 @@ export default function AdminDashboard() {
     localStorage.setItem('admin_dismissed_bells', JSON.stringify(Array.from(dismissedBellIds)));
   }, [dismissedBellIds]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Close bell dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -2391,17 +2404,46 @@ export default function AdminDashboard() {
                 background: rgba(239, 68, 68, 0.15) !important;
                 padding-left: 20px !important;
               }
+              @media (max-width: 1023px) {
+                .admin-main-content {
+                  margin-left: 0 !important;
+                }
+                .sidebar-close-btn {
+                  display: flex !important;
+                }
+              }
+              @media (max-width: 768px) {
+                div[style*="grid-template-columns"], div[style*="gridTemplateColumns"] {
+                  grid-template-columns: 1fr !important;
+                }
+              }
             `}</style>
-            <div style={{ padding: '16px 20px', borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+            <div style={{ padding: '16px 20px', borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0px' }}>
                 <img src={isDark ? logo : logoDark} alt="Logo" style={{ height: '80px', objectFit: 'contain', marginLeft: '-14px', marginTop: '-10px' }} />
                 <p style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.80rem', color: textMuted, letterSpacing: '0.06em', textTransform: 'uppercase', marginTop: '-10px' }}>Admin Panel</p>
               </div>
+              <button 
+                className="sidebar-close-btn"
+                onClick={() => setSidebarOpen(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: textMuted,
+                  display: 'none',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '6px'
+                }}
+              >
+                <FiX size={20} />
+              </button>
             </div>
 
             <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '3px', overflowY: 'auto' }}>
               {navItems.map(item => (
-                <button key={item.id} onClick={() => { setSection(item.id); setModalOpen(false); }}
+                <button key={item.id} onClick={() => { setSection(item.id); setModalOpen(false); if (window.innerWidth < 1024) setSidebarOpen(false); }}
                   className={`admin-nav-item ${section === item.id ? 'admin-nav-item-active' : ''}`}
                   style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '11px 14px', borderRadius: '10px', border: 'none', cursor: 'pointer', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem', background: section === item.id ? 'linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.15))' : 'transparent', color: section === item.id ? '#6366F1' : textMuted, width: '100%', textAlign: 'left', position: 'relative' }}>
                   <span style={{ fontSize: '1rem' }}>{item.icon}</span>
@@ -2420,10 +2462,24 @@ export default function AdminDashboard() {
       </AnimatePresence>
 
       {/* Main content */}
-      <div style={{ flex: 1, marginLeft: '260px', transition: 'margin-left 0.3s' }}>
+      <div className="admin-main-content" style={{ flex: 1, marginLeft: sidebarOpen ? '260px' : '0', transition: 'margin-left 0.3s', display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%', overflowX: 'hidden' }}>
         {/* Topbar */}
         <div style={{ height: '64px', background: sidebarBg, borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0', display: 'flex', alignItems: 'center', padding: '0 24px', gap: '16px', position: 'sticky', top: 0, zIndex: 99 }}>
-          <h1 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, textTransform: 'capitalize', flex: 1 }}>
+          <button
+            onClick={() => setSidebarOpen(prev => !prev)}
+            title="Toggle Sidebar"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '40px', height: '40px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+              color: isDark ? '#E5E7EB' : '#374151',
+              marginRight: '4px'
+            }}
+          >
+            <FiMenu size={20} />
+          </button>
+          
+          <h1 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, textTransform: 'capitalize', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {modalOpen ? `${modalData ? 'Edit' : 'Add New'} ${modalType}` : section === 'profile' ? 'Profile / About' : section === 'hero' ? 'Hero Section' : section}
           </h1>
 
@@ -2613,26 +2669,18 @@ export default function AdminDashboard() {
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   <p style={{ fontFamily: 'Inter', fontSize: '0.9rem', color: textMuted, marginBottom: '24px' }}>Welcome back, Hardik! Here's an overview of your portfolio.</p>
 
-                  {/* ── Row 1: Primary Stats ── */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
+                  {/* ── Dashboard Stats Grid ── */}
+                  <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 220px), 1fr))', gap: '16px', marginBottom: '32px' }}>
                     <DashboardStatCard icon={<FiFolder size={18} />} label="Projects" value={data.projects.length} color="#10B981" isDark={isDark} badge="✔ Published" badgeColor="#10B981" badgeIcon={<FiTrendingUp size={12} />} />
                     <DashboardStatCard icon={<FiFileText size={18} />} label="Blog Posts" value={data.blogs.length} color="#8B5CF6" isDark={isDark} />
                     <DashboardStatCard icon={<FiAward size={18} />} label="Certifications" value={data.certifications.length} color="#F59E0B" isDark={isDark} />
                     <DashboardStatCard icon={<FiUsers size={18} />} label="Testimonials" value={data.testimonials.length} color="#EC4899" isDark={isDark} badge="✔ Approved" badgeColor="#10B981" />
                     <DashboardStatCard icon={<FiCpu size={18} />} label="Skills" value={data.skills.length} color="#06B6D4" isDark={isDark} />
-                  </div>
-
-                  {/* ── Row 2: Secondary Stats ── */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
                     <DashboardStatCard icon={<FiBriefcase size={18} />} label="Experience" value={data.experience.length} color="#8B5CF6" isDark={isDark} />
                     <DashboardStatCard icon={<FiBookOpen size={18} />} label="Education" value={data.education.length} color="#10B981" isDark={isDark} />
                     <DashboardStatCard icon={<FiSettings size={18} />} label="Services" value={data.services.length} color="#3B82F6" isDark={isDark} />
                     <DashboardStatCard icon={<FiMail size={18} />} label="Messages" value={data.messages.length} color="#06B6D4" isDark={isDark} />
                     <DashboardStatCard icon={<FiMessageSquare size={18} />} label="Unread Messages" value={data.messages.filter(m => !m.read).length} color="#6366F1" isDark={isDark} badge={data.messages.filter(m => !m.read).length > 0 ? '● New' : null} badgeColor="#EF4444" />
-                  </div>
-
-                  {/* ── Row 3: Tertiary Stats ── */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '32px' }}>
                     <DashboardStatCard icon={<FiTrendingUp size={18} />} label="Achievements" value={data.achievements.length} color="#F59E0B" isDark={isDark} />
                     <DashboardStatCard icon={<FiStar size={18} />} label="Featured Projects" value={data.projects.filter(p => p.featured).length} color="#EAB308" isDark={isDark} />
                     <DashboardStatCard icon={<FiEyeOff size={18} />} label="Draft Posts" value={data.blogs.filter(b => !b.published).length} color="#EF4444" isDark={isDark} />

@@ -170,7 +170,7 @@ export default function Blog({ initialTag = '', standalone = false }) {
         </motion.div>
 
         {/* Blog grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(330px,1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,330px),1fr))', gap: '24px' }}>
           {[...filtered].sort((a, b) => {
             if (a.featured && !b.featured) return -1;
             if (!a.featured && b.featured) return 1;

@@ -934,6 +934,7 @@ export default function Hero() {
 
             {/* Glowing circular AI / Brain HUD on the side */}
             <div
+              className="hero-brain-hud"
               style={{
                 position: 'absolute',
                 right: '-70px',
@@ -1073,6 +1074,9 @@ export default function Hero() {
           }
           .hero-left div {
             align-self: center!important;
+          }
+          .hero-brain-hud {
+            display: none !important;
           }
         }
       `}</style>
