@@ -3349,7 +3349,7 @@ export default function AdminDashboard() {
                       Turn the chatbot on or off and configure visibility settings for frontend visitors.
                     </p>
 
-                    <form onSubmit={handleSettingsSubmit}>
+                    <form onSubmit={(e) => { e.preventDefault(); handleSettingsSave(); }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '32px' }}>
                         
                         {/* Chatbot Visibility Toggle */}
