@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend, FiStar, FiMessageSquare, FiBell, FiMoon, FiSun, FiActivity } from 'react-icons/fi';
+import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend, FiStar, FiMessageSquare, FiBell, FiMoon, FiSun, FiActivity, FiMonitor } from 'react-icons/fi';
 import EmojiIcon from '../components/EmojiIcon';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
@@ -2429,6 +2429,7 @@ export default function AdminDashboard() {
                         key={f}
                         onClick={() => setActivityFilter(f)}
                         style={{
+                          display: 'flex', alignItems: 'center', gap: '8px',
                           padding: '8px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer',
                           fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem',
                           background: activityFilter === f
@@ -2436,12 +2437,16 @@ export default function AdminDashboard() {
                             : (isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'),
                           color: activityFilter === f ? '#6366F1' : textMuted,
                           transition: 'all 0.2s ease',
-                          textTransform: 'capitalize',
                         }}
                         onMouseEnter={e => { if (activityFilter !== f) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'; }}
                         onMouseLeave={e => { if (activityFilter !== f) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'; }}
                       >
-                        {f === 'all' ? 'All Activity' : f === 'message' ? '✉️ Messages' : f === 'comment' ? '💬 Comments' : '⭐ Testimonials'}
+                        {f === 'message' && <FiMail size={14} />}
+                        {f === 'comment' && <FiMessageSquare size={14} />}
+                        {f === 'testimonial' && <FiStar size={14} />}
+                        <span>
+                          {f === 'all' ? 'All Activity' : f === 'message' ? 'Messages' : f === 'comment' ? 'Comments' : 'Testimonials'}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -2573,7 +2578,7 @@ export default function AdminDashboard() {
                     {/* ── Hero Section Fields ── */}
                     <div>
                       <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '1.1rem' }}>🏠</span> Hero Section Config
+                        <FiHome size={18} color="#6366F1" /> Hero Section Config
                       </h4>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         <div style={{ gridColumn: '1 / -1' }}>
@@ -2598,7 +2603,7 @@ export default function AdminDashboard() {
                     {/* ── Laptop Screen Fields ── */}
                     <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
                       <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '1.1rem' }}>💻</span> Laptop Screen Content
+                        <FiMonitor size={18} color="#6366F1" /> Laptop Screen Content
                       </h4>
                       <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '16px' }}>Customize the code editor mockup shown inside the interactive laptop on the homepage.</p>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -2713,7 +2718,7 @@ export default function AdminDashboard() {
                         fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
                       }}
                     >
-                      🏷️ Project Categories
+                      <FiLayers size={14} /> Project Categories
                     </button>
                   </div>
 
@@ -2770,7 +2775,7 @@ export default function AdminDashboard() {
                         fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
                       }}
                     >
-                      🏷️ Skill Categories
+                      <FiLayers size={14} /> Skill Categories
                     </button>
                   </div>
 
@@ -2992,7 +2997,7 @@ export default function AdminDashboard() {
                         fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
                       }}
                     >
-                      🏷️ Blog Categories
+                      <FiLayers size={14} /> Blog Categories
                     </button>
                     <button onClick={() => setBlogsSubTab('comments')}
                       style={{
