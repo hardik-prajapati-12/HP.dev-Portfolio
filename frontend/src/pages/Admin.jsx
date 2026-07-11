@@ -441,9 +441,6 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
-                  <ImageUpload label="Client Avatar" value={form.avatar || ''} onChange={(url) => setForm({ ...form, avatar: url })} token={token} isDark={isDark} labelStyle={labelStyle} />
-                </div>
-                <div>
                   <label style={labelStyle}>Rating (1-5)</label>
                   <select style={selectStyle} value={form.rating || 5} onChange={e => setForm({ ...form, rating: Number(e.target.value) })}>
                     <option value={5} style={optionStyle}>5 Stars</option>
@@ -453,7 +450,56 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                     <option value={1} style={optionStyle}>1 Star</option>
                   </select>
                 </div>
+                <div>
+                  <label style={labelStyle}>Theme Color (Hex)</label>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
+                    <div style={{ flex: 1 }}>
+                      <input
+                        style={{ ...inputStyle, marginBottom: 0, height: '44px', boxSizing: 'border-box' }}
+                        value={form.color || ''}
+                        onChange={e => setForm({ ...form, color: e.target.value })}
+                        placeholder="#6366F1"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: '44px',
+                        minWidth: '44px',
+                        height: '44px',
+                        borderRadius: '8px',
+                        background: form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1',
+                        border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                        position: 'relative',
+                        cursor: 'pointer',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        flexShrink: 0,
+                      }}
+                      title="Choose Color"
+                    >
+                      <input
+                        type="color"
+                        value={form.color && form.color.startsWith('#') && form.color.length === 7 ? form.color : '#6366F1'}
+                        onChange={e => setForm({ ...form, color: e.target.value.toUpperCase() })}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          opacity: 0,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              <ImageUpload label="Client Avatar" value={form.avatar || ''} onChange={(url) => setForm({ ...form, avatar: url })} token={token} isDark={isDark} labelStyle={labelStyle} />
 
               <label style={labelStyle}>Content</label>
               <textarea style={{ ...inputStyle, height: '100px', resize: 'vertical' }} value={form.content || ''} onChange={e => setForm({ ...form, content: e.target.value })} required />
@@ -1867,7 +1913,7 @@ export default function AdminDashboard() {
   const defaultForms = {
     project: { title: '', category: '', image: '', technologies: '', features: '', githubUrl: '', liveUrl: '', featured: false, description: '', longDescription: '', caseStudyTitle: '', caseStudyBadge: 'Production-focused build', caseStudyProblem: '', caseStudyArchitecture: '', caseStudyDataModel: '', caseStudyFeatureFocus: '', caseStudyOutcomes: '', caseStudyInsight: '', caseStudyImage: '', caseStudyArchitectureDiagrams: [] },
     blog: { title: '', category: '', image: '', tags: '', readTime: '', excerpt: '', content: '', featured: false, categoryColor: '#6366F1' },
-    testimonial: { name: '', role: '', company: '', avatar: '', rating: 5, content: '' },
+    testimonial: { name: '', role: '', company: '', avatar: '', rating: 5, content: '', color: '#6366F1' },
     certification: { title: '', issuer: '', date: new Date().toISOString().split('T')[0], color: '#6366F1', badge: '🏆', credentialUrl: '', description: '', skills: '', logo: '', image: '' },
     skill: { name: '', category: 'Frontend', level: 100, icon: '⚡', order: 0, image: '' },
     experience: { title: '', company: '', year: '', type: '', description: '', tech: '', icon: '💼', image: '', color: '#6366F1', order: 0 },
