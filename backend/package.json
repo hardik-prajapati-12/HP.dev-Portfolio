@@ -4,6 +4,7 @@
   "description": "Portfolio Backend API",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "dev": "node --max-old-space-size=1024 server.js",
     "seed": "node --max-old-space-size=1024 utils/seedAdmin.js"
   },
