@@ -6,7 +6,7 @@ const getAllowedIps = () => (process.env.ADMIN_ALLOWED_IPS || '').split(',').map
 
 const isIpAllowed = (req) => {
   const allowed = getAllowedIps();
-  if (!allowed.length) return true;
+  if (!allowed.length || allowed.includes('*')) return true;
   const clientIp = getClientIp(req);
   return allowed.some((ip) => clientIp === ip || clientIp.endsWith(ip));
 };
