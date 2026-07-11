@@ -171,7 +171,7 @@ function MessageContent({ message, isDark }) {
     );
   }
 
-  return <p style={{ margin: 0, lineHeight: 1.55 }}>{message.content}</p>;
+  return <p style={{ margin: 0, lineHeight: 1.55, whiteSpace: 'pre-line' }}>{message.content}</p>;
 }
 
 function CroppedChatbotLogo({ size = 46, imageWidth = 146, top = '50%', glow = false }) {
@@ -314,11 +314,7 @@ export default function Chatbot({ publicSettings }) {
 
     if (containsAny(clean, ['skill', 'tech', 'stack', 'language', 'framework', 'tool'])) {
       return {
-        content: [
-          skillsText,
-          context.topSkills,
-          `Portfolio snapshot: ${context.stats}.`,
-        ],
+        content: skillsText,
       };
     }
 
@@ -332,11 +328,7 @@ export default function Chatbot({ publicSettings }) {
 
     if (containsAny(clean, ['service', 'consult', 'build'])) {
       return {
-        content: [
-          servicesText,
-          `Best fit: React, Node.js, MongoDB, REST APIs, JavaScript, and scalable portfolio or product builds.`,
-          'Type Message and I can collect your project details for him.',
-        ],
+        content: servicesText,
       };
     }
 

@@ -11,19 +11,60 @@ const { getOpenAIClient, createOpenAIMessage } = require('../utils/openaiClient'
 
 const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-3.5-turbo';
 
+const calculateSimilarity = (str1, str2) => {
+  const s1 = String(str1).toLowerCase().replace(/[^\w\s]/g, '').trim();
+  const s2 = String(str2).toLowerCase().replace(/[^\w\s]/g, '').trim();
+
+  if (s1 === s2) return 1.0;
+  if (!s1 || !s2) return 0.0;
+
+  const words1 = s1.split(/\s+/);
+  const words2 = s2.split(/\s+/);
+
+  const stopWords = new Set(['is', 'are', 'the', 'a', 'an', 'do', 'does', 'how', 'what', 'where', 'when', 'why', 'can', 'i', 'you', 'your', 'we', 'us', 'to', 'for', 'in', 'of', 'on', 'with', 'about']);
+  
+  const tokens1 = words1.filter(w => !stopWords.has(w));
+  const tokens2 = words2.filter(w => !stopWords.has(w));
+
+  const list1 = tokens1.length ? tokens1 : words1;
+  const list2 = tokens2.length ? tokens2 : words2;
+
+  const set1 = new Set(list1);
+  const set2 = new Set(list2);
+  
+  const intersection = new Set([...set1].filter(x => set2.has(x)));
+  const union = new Set([...set1, ...set2]);
+
+  const jaccard = intersection.size / union.size;
+
+  let substringMatch = 0;
+  if (s1.includes(s2) || s2.includes(s1)) {
+    substringMatch = Math.min(s1.length, s2.length) / Math.max(s1.length, s2.length);
+  }
+
+  return (jaccard * 0.7) + (substringMatch * 0.3);
+};
+
 const createLocalReply = async (input, profile) => {
   const clean = String(input).toLowerCase().trim();
   const has = (words) => words.some((word) => clean.includes(word));
 
-  // 1. Check custom FAQs first
+  // 1. Check custom FAQs with token similarity matching
   try {
     const faqs = await ChatbotFaq.find();
-    const matchedFaq = faqs.find(faq => {
-      const qClean = faq.question.toLowerCase().trim();
-      return clean.includes(qClean) || qClean.includes(clean);
-    });
-    if (matchedFaq) {
-      return { content: matchedFaq.answer };
+    let bestMatch = null;
+    let highestScore = 0;
+
+    for (const faq of faqs) {
+      const score = calculateSimilarity(clean, faq.question);
+      if (score > highestScore) {
+        highestScore = score;
+        bestMatch = faq;
+      }
+    }
+
+    if (bestMatch && highestScore >= 0.30) {
+      return { content: bestMatch.answer };
     }
   } catch (err) {
     console.error('Error fetching ChatbotFaqs:', err);
@@ -42,18 +83,8 @@ const createLocalReply = async (input, profile) => {
   const servicesText = settings?.fallbackServices || 'Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting.';
 
   if (has(['skill', 'tech', 'stack', 'language', 'framework', 'tool'])) {
-    const skills = await Skill.find().sort({ order: 1 }).limit(8);
-    const grouped = skills.reduce((acc, skill) => {
-      acc[skill.category] = acc[skill.category] || [];
-      acc[skill.category].push(skill.name);
-      return acc;
-    }, {});
-
     return {
-      content: [
-        skillsText,
-        ...Object.entries(grouped).map(([category, names]) => `${category}: ${names.join(', ')}`),
-      ],
+      content: skillsText,
     };
   }
 
@@ -71,12 +102,8 @@ const createLocalReply = async (input, profile) => {
   }
 
   if (has(['service', 'consult', 'build'])) {
-    const services = await Service.find().sort({ order: 1 }).limit(4);
     return {
-      content: [
-        servicesText,
-        `Common services: ${services.map((service) => service.title).join(', ')}.`,
-      ],
+      content: servicesText,
     };
   }
 
