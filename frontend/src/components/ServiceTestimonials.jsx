@@ -5,6 +5,7 @@ import { FiChevronLeft, FiChevronRight, FiStar } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { SERVICES, TESTIMONIALS } from '../data/portfolioData';
 import axios from 'axios';
+import { resolveImageUrl } from '../utils/adminApi';
 import EmojiIcon from './EmojiIcon';
 
 const getThemeColor = (color) => {
@@ -157,7 +158,7 @@ export function Testimonials() {
                 {testimonialsToDisplay[current].message}
               </p>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'16px' }}>
-                <img src={testimonialsToDisplay[current].avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + testimonialsToDisplay[current].name} alt={testimonialsToDisplay[current].name}
+                <img src={resolveImageUrl(testimonialsToDisplay[current].avatar) || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + testimonialsToDisplay[current].name} alt={testimonialsToDisplay[current].name}
                   style={{ width:'52px', height:'52px', borderRadius:'50%', border:`2px solid ${testimonialsToDisplay[current].color || '#6366F1'}4d` }}
                 />
                 <div style={{ textAlign:'left' }}>

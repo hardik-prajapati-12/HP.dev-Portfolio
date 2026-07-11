@@ -5,7 +5,7 @@ import EmojiIcon from '../components/EmojiIcon';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
 import { useAdminSession } from '../context/AdminSessionContext';
-import { adminApi, getAdminHeaders, isAdminAccessVerified, setAdminAccessKey } from '../utils/adminApi';
+import { adminApi, getAdminHeaders, isAdminAccessVerified, setAdminAccessKey, resolveImageUrl } from '../utils/adminApi';
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logo-dark.png';
 import { getSkillIconDetails } from '../utils/skillIcons';
@@ -42,7 +42,7 @@ function ImageUpload({ label, value, onChange, token, isDark, labelStyle }) {
       <label style={labelStyle}>{label}</label>
       {value && (
         <div style={{ marginBottom: '12px', padding: '12px', borderRadius: '10px', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0', background: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', display: 'inline-flex', flexDirection: 'column', gap: '8px' }}>
-          <img src={value} alt="Preview" style={{ width: '120px', height: '120px', borderRadius: '10px', objectFit: 'cover' }} />
+          <img src={resolveImageUrl(value)} alt="Preview" style={{ width: '120px', height: '120px', borderRadius: '10px', objectFit: 'cover' }} />
           <span style={{ fontFamily: 'Inter', fontSize: '0.72rem', color: muted, wordBreak: 'break-all', maxWidth: '200px' }}>{value}</span>
         </div>
       )}
@@ -3229,7 +3229,7 @@ export default function AdminDashboard() {
                       renderItem={(p, tm, tmut) => (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                           {p.image && p.image.trim() !== '' ? (
-                            <img src={p.image} alt={p.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
+                            <img src={resolveImageUrl(p.image)} alt={p.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
                           ) : (
                             <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📁</div>
                           )}
@@ -3292,7 +3292,7 @@ export default function AdminDashboard() {
                           <>
                             <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
                               {s.image && s.image.trim() !== '' ? (
-                                <img src={s.image} alt={s.name} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                                <img src={resolveImageUrl(s.image)} alt={s.name} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
                               ) : (
                                 <span style={{ display: 'inline-flex', alignItems: 'center', minWidth: '20px', justifyContent: 'center', fontSize: '1.15rem', color: iconDetails.color }}>
                                   {iconDetails.icon}
@@ -3352,7 +3352,7 @@ export default function AdminDashboard() {
                         <>
                           <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
                             {e.image && e.image.trim() !== '' ? (
-                              <img src={e.image} alt={e.company} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                              <img src={resolveImageUrl(e.image)} alt={e.company} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
                             ) : (
                               <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
                                 {e.icon || '💼'}
@@ -3384,7 +3384,7 @@ export default function AdminDashboard() {
                     <>
                       <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {e.image && e.image.trim() !== '' ? (
-                          <img src={e.image} alt={e.institution} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                          <img src={resolveImageUrl(e.image)} alt={e.institution} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
                         ) : (
                           <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
                             {e.icon || '🎓'}
@@ -3406,7 +3406,7 @@ export default function AdminDashboard() {
                     <>
                       <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {s.image && s.image.trim() !== '' ? (
-                          <img src={s.image} alt={s.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                          <img src={resolveImageUrl(s.image)} alt={s.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
                         ) : (
                           <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
                             {s.icon || '🚀'}
@@ -3427,7 +3427,7 @@ export default function AdminDashboard() {
                     <>
                       <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {a.image && a.image.trim() !== '' ? (
-                          <img src={a.image} alt={a.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                          <img src={resolveImageUrl(a.image)} alt={a.title} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
                         ) : (
                           <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
                             {a.icon || '🏆'}
@@ -3448,7 +3448,7 @@ export default function AdminDashboard() {
                     <>
                       <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {s.image && s.image.trim() !== '' ? (
-                          <img src={s.image} alt={s.label} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                          <img src={resolveImageUrl(s.image)} alt={s.label} style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
                         ) : (
                           <span style={{ fontSize: '1.15rem', minWidth: '20px', display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
                             {s.icon || '🚀'}
@@ -3519,7 +3519,7 @@ export default function AdminDashboard() {
                       renderItem={(b, tm, tmut) => (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                           {b.image && b.image.trim() !== '' ? (
-                            <img src={b.image} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
+                            <img src={resolveImageUrl(b.image)} alt={b.title} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
                           ) : (
                             <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}><FiFileText size={18} /></div>
                           )}
@@ -3719,7 +3719,7 @@ export default function AdminDashboard() {
                   renderItem={(t, tm, tmut) => (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       {t.avatar && t.avatar.trim() !== '' ? (
-                        <img src={t.avatar} alt={t.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '50%', flexShrink: 0 }} />
+                        <img src={resolveImageUrl(t.avatar)} alt={t.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '50%', flexShrink: 0 }} />
                       ) : (
                         <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${t.name}`} alt={t.name} style={{ width: '48px', height: '48px', borderRadius: '50%', flexShrink: 0 }} />
                       )}

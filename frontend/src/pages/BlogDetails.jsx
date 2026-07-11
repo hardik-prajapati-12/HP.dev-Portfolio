@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiArrowLeft, FiClock, FiTrash2, FiMessageSquare } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
+import { resolveImageUrl } from '../utils/adminApi';
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logo-dark.png';
 
@@ -303,7 +304,7 @@ export default function BlogDetails() {
         <div style={{ 
           position: 'absolute', 
           inset: 0, 
-          backgroundImage: `url(${blog.image})`, 
+          backgroundImage: `url(${resolveImageUrl(blog.image)})`, 
           backgroundSize: 'cover', 
           backgroundPosition: 'center', 
           zIndex: 0 

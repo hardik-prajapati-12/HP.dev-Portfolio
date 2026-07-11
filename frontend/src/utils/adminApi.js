@@ -33,3 +33,14 @@ export const adminApi = {
   delete: (url, token, config = {}) =>
     axios.delete(url, { ...config, headers: { ...getAdminHeaders(token), ...config.headers } }),
 };
+
+export const resolveImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
+    return path;
+  }
+  const apiBase = import.meta.env.VITE_API_URL || 'https://hp-dev-portfolio.onrender.com';
+  const cleanBase = apiBase.replace(/\/api$/, '');
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${cleanBase}${cleanPath}`;
+};

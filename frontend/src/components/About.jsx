@@ -7,6 +7,7 @@ import { useTheme } from '../context/ThemeContext';
 import { PERSONAL_INFO, STATS, EDUCATION } from '../data/portfolioData';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { resolveImageUrl } from '../utils/adminApi';
 
 const CountUp = typeof CountUpModule === 'function' ? CountUpModule : (CountUpModule.default || CountUpModule);
 
@@ -16,7 +17,7 @@ const fadeUp = {
 };
 
 function ProfilePhotoShowcase({ profile, isDark, inView }) {
-  const avatarSrc = profile.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Hardik&backgroundColor=0F172A';
+  const avatarSrc = resolveImageUrl(profile.avatar) || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah';
 
   // The card bg must be very close to black so the photo's black bg blends naturally
   const cardBgColor = '#070B14';

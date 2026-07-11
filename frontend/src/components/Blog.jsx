@@ -5,6 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { FiSearch, FiCalendar, FiArrowRight, FiClock, FiStar } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
+import { resolveImageUrl } from '../utils/adminApi';
 
 const SAMPLE_BLOGS = [
   {
@@ -195,7 +196,7 @@ export default function Blog({ initialTag = '', standalone = false }) {
               }}
             >
               <div style={{ position: 'relative', height: '190px', overflow: 'hidden' }}>
-                <img src={blog.image} alt={blog.title}
+                <img src={resolveImageUrl(blog.image)} alt={blog.title}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
                   onMouseEnter={e => e.target.style.transform = 'scale(1.06)'}
                   onMouseLeave={e => e.target.style.transform = 'scale(1)'}

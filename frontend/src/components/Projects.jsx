@@ -6,6 +6,7 @@ import { FiGithub, FiExternalLink, FiStar, FiCode } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { PROJECTS } from '../data/portfolioData';
 import axios from 'axios';
+import { resolveImageUrl } from '../utils/adminApi';
 
 const FALLBACK_FILTERS = [
   { label:'All', value:'all' },
@@ -154,7 +155,7 @@ export default function Projects() {
                 onClick={() => navigate(`/project/${project._id || project.id}`)}
               >
                 <div style={{ position:'relative',overflow:'hidden',height:'200px' }}>
-                  <img src={project.image} alt={project.title} style={{ width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s ease' }}
+                  <img src={resolveImageUrl(project.image)} alt={project.title} style={{ width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s ease' }}
                     onMouseEnter={e => e.target.style.transform='scale(1.08)'}
                     onMouseLeave={e => e.target.style.transform='scale(1)'}
                   />

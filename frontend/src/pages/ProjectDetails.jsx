@@ -17,6 +17,7 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { PROJECTS } from '../data/portfolioData';
 import axios from 'axios';
+import { resolveImageUrl } from '../utils/adminApi';
 
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logo-dark.png';
@@ -239,7 +240,7 @@ export default function ProjectDetails() {
         <div style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: `url(${project.image})`,
+          backgroundImage: `url(${resolveImageUrl(project.image)})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'blur(30px) brightness(0.4)',
@@ -321,7 +322,7 @@ export default function ProjectDetails() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.3)', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0', aspectRatio: '16/9', maxHeight: '340px' }}>
-            <img src={project.image} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={resolveImageUrl(project.image)} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         </div>
       </section>
@@ -520,7 +521,7 @@ export default function ProjectDetails() {
                       Maximize
                     </button>
                     <img
-                      src={architectureDiagrams[archActiveTab]?.imageUrl}
+                      src={resolveImageUrl(architectureDiagrams[archActiveTab]?.imageUrl)}
                       alt={architectureDiagrams[archActiveTab]?.label || 'Architecture Diagram'}
                       style={{
                         width: '100%',
@@ -536,7 +537,7 @@ export default function ProjectDetails() {
 
             <aside style={{ display: 'grid', gap: '18px' }}>
               <div style={{ borderRadius: '20px', overflow: 'hidden', border: panelBorder, background: insetBg }}>
-                <img src={caseStudy.caseStudyImage || project.image} alt={`${project.title} preview`} style={{ width: '100%', maxHeight: '320px', objectFit: 'contain', display: 'block', background: isDark ? 'rgba(0,0,0,0.2)' : '#F1F5F9' }} />
+                <img src={resolveImageUrl(caseStudy.caseStudyImage || project.image)} alt={`${project.title} preview`} style={{ width: '100%', maxHeight: '320px', objectFit: 'contain', display: 'block', background: isDark ? 'rgba(0,0,0,0.2)' : '#F1F5F9' }} />
                 <div style={{ padding: '18px' }}>
                   <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1rem' }}>Live Project Insight</h4>
                   <p style={{ margin: '8px 0 0', color: mutedColor, lineHeight: 1.7, fontSize: '0.92rem' }}>
@@ -700,7 +701,7 @@ export default function ProjectDetails() {
             justifyContent: 'center',
           }}>
             <img
-              src={architectureDiagrams[archActiveTab]?.imageUrl}
+              src={resolveImageUrl(architectureDiagrams[archActiveTab]?.imageUrl)}
               alt={architectureDiagrams[archActiveTab]?.label || 'Architecture Diagram'}
               style={{
                 maxWidth: '100%',
