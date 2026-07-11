@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend, FiStar, FiMessageSquare } from 'react-icons/fi';
+import { FiHome, FiFolder, FiMail, FiFileText, FiLogOut, FiMenu, FiX, FiTrash2, FiPlusCircle, FiUsers, FiBarChart2, FiAward, FiEdit2, FiCheckCircle, FiAlertCircle, FiUser, FiCpu, FiBriefcase, FiBookOpen, FiLayers, FiTrendingUp, FiUpload, FiImage, FiEye, FiEyeOff, FiArrowRight, FiHash, FiSettings, FiCornerUpLeft, FiSend, FiStar, FiMessageSquare, FiBell, FiMoon, FiSun, FiActivity } from 'react-icons/fi';
 import EmojiIcon from '../components/EmojiIcon';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
@@ -91,8 +91,12 @@ function ImageUpload({ label, value, onChange, token, isDark, labelStyle }) {
 }
 
 /* ─────────── CRUD MODAL ─────────── */
-function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDark, token, isPage = false }) {
+function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDark, token, isPage = false, globalData }) {
   if (!isOpen) return null;
+
+  const projectCategories = globalData?.projectCategories || [];
+  const blogCategories = globalData?.blogCategories || [];
+  const experienceTypes = globalData?.experienceTypes || [];
 
   const title = data ? `Edit ${type}` : `Add New ${type}`;
   const inputStyle = {
@@ -191,11 +195,11 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                 <div>
                   <label style={labelStyle}>Category</label>
                   <select style={inputStyle} value={form.category || ''} onChange={e => {
-                    const selectedCat = data.projectCategories.find(c => c.name === e.target.value);
+                    const selectedCat = projectCategories.find(c => c.name === e.target.value);
                     setForm({ ...form, category: e.target.value, categoryColor: selectedCat?.color || '#6366F1' });
                   }} required>
                     <option value="" disabled>Select Category</option>
-                    {data.projectCategories.map(cat => (
+                    {projectCategories.map(cat => (
                       <option key={cat._id} value={cat.name}>{cat.name}</option>
                     ))}
                     <option value="Uncategorized">Uncategorized</option>
@@ -315,11 +319,11 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                 <div>
                   <label style={labelStyle}>Category</label>
                   <select style={inputStyle} value={form.category || ''} onChange={e => {
-                    const selectedCat = data.blogCategories.find(c => c.name === e.target.value);
+                    const selectedCat = blogCategories.find(c => c.name === e.target.value);
                     setForm({ ...form, category: e.target.value, categoryColor: selectedCat?.color || '#6366F1' });
                   }} required>
                     <option value="" disabled>Select Category</option>
-                    {data.blogCategories.map(cat => (
+                    {blogCategories.map(cat => (
                       <option key={cat._id} value={cat.name}>{cat.name}</option>
                     ))}
                     <option value="Uncategorized">Uncategorized</option>
@@ -571,7 +575,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
                   <label style={labelStyle}>Type</label>
                   <select style={inputStyle} value={form.type || ''} onChange={e => setForm({ ...form, type: e.target.value })} required>
                     <option value="" disabled>Select Type</option>
-                    {data.experienceTypes.map(t => (
+                    {experienceTypes.map(t => (
                       <option key={t._id} value={t.name}>{t.name}</option>
                     ))}
                     <option value="-">-</option>
@@ -1516,7 +1520,7 @@ function CrudList({ items, type, label, onAdd, onEdit, onDelete, renderItem, isD
 
 /* ═══════════ MAIN DASHBOARD ═══════════ */
 export default function AdminDashboard() {
-  const { isDark } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const { setAdminSession, logoutAdmin } = useAdminSession();
   const [token, setToken] = useState(localStorage.getItem('admin_token'));
   const [accessVerified, setAccessVerified] = useState(isAdminAccessVerified());
@@ -1528,6 +1532,36 @@ export default function AdminDashboard() {
   const [experienceSubTab, setExperienceSubTab] = useState('experiences');
   const [projectsSubTab, setProjectsSubTab] = useState('projects');
   const [blogsSubTab, setBlogsSubTab] = useState('blogs');
+
+  const [bellOpen, setBellOpen] = useState(false);
+  const [activityFilter, setActivityFilter] = useState('all');
+  const [seenNotifIds, setSeenNotifIds] = useState(() => {
+    const saved = localStorage.getItem('admin_seen_notifs');
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
+  const [dismissedBellIds, setDismissedBellIds] = useState(() => {
+    const saved = localStorage.getItem('admin_dismissed_bells');
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
+  const bellRef = useRef(null);
+
+  // Sync to localStorage
+  useEffect(() => {
+    localStorage.setItem('admin_seen_notifs', JSON.stringify(Array.from(seenNotifIds)));
+  }, [seenNotifIds]);
+
+  useEffect(() => {
+    localStorage.setItem('admin_dismissed_bells', JSON.stringify(Array.from(dismissedBellIds)));
+  }, [dismissedBellIds]);
+
+  // Close bell dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (bellRef.current && !bellRef.current.contains(e.target)) setBellOpen(false);
+    };
+    if (bellOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [bellOpen]);
 
   // Toast notification state
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
@@ -1956,8 +1990,79 @@ export default function AdminDashboard() {
   };
 
   /* ── Nav items ── */
+  // Build notifications from existing data
+  const allNotifications = [
+    ...data.messages.map(m => ({ id: m._id, type: 'message', title: m.subject, from: m.name, date: m.createdAt, read: m.read || seenNotifIds.has(m._id), data: m })),
+    ...data.comments.filter(c => !c.approved).map(c => ({ id: c._id, type: 'comment', title: c.content?.substring(0, 60) + '...', from: c.name || c.author, date: c.createdAt, read: seenNotifIds.has(c._id), data: c })),
+    ...data.testimonials.filter(t => !t.approved).map(t => ({ id: t._id, type: 'testimonial', title: `Testimonial from ${t.name}`, from: t.name, date: t.createdAt, read: seenNotifIds.has(t._id), data: t })),
+  ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Bell dropdown only shows non-dismissed notifications
+  const bellNotifications = allNotifications.filter(n => !dismissedBellIds.has(n.id));
+  const unreadNotifCount = allNotifications.filter(n => !n.read).length;
+
+  const markNotifSeen = (notif) => {
+    if (notif.type === 'message') {
+      if (!notif.read) handleMarkAsRead(notif.id);
+    }
+    setSeenNotifIds(prev => new Set([...prev, notif.id]));
+  };
+
+  const markAllSeen = () => {
+    // Mark all messages as read via API
+    allNotifications.forEach(n => {
+      if (n.type === 'message' && !n.read) handleMarkAsRead(n.id);
+    });
+    // Mark all as locally seen
+    setSeenNotifIds(prev => new Set([...prev, ...allNotifications.map(n => n.id)]));
+  };
+
+  // When Activity page is opened or bell dropdown is opened, mark all as seen (removes badges)
+  useEffect(() => {
+    if ((section === 'activity' || bellOpen) && unreadNotifCount > 0) {
+      markAllSeen();
+    }
+  }, [section, bellOpen, unreadNotifCount]);
+
+  const handleNotifClick = (notif) => {
+    setBellOpen(false);
+    markNotifSeen(notif);
+    // Remove this notification from bell dropdown
+    setDismissedBellIds(prev => new Set([...prev, notif.id]));
+    if (notif.type === 'message') {
+      setSection('messages');
+      setSelectedMessage(notif.data);
+    } else if (notif.type === 'comment') {
+      setSection('comments');
+    } else if (notif.type === 'testimonial') {
+      setSection('testimonials');
+    }
+  };
+
+  const handleActivityClick = (notif) => {
+    markNotifSeen(notif);
+    if (notif.type === 'message') {
+      setSection('messages');
+      setSelectedMessage(notif.data);
+    } else if (notif.type === 'comment') {
+      setSection('comments');
+    } else if (notif.type === 'testimonial') {
+      setSection('testimonials');
+    }
+  };
+
+  const handleDeleteNotification = async (notif) => {
+    if (notif.type === 'comment') {
+      await handleDeleteComment(notif.id);
+    } else {
+      await handleDelete(notif.type, notif.id);
+    }
+  };
+
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <FiBarChart2 /> },
+    { id: 'activity', label: 'Activity', icon: <FiActivity />, badge: unreadNotifCount },
+    { id: 'hero', label: 'Hero Section', icon: <FiHome /> },
     { id: 'profile', label: 'Profile / About', icon: <FiUser /> },
     { id: 'stats', label: 'Stats / Counters', icon: <FiHash /> },
     { id: 'education', label: 'Education', icon: <FiBookOpen /> },
@@ -2046,9 +2151,171 @@ export default function AdminDashboard() {
       <div style={{ flex: 1, marginLeft: '260px', transition: 'margin-left 0.3s' }}>
         {/* Topbar */}
         <div style={{ height: '64px', background: sidebarBg, borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0', display: 'flex', alignItems: 'center', padding: '0 24px', gap: '16px', position: 'sticky', top: 0, zIndex: 99 }}>
-          <h1 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, textTransform: 'capitalize' }}>
-            {modalOpen ? `${modalData ? 'Edit' : 'Add New'} ${modalType}` : section === 'profile' ? 'Profile / About' : section}
+          <h1 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, textTransform: 'capitalize', flex: 1 }}>
+            {modalOpen ? `${modalData ? 'Edit' : 'Add New'} ${modalType}` : section === 'profile' ? 'Profile / About' : section === 'hero' ? 'Hero Section' : section}
           </h1>
+
+          {/* ── Theme Toggle ── */}
+          <button
+            onClick={toggleTheme}
+            title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '40px', height: '40px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+              color: isDark ? '#FBBF24' : '#6366F1',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              position: 'relative', overflow: 'hidden',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.1)'; e.currentTarget.style.transform = 'scale(1.08)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'; e.currentTarget.style.transform = 'scale(1)'; }}
+          >
+            {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+          </button>
+
+          {/* ── Notification Bell ── */}
+          <div ref={bellRef} style={{ position: 'relative' }}>
+            <button
+              onClick={() => setBellOpen(prev => !prev)}
+              title="Notifications"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '40px', height: '40px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                background: bellOpen ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.1)') : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'),
+                color: bellOpen ? '#6366F1' : (isDark ? '#94A3B8' : '#64748B'),
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                position: 'relative',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.1)'; e.currentTarget.style.transform = 'scale(1.08)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = bellOpen ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.1)') : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'); e.currentTarget.style.transform = 'scale(1)'; }}
+            >
+              <FiBell size={18} />
+              {unreadNotifCount > 0 && (
+                <span style={{
+                  position: 'absolute', top: '4px', right: '4px',
+                  minWidth: '18px', height: '18px', borderRadius: '9px',
+                  background: '#EF4444', color: 'white',
+                  fontSize: '0.65rem', fontWeight: 700, fontFamily: 'Inter',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  padding: '0 4px', boxShadow: '0 2px 8px rgba(239,68,68,0.4)',
+                  animation: 'pulse 2s infinite',
+                }}>{unreadNotifCount > 9 ? '9+' : unreadNotifCount}</span>
+              )}
+            </button>
+
+            {/* Bell Dropdown */}
+            <AnimatePresence>
+              {bellOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  style={{
+                    position: 'absolute', top: '52px', right: 0,
+                    width: '380px', maxHeight: '480px',
+                    background: isDark ? '#1E293B' : '#FFFFFF',
+                    border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0',
+                    borderRadius: '16px',
+                    boxShadow: isDark ? '0 20px 60px rgba(0,0,0,0.5)' : '0 20px 60px rgba(0,0,0,0.12)',
+                    overflow: 'hidden', zIndex: 9999,
+                  }}
+                >
+                  <div style={{ padding: '16px 20px', borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, margin: 0 }}>Notifications</h3>
+                    {unreadNotifCount > 0 && <span style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: '#6366F1', fontWeight: 600, background: isDark ? 'rgba(99,102,241,0.12)' : 'rgba(99,102,241,0.08)', padding: '4px 10px', borderRadius: '20px' }}>{unreadNotifCount} new</span>}
+                  </div>
+                  <div style={{ maxHeight: '340px', overflowY: 'auto' }}>
+                    {bellNotifications.length === 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', color: textMuted, fontFamily: 'Inter', fontSize: '0.85rem' }}>
+                        <FiBell size={28} style={{ marginBottom: '8px', opacity: 0.3 }} />
+                        <p style={{ margin: 0 }}>No notifications yet</p>
+                      </div>
+                    ) : (
+                      bellNotifications.slice(0, 8).map(notif => (
+                        <div
+                          key={`${notif.type}-${notif.id}`}
+                          onClick={() => handleNotifClick(notif)}
+                          style={{
+                            padding: '14px 20px', cursor: 'pointer',
+                            borderBottom: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F8FAFC',
+                            background: !notif.read ? (isDark ? 'rgba(99,102,241,0.04)' : 'rgba(99,102,241,0.02)') : 'transparent',
+                            transition: 'background 0.15s ease',
+                            display: 'flex', gap: '12px', alignItems: 'center',
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : '#F8FAFC'}
+                          onMouseLeave={e => e.currentTarget.style.background = !notif.read ? (isDark ? 'rgba(99,102,241,0.04)' : 'rgba(99,102,241,0.02)') : 'transparent'}
+                        >
+                          <div style={{
+                            width: '36px', height: '36px', borderRadius: '10px', flexShrink: 0,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: notif.type === 'message' ? 'rgba(6,182,212,0.12)' : notif.type === 'comment' ? 'rgba(139,92,246,0.12)' : 'rgba(236,72,153,0.12)',
+                            color: notif.type === 'message' ? '#06B6D4' : notif.type === 'comment' ? '#8B5CF6' : '#EC4899',
+                          }}>
+                            {notif.type === 'message' ? <FiMail size={16} /> : notif.type === 'comment' ? <FiMessageSquare size={16} /> : <FiStar size={16} />}
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+                              <span style={{ fontFamily: 'Poppins', fontWeight: notif.read ? 500 : 700, fontSize: '0.82rem', color: textMain, textTransform: 'capitalize' }}>{notif.type}</span>
+                              <span style={{ fontFamily: 'Inter', fontSize: '0.7rem', color: textMuted, whiteSpace: 'nowrap' }}>{new Date(notif.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                            </div>
+                            <p style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: textMuted, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {notif.from && <strong style={{ color: textMain }}>{notif.from}: </strong>}{notif.title}
+                            </p>
+                            {!notif.read && <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: '#6366F1', marginTop: '4px' }} />}
+                          </div>
+                          {/* Close / Dismiss Button */}
+                          <button
+                            title="Dismiss notification"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDismissedBellIds(prev => new Set([...prev, notif.id]));
+                            }}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                              padding: '4px',
+                              borderRadius: '50%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: textMuted,
+                              opacity: 0.5,
+                              transition: 'all 0.2s',
+                            }}
+                            onMouseEnter={e => {
+                              e.currentTarget.style.opacity = 1;
+                              e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)';
+                            }}
+                            onMouseLeave={e => {
+                              e.currentTarget.style.opacity = 0.5;
+                              e.currentTarget.style.background = 'transparent';
+                            }}
+                          >
+                            <FiX size={14} />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  <div
+                    onClick={() => { setBellOpen(false); markAllSeen(); setDismissedBellIds(prev => new Set([...prev, ...allNotifications.map(n => n.id)])); setSection('activity'); }}
+                    style={{
+                      padding: '14px 20px', textAlign: 'center', cursor: 'pointer',
+                      borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F1F5F9',
+                      fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem',
+                      color: '#6366F1', transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.04)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    View All Activity →
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         <div style={{ padding: '32px 24px' }}>
@@ -2064,6 +2331,7 @@ export default function AdminDashboard() {
               isDark={isDark}
               token={token}
               isPage
+              globalData={data}
             />
           ) : (
             <>
@@ -2097,6 +2365,222 @@ export default function AdminDashboard() {
                 <DashboardStatCard icon={<FiStar size={18} />} label="Featured Projects" value={data.projects.filter(p => p.featured).length} color="#EAB308" isDark={isDark} />
                 <DashboardStatCard icon={<FiEyeOff size={18} />} label="Draft Posts" value={data.blogs.filter(b => !b.published).length} color="#EF4444" isDark={isDark} />
                 <DashboardStatCard icon={<FiHash size={18} />} label="Stat Cards" value={data.stats?.length || 0} color="#6366F1" isDark={isDark} />
+              </div>
+            </motion.div>
+          )}
+
+          {/* ════ ACTIVITY ════ */}
+          {section === 'activity' && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>Track all recent activities across your portfolio — messages, comments, and testimonials.</p>
+
+              {/* Filter Tabs */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+                {['all', 'message', 'comment', 'testimonial'].map(f => (
+                  <button
+                    key={f}
+                    onClick={() => setActivityFilter(f)}
+                    style={{
+                      padding: '8px 18px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                      fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem',
+                      background: activityFilter === f
+                        ? 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15))'
+                        : (isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'),
+                      color: activityFilter === f ? '#6366F1' : textMuted,
+                      transition: 'all 0.2s ease',
+                      textTransform: 'capitalize',
+                    }}
+                    onMouseEnter={e => { if (activityFilter !== f) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'; }}
+                    onMouseLeave={e => { if (activityFilter !== f) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'; }}
+                  >
+                    {f === 'all' ? 'All Activity' : f === 'message' ? '✉️ Messages' : f === 'comment' ? '💬 Comments' : '⭐ Testimonials'}
+                  </button>
+                ))}
+              </div>
+
+              {/* Activity Timeline */}
+              <div style={{ background: cardBg, border: cardBorder, borderRadius: '20px', overflow: 'hidden' }}>
+                {allNotifications.filter(n => activityFilter === 'all' || n.type === activityFilter).length === 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px', color: textMuted, fontFamily: 'Inter' }}>
+                    <FiActivity size={36} style={{ marginBottom: '12px', opacity: 0.3 }} />
+                    <p style={{ margin: 0 }}>No activity to show{activityFilter !== 'all' ? ` for ${activityFilter}s` : ''}.</p>
+                  </div>
+                ) : (
+                  <div style={{ position: 'relative' }}>
+                    {/* Timeline line */}
+                    <div style={{ position: 'absolute', left: '32px', top: '24px', bottom: '24px', width: '2px', background: isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.1)', borderRadius: '1px' }} />
+
+                    {allNotifications.filter(n => activityFilter === 'all' || n.type === activityFilter).map((notif, idx) => {
+                      const iconColor = notif.type === 'message' ? '#06B6D4' : notif.type === 'comment' ? '#8B5CF6' : '#EC4899';
+                      const iconBg = notif.type === 'message' ? 'rgba(6,182,212,0.12)' : notif.type === 'comment' ? 'rgba(139,92,246,0.12)' : 'rgba(236,72,153,0.12)';
+                      const timeAgo = (date) => {
+                        const diff = Date.now() - new Date(date).getTime();
+                        const mins = Math.floor(diff / 60000);
+                        if (mins < 1) return 'Just now';
+                        if (mins < 60) return `${mins}m ago`;
+                        const hrs = Math.floor(mins / 60);
+                        if (hrs < 24) return `${hrs}h ago`;
+                        const days = Math.floor(hrs / 24);
+                        if (days < 7) return `${days}d ago`;
+                        return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                      };
+
+                      return (
+                        <div
+                          key={`activity-${notif.type}-${notif.id}`}
+                          onClick={() => handleActivityClick(notif)}
+                          style={{
+                            display: 'flex', gap: '16px', padding: '18px 24px 18px 16px',
+                            cursor: 'pointer', position: 'relative',
+                            borderBottom: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F8FAFC',
+                            background: !notif.read ? (isDark ? 'rgba(99,102,241,0.03)' : 'rgba(99,102,241,0.015)') : 'transparent',
+                            transition: 'all 0.2s ease',
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.03)'; e.currentTarget.style.paddingLeft = '20px'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = !notif.read ? (isDark ? 'rgba(99,102,241,0.03)' : 'rgba(99,102,241,0.015)') : 'transparent'; e.currentTarget.style.paddingLeft = '16px'; }}
+                        >
+                          {/* Timeline dot */}
+                          <div style={{
+                            width: '40px', height: '40px', borderRadius: '12px', flexShrink: 0,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: iconBg, color: iconColor, zIndex: 1,
+                            boxShadow: !notif.read ? `0 0 12px ${iconColor}30` : 'none',
+                          }}>
+                            {notif.type === 'message' ? <FiMail size={18} /> : notif.type === 'comment' ? <FiMessageSquare size={18} /> : <FiStar size={18} />}
+                          </div>
+
+                          {/* Content */}
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.85rem', color: textMain, textTransform: 'capitalize' }}>
+                                  New {notif.type}
+                                </span>
+                                {!notif.read && <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#6366F1', display: 'inline-block', boxShadow: '0 0 6px rgba(99,102,241,0.5)' }} />}
+                              </div>
+                              <span style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted, whiteSpace: 'nowrap' }}>{timeAgo(notif.date)}</span>
+                            </div>
+                            <p style={{ fontFamily: 'Inter', fontSize: '0.85rem', color: isDark ? '#CBD5E1' : '#475569', margin: '0 0 4px 0', lineHeight: 1.5 }}>
+                              {notif.from && <strong style={{ color: textMain }}>{notif.from}</strong>}
+                              {notif.from && ' — '}
+                              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'inline' }}>{notif.title}</span>
+                            </p>
+                            <span style={{
+                              display: 'inline-flex', alignItems: 'center', gap: '4px',
+                              fontFamily: 'Inter', fontSize: '0.72rem', fontWeight: 600,
+                              color: iconColor,
+                              background: iconBg,
+                              padding: '3px 10px', borderRadius: '6px',
+                              textTransform: 'capitalize',
+                            }}>
+                              {notif.type === 'message' ? <FiMail size={11} /> : notif.type === 'comment' ? <FiMessageSquare size={11} /> : <FiStar size={11} />}
+                              {notif.type}
+                            </span>
+                          </div>
+
+                          {/* Actions */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }} onClick={e => e.stopPropagation()}>
+                            <button
+                              title={`Delete ${notif.type}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteNotification(notif);
+                              }}
+                              style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                                background: 'rgba(239, 68, 68, 0.08)', color: '#EF4444',
+                                transition: 'all 0.2s ease',
+                                opacity: 0.6,
+                              }}
+                              onMouseEnter={e => {
+                                e.currentTarget.style.opacity = 1;
+                                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
+                              }}
+                              onMouseLeave={e => {
+                                e.currentTarget.style.opacity = 0.6;
+                                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)';
+                              }}
+                            >
+                              <FiTrash2 size={15} />
+                            </button>
+                            <div style={{ display: 'flex', alignItems: 'center', color: textMuted, opacity: 0.4 }}>
+                              <FiArrowRight size={16} />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ════ HERO SECTION ════ */}
+          {section === 'hero' && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>Manage the hero content and the interactive laptop mockup text shown on the home page.</p>
+              <div style={{ padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
+                {/* ── Hero Section Fields ── */}
+                <div>
+                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.1rem' }}>🏠</span> Hero Section Config
+                  </h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Sub Hero Title</label>
+                      <input style={profileInputStyle} value={profileForm.heroTitle || ''} onChange={e => setProfileForm({ ...profileForm, heroTitle: e.target.value })} placeholder="Full Stack Developer & Software Engineer" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Hero Description</label>
+                      <textarea style={{ ...profileInputStyle, height: '80px', resize: 'vertical' }} value={profileForm.heroDesc || ''} onChange={e => setProfileForm({ ...profileForm, heroDesc: e.target.value })} placeholder="I build scalable, high-performance web applications..." />
+                    </div>
+                    <div>
+                      <label style={profileLabelStyle}>Resume URL</label>
+                      <input style={profileInputStyle} value={profileForm.resumeUrl || ''} onChange={e => setProfileForm({ ...profileForm, resumeUrl: e.target.value })} />
+                    </div>
+                    <div>
+                      <label style={profileLabelStyle}>Roles (comma-separated)</label>
+                      <input style={profileInputStyle} value={profileForm.roles || ''} onChange={e => setProfileForm({ ...profileForm, roles: e.target.value })} placeholder="MERN Stack Developer, Full Stack Engineer" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Laptop Screen Fields ── */}
+                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
+                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.1rem' }}>💻</span> Laptop Screen Content
+                  </h4>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '16px' }}>Customize the code editor mockup shown inside the interactive laptop on the homepage.</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={profileLabelStyle}>Screen Name</label>
+                      <input style={profileInputStyle} value={profileForm.laptopName || ''} onChange={e => setProfileForm({ ...profileForm, laptopName: e.target.value })} placeholder="Hardik Prajapati" />
+                    </div>
+                    <div>
+                      <label style={profileLabelStyle}>Screen Job Title</label>
+                      <input style={profileInputStyle} value={profileForm.laptopTitle || ''} onChange={e => setProfileForm({ ...profileForm, laptopTitle: e.target.value })} placeholder="Full Stack Engineer" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Screen Skills (comma-separated)</label>
+                      <input style={profileInputStyle} value={profileForm.laptopSkills || ''} onChange={e => setProfileForm({ ...profileForm, laptopSkills: e.target.value })} placeholder="React, Node.js, Express, MongoDB, Java, AI/ML, DSA" />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={profileLabelStyle}>Screen Passion</label>
+                      <input style={profileInputStyle} value={profileForm.laptopPassion || ''} onChange={e => setProfileForm({ ...profileForm, laptopPassion: e.target.value })} placeholder="Turning ideas into impact" />
+                    </div>
+                  </div>
+                </div>
+                <div style={{ marginTop: '16px' }}>
+                  <label style={profileLabelStyle}>Bio</label>
+                  <textarea style={{ ...profileInputStyle, height: '100px', resize: 'vertical' }} value={profileForm.bio || ''} onChange={e => setProfileForm({ ...profileForm, bio: e.target.value })} />
+                </div>
+                <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
+                  <button onClick={handleProfileSave} style={{ padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                    Save Hero Config
+                  </button>
+                </div>
               </div>
             </motion.div>
           )}
@@ -2146,65 +2630,6 @@ export default function AdminDashboard() {
                   <div style={{ gridColumn: '1 / -1' }}>
                     <ImageUpload label="Profile Photo" value={profileForm.avatar || ''} onChange={(url) => setProfileForm({ ...profileForm, avatar: url })} token={token} isDark={isDark} labelStyle={profileLabelStyle} />
                   </div>
-                  <div>
-                    <label style={profileLabelStyle}>Resume URL</label>
-                    <input style={profileInputStyle} value={profileForm.resumeUrl || ''} onChange={e => setProfileForm({ ...profileForm, resumeUrl: e.target.value })} />
-                  </div>
-                  <div>
-                    <label style={profileLabelStyle}>Roles (comma-separated)</label>
-                    <input style={profileInputStyle} value={profileForm.roles || ''} onChange={e => setProfileForm({ ...profileForm, roles: e.target.value })} placeholder="MERN Stack Developer, Full Stack Engineer" />
-                  </div>
-                </div>
-
-                {/* ── Hero Section Fields ── */}
-                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
-                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '1.1rem' }}>🏠</span> Hero Section
-                  </h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={profileLabelStyle}>Sub Hero Title</label>
-                      <input style={profileInputStyle} value={profileForm.heroTitle || ''} onChange={e => setProfileForm({ ...profileForm, heroTitle: e.target.value })} placeholder="Full Stack Developer & Software Engineer" />
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={profileLabelStyle}>Hero Description</label>
-                      <textarea style={{ ...profileInputStyle, height: '80px', resize: 'vertical' }} value={profileForm.heroDesc || ''} onChange={e => setProfileForm({ ...profileForm, heroDesc: e.target.value })} placeholder="I build scalable, high-performance web applications..." />
-                    </div>
-                  </div>
-                </div>
-
-                {/* ── Laptop Screen Fields ── */}
-                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0' }}>
-                  <h4 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.95rem', color: textMain, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '1.1rem' }}>💻</span> Laptop Screen Content
-                  </h4>
-                  <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted, marginBottom: '16px' }}>Customize the code editor mockup shown inside the interactive laptop on the homepage.</p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    <div>
-                      <label style={profileLabelStyle}>Screen Name</label>
-                      <input style={profileInputStyle} value={profileForm.laptopName || ''} onChange={e => setProfileForm({ ...profileForm, laptopName: e.target.value })} placeholder="Hardik Prajapati" />
-                    </div>
-                    <div>
-                      <label style={profileLabelStyle}>Screen Job Title</label>
-                      <input style={profileInputStyle} value={profileForm.laptopTitle || ''} onChange={e => setProfileForm({ ...profileForm, laptopTitle: e.target.value })} placeholder="Full Stack Engineer" />
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={profileLabelStyle}>Screen Skills (comma-separated)</label>
-                      <input style={profileInputStyle} value={profileForm.laptopSkills || ''} onChange={e => setProfileForm({ ...profileForm, laptopSkills: e.target.value })} placeholder="React, Node.js, Express, MongoDB, Java, AI/ML, DSA" />
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={profileLabelStyle}>Screen Passion</label>
-                      <input style={profileInputStyle} value={profileForm.laptopPassion || ''} onChange={e => setProfileForm({ ...profileForm, laptopPassion: e.target.value })} placeholder="Turning ideas into impact" />
-                    </div>
-                  </div>
-                </div>
-                <div style={{ marginTop: '16px' }}>
-                  <label style={profileLabelStyle}>Tagline</label>
-                  <input style={profileInputStyle} value={profileForm.tagline || ''} onChange={e => setProfileForm({ ...profileForm, tagline: e.target.value })} />
-                </div>
-                <div style={{ marginTop: '16px' }}>
-                  <label style={profileLabelStyle}>Bio</label>
-                  <textarea style={{ ...profileInputStyle, height: '100px', resize: 'vertical' }} value={profileForm.bio || ''} onChange={e => setProfileForm({ ...profileForm, bio: e.target.value })} />
                 </div>
                 <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
                   <button onClick={handleProfileSave} style={{ padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.9rem', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
@@ -2610,9 +3035,9 @@ export default function AdminDashboard() {
                   <div className="inbox-right-pane" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
                     {!selectedMessage ? (
                       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: textMuted, fontFamily: 'Inter', fontSize: '0.9rem' }}>
-                        <div style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                           <FiMail size={40} style={{ marginBottom: '12px', opacity: 0.3 }} />
-                          <p>Select a message to view details</p>
+                          <p style={{ margin: 0 }}>Select a message to view details</p>
                         </div>
                       </div>
                     ) : (
