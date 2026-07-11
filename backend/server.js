@@ -54,6 +54,7 @@ app.use('/api/stats', require('./routes/statRoutes'));
 app.use('/api/settings', require('./routes/settingRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/chat', require('./routes/chatRoutes'));
+app.use('/api/chatbot-faq', require('./routes/chatbotFaqRoutes'));
 
 // Error handler
 app.use(errorHandler);

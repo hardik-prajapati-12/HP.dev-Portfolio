@@ -1706,7 +1706,7 @@ export default function AdminDashboard() {
   const [accessVerified, setAccessVerified] = useState(isAdminAccessVerified());
   const [section, setSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [], skillCategories: [] });
+  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [], skillCategories: [], chatbotFaqs: [] });
 
   // Sub-tabs state
   const [experienceSubTab, setExperienceSubTab] = useState('experiences');
@@ -1808,6 +1808,9 @@ export default function AdminDashboard() {
     chatbotSubtitle: "Portfolio guide and inquiry assistant",
     chatbotWelcomeMessage: "Hi, I am Hardik's portfolio assistant. Ask me about my skills, projects, services, experience, or use Message to send a direct inquiry.",
     chatbotThemeColor: "#6366F1",
+    fallbackSkills: "Hardik works across the full MERN stack with strong frontend, backend, database, and tooling coverage.",
+    fallbackProjects: "Here are a few featured projects from the portfolio:",
+    fallbackServices: "Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting.",
     corsAllowedOrigin: '*',
     visibleSections: {
       about: true,
@@ -1849,7 +1852,8 @@ export default function AdminDashboard() {
       adminApi.get('/api/blogs/categories', token).catch(() => ({ data: [] })),
       adminApi.get('/api/experience/types', token).catch(() => ({ data: [] })),
       adminApi.get('/api/skills/categories', token).catch(() => ({ data: [] })),
-    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett, pCats, bCats, expTypes, skCats]) => {
+      adminApi.get('/api/chatbot-faq', token).catch(() => ({ data: [] })),
+    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett, pCats, bCats, expTypes, skCats, faqs]) => {
       const newData = {
         projects: p.data.data || [],
         messages: c.data.data || [],
@@ -1869,6 +1873,7 @@ export default function AdminDashboard() {
         blogCategories: Array.isArray(bCats.data) ? bCats.data : (bCats.data?.data || []),
         experienceTypes: Array.isArray(expTypes.data) ? expTypes.data : [],
         skillCategories: Array.isArray(skCats.data) ? skCats.data : [],
+        chatbotFaqs: Array.isArray(faqs.data) ? faqs.data : [],
       };
       setData(newData);
       if (prof.data && prof.data.name) {
@@ -2176,6 +2181,65 @@ export default function AdminDashboard() {
       showToast('SMTP Connection failed: ' + (err.response?.data?.message || err.message), 'error');
     } finally {
       setTestingSmtp(false);
+    }
+  };
+
+  /* ── FAQ handlers ── */
+  const [faqForm, setFaqForm] = useState({ question: '', answer: '' });
+  const [editingFaqId, setEditingFaqId] = useState(null);
+
+  const handleFaqSubmit = async (e) => {
+    e.preventDefault();
+    if (!faqForm.question.trim() || !faqForm.answer.trim()) {
+      showToast('Question and Answer are required.', 'error');
+      return;
+    }
+
+    try {
+      if (editingFaqId) {
+        // Edit flow
+        const res = await adminApi.put(`/api/chatbot-faq/${editingFaqId}`, faqForm, token);
+        showToast('FAQ updated successfully!', 'success');
+        setData(prev => ({
+          ...prev,
+          chatbotFaqs: prev.chatbotFaqs.map(item => item._id === editingFaqId ? res.data : item)
+        }));
+        setEditingFaqId(null);
+      } else {
+        // Create flow
+        const res = await adminApi.post('/api/chatbot-faq', faqForm, token);
+        showToast('FAQ added successfully!', 'success');
+        setData(prev => ({
+          ...prev,
+          chatbotFaqs: [res.data, ...prev.chatbotFaqs]
+        }));
+      }
+      setFaqForm({ question: '', answer: '' });
+    } catch (err) {
+      showToast('Failed to save FAQ: ' + (err.response?.data?.message || err.message), 'error');
+    }
+  };
+
+  const handleFaqEdit = (faq) => {
+    setEditingFaqId(faq._id);
+    setFaqForm({ question: faq.question, answer: faq.answer });
+  };
+
+  const handleFaqDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this Q&A entry?')) return;
+    try {
+      await adminApi.delete(`/api/chatbot-faq/${id}`, token);
+      showToast('FAQ deleted successfully!', 'success');
+      setData(prev => ({
+        ...prev,
+        chatbotFaqs: prev.chatbotFaqs.filter(item => item._id !== id)
+      }));
+      if (editingFaqId === id) {
+        setEditingFaqId(null);
+        setFaqForm({ question: '', answer: '' });
+      }
+    } catch (err) {
+      showToast('Failed to delete FAQ: ' + (err.response?.data?.message || err.message), 'error');
     }
   };
 
@@ -3671,6 +3735,49 @@ export default function AdminDashboard() {
                           </div>
                         </div>
 
+                        {/* Chatbot Fallback Answers */}
+                        <div style={{ marginTop: '24px', borderTop: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0', paddingTop: '24px' }}>
+                          <h4 style={{ margin: '0 0 12px 0', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', color: textMain }}>
+                            Button Fallback Answers
+                          </h4>
+                          <p style={{ margin: '0 0 16px 0', fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>
+                            These messages will be returned as fallback responses when OpenAI is offline, unconfigured, or fails to respond.
+                          </p>
+                          
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div>
+                              <label style={profileLabelStyle}>Skills Button Fallback Answer</label>
+                              <textarea
+                                style={{ ...profileInputStyle, height: '60px', resize: 'vertical' }}
+                                value={settingsForm.fallbackSkills || ''}
+                                onChange={e => setSettingsForm({ ...settingsForm, fallbackSkills: e.target.value })}
+                                placeholder="Answer details for Skills inquiry..."
+                                required
+                              />
+                            </div>
+                            <div>
+                              <label style={profileLabelStyle}>Projects Button Fallback Answer</label>
+                              <textarea
+                                style={{ ...profileInputStyle, height: '60px', resize: 'vertical' }}
+                                value={settingsForm.fallbackProjects || ''}
+                                onChange={e => setSettingsForm({ ...settingsForm, fallbackProjects: e.target.value })}
+                                placeholder="Answer details for Projects inquiry..."
+                                required
+                              />
+                            </div>
+                            <div>
+                              <label style={profileLabelStyle}>Services Button Fallback Answer</label>
+                              <textarea
+                                style={{ ...profileInputStyle, height: '60px', resize: 'vertical' }}
+                                value={settingsForm.fallbackServices || ''}
+                                onChange={e => setSettingsForm({ ...settingsForm, fallbackServices: e.target.value })}
+                                placeholder="Answer details for Services inquiry..."
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
 
                       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -3696,6 +3803,178 @@ export default function AdminDashboard() {
                         </button>
                       </div>
                     </form>
+                  </div>
+
+                  {/* Q&A FAQs Manager Section */}
+                  <div style={{ marginTop: '32px', padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
+                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <FiMessageSquare size={20} color="#8B5CF6" /> Custom Questions & Answers (FAQs)
+                    </h3>
+                    <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '24px' }}>
+                      Add custom questions and replies that the chatbot will match and trigger when OpenAI is unable to answer.
+                    </p>
+
+                    {/* Inline Add / Edit Q&A Form */}
+                    <form onSubmit={handleFaqSubmit} style={{
+                      padding: '20px',
+                      borderRadius: '14px',
+                      background: isDark ? 'rgba(255,255,255,0.015)' : '#F8FAFC',
+                      border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0',
+                      marginBottom: '32px'
+                    }}>
+                      <h4 style={{ margin: '0 0 16px 0', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.9rem', color: textMain }}>
+                        {editingFaqId ? 'Edit Q&A Entry' : 'Add New Q&A Entry'}
+                      </h4>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div>
+                          <label style={profileLabelStyle}>Question / Keyword Match Phrase</label>
+                          <input
+                            style={profileInputStyle}
+                            value={faqForm.question}
+                            onChange={e => setFaqForm({ ...faqForm, question: e.target.value })}
+                            placeholder="e.g., What are your pricing plans? or Do you work weekends?"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label style={profileLabelStyle}>Answer Content</label>
+                          <textarea
+                            style={{ ...profileInputStyle, height: '80px', resize: 'vertical' }}
+                            value={faqForm.answer}
+                            onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })}
+                            placeholder="Type the response details visitors will receive..."
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '16px' }}>
+                        {editingFaqId && (
+                          <button
+                            type="button"
+                            onClick={() => { setEditingFaqId(null); setFaqForm({ question: '', answer: '' }); }}
+                            style={{
+                              padding: '10px 20px',
+                              borderRadius: '8px',
+                              border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #CBD5E1',
+                              background: 'transparent',
+                              color: textMain,
+                              fontFamily: 'Poppins',
+                              fontWeight: 600,
+                              fontSize: '0.8rem',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        )}
+                        <button
+                          type="submit"
+                          style={{
+                            padding: '10px 24px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg,#8B5CF6,#6366F1)',
+                            color: 'white',
+                            fontFamily: 'Poppins',
+                            fontWeight: 700,
+                            fontSize: '0.8rem',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 12px rgba(139,92,246,0.3)',
+                          }}
+                        >
+                          {editingFaqId ? 'Update Entry' : 'Add Q&A Entry'}
+                        </button>
+                      </div>
+                    </form>
+
+                    {/* FAQ Items list */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.9rem', color: textMain }}>
+                        Managed Q&A List
+                      </h4>
+                      {(!data.chatbotFaqs || data.chatbotFaqs.length === 0) ? (
+                        <div style={{
+                          padding: '30px',
+                          textAlign: 'center',
+                          borderRadius: '12px',
+                          border: '1px dashed ' + (isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'),
+                          color: textMuted,
+                          fontSize: '0.82rem',
+                          fontFamily: 'Inter'
+                        }}>
+                          No custom FAQ questions configured. Added FAQs will display here.
+                        </div>
+                      ) : (
+                        <div style={{ display: 'grid', gap: '12px' }}>
+                          {data.chatbotFaqs.map(faq => (
+                            <div
+                              key={faq._id}
+                              style={{
+                                padding: '16px',
+                                borderRadius: '12px',
+                                background: isDark ? 'rgba(255,255,255,0.015)' : '#FBFBFE',
+                                border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F1F6',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'flex-start',
+                                gap: '16px'
+                              }}
+                            >
+                              <div style={{ minWidth: 0, flex: 1 }}>
+                                <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.86rem', color: textMain, marginBottom: '6px' }}>
+                                  Q: {faq.question}
+                                </div>
+                                <div style={{ fontFamily: 'Inter', fontSize: '0.8rem', color: textMuted, lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                                  A: {faq.answer}
+                                </div>
+                              </div>
+                              <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                                <button
+                                  type="button"
+                                  onClick={() => handleFaqEdit(faq)}
+                                  style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    background: isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9',
+                                    color: '#6366F1',
+                                    display: 'grid',
+                                    placeItems: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'background 0.2s',
+                                  }}
+                                  title="Edit FAQ"
+                                >
+                                  <FiEdit2 size={14} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleFaqDelete(faq._id)}
+                                  style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    background: isDark ? 'rgba(239,68,68,0.1)' : '#FEE2E2',
+                                    color: '#EF4444',
+                                    display: 'grid',
+                                    placeItems: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'background 0.2s',
+                                  }}
+                                  title="Delete FAQ"
+                                >
+                                  <FiTrash2 size={14} />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               )}

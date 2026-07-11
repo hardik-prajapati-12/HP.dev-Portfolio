@@ -5,6 +5,8 @@ const Skill = require('../models/Skill');
 const Service = require('../models/Service');
 const Experience = require('../models/Experience');
 const Certification = require('../models/Certification');
+const ChatbotFaq = require('../models/ChatbotFaq');
+const Setting = require('../models/Setting');
 const { getOpenAIClient, createOpenAIMessage } = require('../utils/openaiClient');
 
 const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-3.5-turbo';
@@ -12,6 +14,32 @@ const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-3.5-turbo';
 const createLocalReply = async (input, profile) => {
   const clean = String(input).toLowerCase().trim();
   const has = (words) => words.some((word) => clean.includes(word));
+
+  // 1. Check custom FAQs first
+  try {
+    const faqs = await ChatbotFaq.find();
+    const matchedFaq = faqs.find(faq => {
+      const qClean = faq.question.toLowerCase().trim();
+      return clean.includes(qClean) || qClean.includes(clean);
+    });
+    if (matchedFaq) {
+      return { content: matchedFaq.answer };
+    }
+  } catch (err) {
+    console.error('Error fetching ChatbotFaqs:', err);
+  }
+
+  // Fetch chatbot settings for customizable fallback messages
+  let settings = null;
+  try {
+    settings = await Setting.findOne();
+  } catch (err) {
+    console.error('Error loading Setting for chatbot fallbacks:', err);
+  }
+
+  const skillsText = settings?.fallbackSkills || 'Hardik works across the full MERN stack with strong frontend, backend, database, and tooling coverage.';
+  const projectsText = settings?.fallbackProjects || 'Here are a few featured projects from the portfolio:';
+  const servicesText = settings?.fallbackServices || 'Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting.';
 
   if (has(['skill', 'tech', 'stack', 'language', 'framework', 'tool'])) {
     const skills = await Skill.find().sort({ order: 1 }).limit(8);
@@ -23,7 +51,7 @@ const createLocalReply = async (input, profile) => {
 
     return {
       content: [
-        'Hardik works across the full MERN stack with strong frontend, backend, database, and tooling coverage.',
+        skillsText,
         ...Object.entries(grouped).map(([category, names]) => `${category}: ${names.join(', ')}`),
       ],
     };
@@ -33,7 +61,7 @@ const createLocalReply = async (input, profile) => {
     const projects = await Project.find({ featured: true }).sort({ order: 1 }).limit(3);
     return {
       kind: 'cards',
-      content: 'Here are a few featured projects from the portfolio:',
+      content: projectsText,
       cards: projects.map((project) => ({
         title: project.title,
         description: project.description,
@@ -42,11 +70,11 @@ const createLocalReply = async (input, profile) => {
     };
   }
 
-  if (has(['hire', 'service', 'freelance', 'available', 'consult', 'build'])) {
+  if (has(['service', 'consult', 'build'])) {
     const services = await Service.find().sort({ order: 1 }).limit(4);
     return {
       content: [
-        'Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting.',
+        servicesText,
         `Common services: ${services.map((service) => service.title).join(', ')}.`,
       ],
     };

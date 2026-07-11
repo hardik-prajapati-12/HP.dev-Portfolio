@@ -308,10 +308,14 @@ export default function Chatbot({ publicSettings }) {
   const buildReply = (input) => {
     const clean = input.toLowerCase().trim();
 
+    const skillsText = publicSettings?.fallbackSkills || 'Hardik works across the full MERN stack with strong frontend, backend, database, and tooling coverage.';
+    const projectsText = publicSettings?.fallbackProjects || 'Here are a few featured projects from the portfolio:';
+    const servicesText = publicSettings?.fallbackServices || 'Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting.';
+
     if (containsAny(clean, ['skill', 'tech', 'stack', 'language', 'framework', 'tool'])) {
       return {
         content: [
-          'Hardik works across the full MERN stack with strong frontend, backend, database, and tooling coverage.',
+          skillsText,
           context.topSkills,
           `Portfolio snapshot: ${context.stats}.`,
         ],
@@ -321,7 +325,7 @@ export default function Chatbot({ publicSettings }) {
     if (containsAny(clean, ['project', 'portfolio', 'built', 'work', 'app', 'demo'])) {
       return {
         kind: 'cards',
-        content: 'Here are a few featured projects from the portfolio:',
+        content: projectsText,
         cards: context.featuredProjects,
       };
     }
@@ -329,7 +333,7 @@ export default function Chatbot({ publicSettings }) {
     if (containsAny(clean, ['service', 'consult', 'build'])) {
       return {
         content: [
-          'Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting.',
+          servicesText,
           `Best fit: React, Node.js, MongoDB, REST APIs, JavaScript, and scalable portfolio or product builds.`,
           'Type Message and I can collect your project details for him.',
         ],

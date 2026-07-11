@@ -21,6 +21,9 @@ const settingSchema = new mongoose.Schema({
   chatbotSubtitle: { type: String, default: "Portfolio guide and inquiry assistant" },
   chatbotWelcomeMessage: { type: String, default: "Hi, I am Hardik's portfolio assistant. Ask me about my skills, projects, services, experience, or use Message to send a direct inquiry." },
   chatbotThemeColor: { type: String, default: "#6366F1" },
+  fallbackSkills: { type: String, default: "Hardik works across the full MERN stack with strong frontend, backend, database, and tooling coverage." },
+  fallbackProjects: { type: String, default: "Here are a few featured projects from the portfolio:" },
+  fallbackServices: { type: String, default: "Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting." },
 
   // Section Visibility Settings
   visibleSections: {

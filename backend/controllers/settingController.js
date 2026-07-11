@@ -30,6 +30,9 @@ exports.getPublicSettings = async (req, res) => {
       chatbotSubtitle: settings.chatbotSubtitle || "Portfolio guide and inquiry assistant",
       chatbotWelcomeMessage: settings.chatbotWelcomeMessage || "Hi, I am Hardik's portfolio assistant. Ask me about my skills, projects, services, experience, or use Message to send a direct inquiry.",
       chatbotThemeColor: settings.chatbotThemeColor || "#6366F1",
+      fallbackSkills: settings.fallbackSkills || "Hardik works across the full MERN stack with strong frontend, backend, database, and tooling coverage.",
+      fallbackProjects: settings.fallbackProjects || "Here are a few featured projects from the portfolio:",
+      fallbackServices: settings.fallbackServices || "Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting.",
       visibleSections: settings.visibleSections || {
         about: true,
         skills: true,
