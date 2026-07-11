@@ -14,6 +14,9 @@ const connectDB = async () => {
     // Migrate old published boolean to new status field
     await migrateBlogStatus();
 
+    // Migrate blog tags to lowercase
+    await migrateBlogTagsToLowercase();
+
     // Start the blog scheduler for auto-publishing scheduled posts
     startBlogScheduler();
   } catch (error) {
@@ -167,6 +170,46 @@ const startBlogScheduler = () => {
   // Then run every 60 seconds
   schedulerInterval = setInterval(publishScheduledBlogs, 60 * 1000);
   console.log('[Blog Scheduler] Started — checking every 60 seconds for scheduled posts');
+};
+
+const migrateBlogTagsToLowercase = async () => {
+  try {
+    const Tag = require('../models/Tag');
+    const Blog = require('../models/Blog');
+
+    // 1. Convert all tags in Tag collection to lowercase
+    const tags = await Tag.find();
+    for (const tag of tags) {
+      const lower = tag.name.toLowerCase();
+      if (tag.name !== lower) {
+        // Check if there is already a tag with the lowercase name
+        const duplicate = await Tag.findOne({ name: lower });
+        if (duplicate) {
+          await Tag.deleteOne({ _id: tag._id });
+        } else {
+          tag.name = lower;
+          await tag.save();
+        }
+      }
+    }
+
+    // 2. Convert all tags inside Blog posts to lowercase
+    const blogs = await Blog.find();
+    for (const blog of blogs) {
+      if (blog.tags && blog.tags.length > 0) {
+        const lowerTags = blog.tags.map(t => t.toLowerCase());
+        const hasChanges = blog.tags.some((t, i) => t !== lowerTags[i]);
+        if (hasChanges) {
+          // Remove duplicates
+          blog.tags = [...new Set(lowerTags)];
+          await blog.save();
+        }
+      }
+    }
+    console.log('Blog tags lowercase migration completed.');
+  } catch (err) {
+    console.error('Error during Blog tags lowercase migration:', err.message);
+  }
 };
 
 module.exports = connectDB;

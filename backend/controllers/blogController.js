@@ -92,7 +92,7 @@ exports.getBlogTags = async (req, res, next) => {
       if (t && t.trim() !== '') {
         await Tag.findOneAndUpdate(
           { name: new RegExp(`^${escapeRegex(t.trim())}$`, 'i') },
-          { $setOnInsert: { name: t.trim() } },
+          { $setOnInsert: { name: t.trim().toLowerCase() } },
           { upsert: true, new: true }
         );
       }
@@ -111,7 +111,7 @@ exports.getBlogTags = async (req, res, next) => {
     
     const result = allTags.map(t => {
       return {
-        tag: t.name,
+        tag: t.name.toLowerCase(),
         count: countMap[t.name.toLowerCase()] || 0
       };
     });
@@ -151,7 +151,7 @@ exports.renameTag = async (req, res, next) => {
 
     await Tag.findOneAndUpdate(
       { name: new RegExp(`^${escapeRegex(oldTag)}$`, 'i') },
-      { name: newTag.trim() }
+      { name: newTag.trim().toLowerCase() }
     );
 
     const oldTagRegex = new RegExp(`^${escapeRegex(oldTag)}$`, 'i');
@@ -165,9 +165,9 @@ exports.renameTag = async (req, res, next) => {
       blog.tags = blog.tags.map(t => {
         if (t.toLowerCase() === oldTag.toLowerCase()) {
           updated = true;
-          return hasNewTag ? null : newTag.trim();
+          return hasNewTag ? null : newTag.trim().toLowerCase();
         }
-        return t;
+        return t.toLowerCase();
       }).filter(Boolean);
 
       if (updated) {
@@ -175,7 +175,7 @@ exports.renameTag = async (req, res, next) => {
       }
     }));
 
-    res.json({ success: true, message: `Renamed tag '${oldTag}' to '${newTag.trim()}'` });
+    res.json({ success: true, message: `Renamed tag '${oldTag}' to '${newTag.trim().toLowerCase()}'` });
   } catch (error) {
     next(error);
   }
@@ -193,7 +193,7 @@ exports.createTag = async (req, res, next) => {
       return res.status(400).json({ message: 'Tag already exists' });
     }
 
-    const newTagDoc = await Tag.create({ name: tag.trim() });
+    const newTagDoc = await Tag.create({ name: tag.trim().toLowerCase() });
     res.status(201).json({ success: true, data: newTagDoc });
   } catch (error) {
     next(error);

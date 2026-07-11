@@ -412,7 +412,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <ImageUpload label="Blog Image" value={form.image || ''} onChange={(url) => setForm({ ...form, image: url })} token={token} isDark={isDark} labelStyle={labelStyle} />
 
               <label style={labelStyle}>Tags (comma-separated)</label>
-              <input style={inputStyle} value={form.tags || ''} onChange={e => setForm({ ...form, tags: e.target.value })} placeholder="React, performance" />
+              <input style={inputStyle} value={form.tags || ''} onChange={e => setForm({ ...form, tags: e.target.value.toLowerCase() })} placeholder="react, performance" />
 
               <label style={labelStyle}>Excerpt (Short summary)</label>
               <input style={inputStyle} value={form.excerpt || ''} onChange={e => setForm({ ...form, excerpt: e.target.value })} required />
@@ -919,7 +919,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
           {type === 'tag' && (
             <>
               <label style={labelStyle}>Tag Name</label>
-              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} required />
+              <input style={inputStyle} value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value.toLowerCase() })} required />
             </>
           )}
 
@@ -1807,7 +1807,7 @@ export default function AdminDashboard() {
     } else if (type === 'experience') {
       formFields.tech = item.tech ? item.tech.join(', ') : '';
     } else if (type === 'tag') {
-      formFields.name = item.tag;
+      formFields.name = item.tag ? item.tag.toLowerCase() : '';
     }
     setModalForm(formFields);
     setModalOpen(true);
@@ -1871,18 +1871,18 @@ export default function AdminDashboard() {
       delete payload.caseStudyImage;
       delete payload.caseStudyArchitectureDiagrams;
     } else if (modalType === 'blog') {
-      payload.tags = typeof payload.tags === 'string' ? payload.tags.split(',').map(t => t.trim()).filter(Boolean) : payload.tags;
+      payload.tags = typeof payload.tags === 'string' ? payload.tags.split(',').map(t => t.trim().toLowerCase()).filter(Boolean) : payload.tags;
     } else if (modalType === 'experience') {
       payload.tech = typeof payload.tech === 'string' ? payload.tech.split(',').map(t => t.trim()).filter(Boolean) : payload.tech;
     } else if (modalType === 'tag') {
       try {
         if (modalData) {
           // Rename tag
-          await adminApi.put('/api/blogs/rename-tag', { oldTag: modalData.tag, newTag: payload.name }, token);
+          await adminApi.put('/api/blogs/rename-tag', { oldTag: modalData.tag, newTag: payload.name.trim().toLowerCase() }, token);
           showToast(`Tag renamed successfully!`, 'success');
         } else {
           // Create tag
-          await adminApi.post('/api/blogs/create-tag', { tag: payload.name }, token);
+          await adminApi.post('/api/blogs/create-tag', { tag: payload.name.trim().toLowerCase() }, token);
           showToast(`Tag created successfully!`, 'success');
         }
         fetchData();
