@@ -25,6 +25,7 @@ exports.getPublicSettings = async (req, res) => {
       maintenanceMode: settings.maintenanceMode || false,
       googleAnalyticsId: settings.googleAnalyticsId || '',
       enableVisitorLogging: settings.enableVisitorLogging !== false,
+      enableChatbot: settings.enableChatbot !== false,
       visibleSections: settings.visibleSections || {
         about: true,
         skills: true,

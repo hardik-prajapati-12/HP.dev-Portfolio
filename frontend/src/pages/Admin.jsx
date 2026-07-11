@@ -1649,6 +1649,7 @@ export default function AdminDashboard() {
     otpExpiryMinutes: 10,
     otpMaxAttempts: 5,
     enableVisitorLogging: true,
+    enableChatbot: true,
     corsAllowedOrigin: '*',
     visibleSections: {
       about: true,
@@ -2108,6 +2109,7 @@ export default function AdminDashboard() {
     { id: 'blogs', label: 'Blogs', icon: <FiFileText /> },
     { id: 'testimonials', label: 'Testimonials', icon: <FiUsers /> },
     { id: 'messages', label: 'Messages', icon: <FiMail />, badge: data.messages.filter(m => !m.read).length },
+    { id: 'chatbot', label: 'AI Chatbot', icon: <FiMessageSquare /> },
     { id: 'settings', label: 'Settings', icon: <FiSettings /> },
   ];
 
@@ -3329,6 +3331,108 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   )}
+                </motion.div>
+              )}
+
+              {/* ════ CHATBOT SETTINGS ════ */}
+              {section === 'chatbot' && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <p style={{ fontFamily: 'Inter', color: textMuted, fontSize: '0.9rem', marginBottom: '24px' }}>
+                    Configure and manage the interactive AI chatbot displayed on your portfolio landing page.
+                  </p>
+
+                  <div style={{ padding: '32px', borderRadius: '20px', background: cardBg, border: cardBorder }}>
+                    <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <FiMessageSquare size={20} color="#6366F1" /> AI Chatbot Configuration
+                    </h3>
+                    <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '24px' }}>
+                      Turn the chatbot on or off and configure visibility settings for frontend visitors.
+                    </p>
+
+                    <form onSubmit={handleSettingsSubmit}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '32px' }}>
+                        
+                        {/* Chatbot Visibility Toggle */}
+                        <div style={{
+                          padding: '20px',
+                          borderRadius: '14px',
+                          background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC',
+                          border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}>
+                          <div>
+                            <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.9rem', color: textMain }}>
+                              Chatbot Visibility
+                            </h4>
+                            <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>
+                              Toggle whether the chatbot widget is visible to visitors on the frontend site.
+                            </p>
+                          </div>
+                          
+                          {/* Toggle Switch */}
+                          <label style={{
+                            position: 'relative',
+                            display: 'inline-block',
+                            width: '50px',
+                            height: '26px',
+                            cursor: 'pointer'
+                          }}>
+                            <input
+                              type="checkbox"
+                              checked={!!settingsForm.enableChatbot}
+                              onChange={e => setSettingsForm({ ...settingsForm, enableChatbot: e.target.checked })}
+                              style={{ opacity: 0, width: 0, height: 0 }}
+                            />
+                            <span style={{
+                              position: 'absolute',
+                              inset: 0,
+                              borderRadius: '34px',
+                              background: settingsForm.enableChatbot ? '#10B981' : (isDark ? '#374151' : '#E2E8F0'),
+                              transition: 'background 0.3s',
+                            }} />
+                            <span style={{
+                              position: 'absolute',
+                              content: '""',
+                              height: '20px',
+                              width: '20px',
+                              left: settingsForm.enableChatbot ? '26px' : '4px',
+                              bottom: '3px',
+                              borderRadius: '50%',
+                              background: '#FFFFFF',
+                              transition: 'left 0.3s',
+                              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                            }} />
+                          </label>
+                        </div>
+
+                      </div>
+
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                          type="submit"
+                          style={{
+                            padding: '12px 28px',
+                            borderRadius: '10px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg,#6366F1,#8B5CF6)',
+                            color: 'white',
+                            fontFamily: 'Poppins',
+                            fontWeight: 700,
+                            fontSize: '0.88rem',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
+                            transition: 'transform 0.2s',
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
+                          onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+                        >
+                          Save Chatbot Settings
+                        </button>
+                      </div>
+                    </form>
+                  </div>
                 </motion.div>
               )}
 

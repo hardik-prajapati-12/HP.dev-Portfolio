@@ -16,6 +16,7 @@ const settingSchema = new mongoose.Schema({
   maintenanceMode: { type: Boolean, default: false },
   googleAnalyticsId: { type: String, default: '' },
   enableVisitorLogging: { type: Boolean, default: true },
+  enableChatbot: { type: Boolean, default: true },
 
   // Section Visibility Settings
   visibleSections: {
