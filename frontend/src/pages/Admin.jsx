@@ -1661,6 +1661,124 @@ function DashboardStatCard({ icon, label, value, color, isDark, badge, badgeColo
   );
 }
 
+
+/* ─────────── CUSTOM CONFIRM DELETE POPUP ─────────── */
+function ConfirmDeleteModal({ isOpen, message, onConfirm, onCancel, isDark }) {
+  if (!isOpen) return null;
+
+  const overlayStyle = {
+    position: 'fixed',
+    inset: 0,
+    zIndex: 99999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'rgba(3, 7, 18, 0.75)',
+    backdropFilter: 'blur(8px)',
+    padding: '20px',
+  };
+
+  const modalStyle = {
+    width: '100%',
+    maxWidth: '400px',
+    background: isDark ? '#1F2937' : '#FFFFFF',
+    border: isDark ? '1px solid rgba(239, 68, 68, 0.25)' : '1px solid rgba(239, 68, 68, 0.15)',
+    borderRadius: '20px',
+    padding: '28px',
+    boxShadow: isDark ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : '0 20px 40px -12px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
+    fontFamily: 'Inter, sans-serif',
+  };
+
+  const warningIconContainerStyle = {
+    width: '56px',
+    height: '56px',
+    borderRadius: '50%',
+    background: isDark ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
+    border: `1px solid rgba(239, 68, 68, 0.25)`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '0 auto 20px',
+    color: '#EF4444',
+  };
+
+  const titleStyle = {
+    fontFamily: 'Poppins, sans-serif',
+    fontWeight: 700,
+    fontSize: '1.25rem',
+    color: isDark ? '#F1F5F9' : '#0F172A',
+    margin: '0 0 8px 0',
+  };
+
+  const descStyle = {
+    fontSize: '0.9rem',
+    color: isDark ? '#94A3B8' : '#64748B',
+    lineHeight: 1.5,
+    margin: '0 0 24px 0',
+  };
+
+  const btnContainerStyle = {
+    display: 'flex',
+    gap: '12px',
+  };
+
+  const cancelBtnStyle = {
+    flex: 1,
+    padding: '12px',
+    borderRadius: '10px',
+    border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0',
+    background: 'transparent',
+    color: isDark ? '#E2E8F0' : '#475569',
+    fontFamily: 'Poppins',
+    fontWeight: 600,
+    fontSize: '0.88rem',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  };
+
+  const deleteBtnStyle = {
+    flex: 1,
+    padding: '12px',
+    borderRadius: '10px',
+    border: 'none',
+    background: 'linear-gradient(135deg, #EF4444, #DC2626)',
+    color: '#FFFFFF',
+    fontFamily: 'Poppins',
+    fontWeight: 600,
+    fontSize: '0.88rem',
+    cursor: 'pointer',
+    boxShadow: '0 4px 14px rgba(239, 68, 68, 0.25)',
+    transition: 'all 0.2s',
+  };
+
+  return (
+    <div style={overlayStyle} onClick={onCancel}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        onClick={e => e.stopPropagation()}
+        style={modalStyle}
+      >
+        <div style={warningIconContainerStyle}>
+          <FiAlertCircle size={28} />
+        </div>
+        <h3 style={titleStyle}>Confirm Deletion</h3>
+        <p style={descStyle}>{message}</p>
+        <div style={btnContainerStyle}>
+          <button type="button" onClick={onCancel} style={cancelBtnStyle}>
+            Cancel
+          </button>
+          <button type="button" onClick={onConfirm} style={deleteBtnStyle}>
+            Delete
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 /* ─────────── GENERIC CRUD LIST ─────────── */
 function CrudList({ items, type, label, onAdd, onEdit, onDelete, renderItem, isDark }) {
   const cardBg = isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF';
@@ -1706,6 +1824,7 @@ export default function AdminDashboard() {
   const [accessVerified, setAccessVerified] = useState(isAdminAccessVerified());
   const [section, setSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, message: '', onConfirm: null });
   const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [], skillCategories: [], chatbotFaqs: [] });
 
   // Sub-tabs state
@@ -2086,29 +2205,41 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDelete = async (type, id) => {
-    if (!window.confirm("Are you sure you want to delete this item?")) return;
-    try {
-      const url = type === 'message' ? `/api/contact/${id}` : `${apiMap[type]}/${id}`;
-      await adminApi.delete(url, token);
-      fetchData();
-      showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully!`, 'success');
-    } catch (err) {
-      console.error("Error deleting item:", err);
-      showToast("Error deleting item: " + (err.response?.data?.message || err.message), "error");
-    }
+  const handleDelete = (type, id) => {
+    setDeleteConfirmation({
+      isOpen: true,
+      message: `Are you sure you want to delete this ${type}? This action cannot be undone.`,
+      onConfirm: async () => {
+        setDeleteConfirmation(prev => ({ ...prev, isOpen: false }));
+        try {
+          const url = type === 'message' ? `/api/contact/${id}` : `${apiMap[type]}/${id}`;
+          await adminApi.delete(url, token);
+          fetchData();
+          showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully!`, 'success');
+        } catch (err) {
+          console.error("Error deleting item:", err);
+          showToast("Error deleting item: " + (err.response?.data?.message || err.message), "error");
+        }
+      }
+    });
   };
 
-  const handleRemoveTag = async (tag) => {
-    if (!window.confirm(`Remove tag '${tag}' from all posts?`)) return;
-    try {
-      await adminApi.put('/api/blogs/remove-tag', { tag }, token);
-      fetchData();
-      showToast(`Removed tag '${tag}' from blog posts.`, 'success');
-    } catch (err) {
-      console.error('Error removing tag:', err);
-      showToast('Error removing tag: ' + (err.response?.data?.message || err.message), 'error');
-    }
+  const handleRemoveTag = (tag) => {
+    setDeleteConfirmation({
+      isOpen: true,
+      message: `Are you sure you want to remove tag '${tag}' from all posts? This action cannot be undone.`,
+      onConfirm: async () => {
+        setDeleteConfirmation(prev => ({ ...prev, isOpen: false }));
+        try {
+          await adminApi.put('/api/blogs/remove-tag', { tag }, token);
+          fetchData();
+          showToast(`Removed tag '${tag}' from blog posts.`, 'success');
+        } catch (err) {
+          console.error('Error removing tag:', err);
+          showToast('Error removing tag: ' + (err.response?.data?.message || err.message), 'error');
+        }
+      }
+    });
   };
 
   const handleApproveComment = async (id, approved = true) => {
@@ -2122,16 +2253,22 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDeleteComment = async (id) => {
-    if (!window.confirm('Delete this comment?')) return;
-    try {
-      await adminApi.delete(`/api/comments/${id}`, token);
-      fetchData();
-      showToast('Comment deleted successfully.', 'success');
-    } catch (err) {
-      console.error('Error deleting comment:', err);
-      showToast('Error deleting comment: ' + (err.response?.data?.message || err.message), 'error');
-    }
+  const handleDeleteComment = (id) => {
+    setDeleteConfirmation({
+      isOpen: true,
+      message: 'Are you sure you want to delete this comment? This action cannot be undone.',
+      onConfirm: async () => {
+        setDeleteConfirmation(prev => ({ ...prev, isOpen: false }));
+        try {
+          await adminApi.delete(`/api/comments/${id}`, token);
+          fetchData();
+          showToast('Comment deleted successfully.', 'success');
+        } catch (err) {
+          console.error('Error deleting comment:', err);
+          showToast('Error deleting comment: ' + (err.response?.data?.message || err.message), 'error');
+        }
+      }
+    });
   };
 
   const handleMarkAsRead = async (id) => {
@@ -2238,22 +2375,28 @@ export default function AdminDashboard() {
     setFaqForm({ question: faq.question, answer: faq.answer });
   };
 
-  const handleFaqDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this Q&A entry?')) return;
-    try {
-      await adminApi.delete(`/api/chatbot-faq/${id}`, token);
-      showToast('FAQ deleted successfully!', 'success');
-      setData(prev => ({
-        ...prev,
-        chatbotFaqs: prev.chatbotFaqs.filter(item => item._id !== id)
-      }));
-      if (editingFaqId === id) {
-        setEditingFaqId(null);
-        setFaqForm({ question: '', answer: '' });
+  const handleFaqDelete = (id) => {
+    setDeleteConfirmation({
+      isOpen: true,
+      message: 'Are you sure you want to delete this Q&A entry? This action cannot be undone.',
+      onConfirm: async () => {
+        setDeleteConfirmation(prev => ({ ...prev, isOpen: false }));
+        try {
+          await adminApi.delete(`/api/chatbot-faq/${id}`, token);
+          showToast('FAQ deleted successfully!', 'success');
+          setData(prev => ({
+            ...prev,
+            chatbotFaqs: prev.chatbotFaqs.filter(item => item._id !== id)
+          }));
+          if (editingFaqId === id) {
+            setEditingFaqId(null);
+            setFaqForm({ question: '', answer: '' });
+          }
+        } catch (err) {
+          showToast('Failed to delete FAQ: ' + (err.response?.data?.message || err.message), 'error');
+        }
       }
-    } catch (err) {
-      showToast('Failed to delete FAQ: ' + (err.response?.data?.message || err.message), 'error');
-    }
+    });
   };
 
   /* ── Nav items ── */
@@ -3955,7 +4098,7 @@ export default function AdminDashboard() {
                           No custom FAQ questions configured. Added FAQs will display here.
                         </div>
                       ) : (
-                        <div style={{ display: 'grid', gap: '12px' }}>
+                        <div className="custom-scrollbar" style={{ display: 'grid', gap: '12px', maxHeight: '420px', overflowY: 'auto', paddingRight: '6px' }}>
                           {data.chatbotFaqs.map(faq => (
                             <div
                               key={faq._id}
@@ -4037,10 +4180,10 @@ export default function AdminDashboard() {
                   {/* Settings Sub-Tab Bar */}
                   <div style={{ display: 'flex', gap: '8px', borderBottom: cardBorder, paddingBottom: '12px', marginBottom: '24px', overflowX: 'auto', whiteSpace: 'nowrap' }}>
                     {[
-                      { id: 'general', label: 'General', emoji: '⚙️' },
-                      { id: 'visibility', label: 'Section Visibility', emoji: '👁️' },
-                      { id: 'smtp', label: 'SMTP Configuration', emoji: '📧' },
-                      { id: 'system', label: 'System Info', emoji: '📊' },
+                      { id: 'general', label: 'General', icon: <FiSettings size={16} /> },
+                      { id: 'visibility', label: 'Section Visibility', icon: <FiEye size={16} /> },
+                      { id: 'smtp', label: 'SMTP Configuration', icon: <FiMail size={16} /> },
+                      { id: 'system', label: 'System Info', icon: <FiMonitor size={16} /> },
                     ].map(tab => {
                       const isActive = settingsTab === tab.id;
                       return (
@@ -4064,7 +4207,7 @@ export default function AdminDashboard() {
                             transition: 'all 0.2s',
                           }}
                         >
-                          <EmojiIcon emoji={tab.emoji} size={16} color={isActive ? '#6366F1' : textMuted} />
+                          {tab.icon}
                           {tab.label}
                         </button>
                       );
@@ -4525,6 +4668,18 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+
+      <AnimatePresence>
+        {deleteConfirmation.isOpen && (
+          <ConfirmDeleteModal
+            isOpen={deleteConfirmation.isOpen}
+            message={deleteConfirmation.message}
+            onConfirm={deleteConfirmation.onConfirm}
+            onCancel={() => setDeleteConfirmation(prev => ({ ...prev, isOpen: false }))}
+            isDark={isDark}
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {toast.show && (
