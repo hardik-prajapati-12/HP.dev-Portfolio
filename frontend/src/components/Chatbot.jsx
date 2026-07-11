@@ -27,7 +27,6 @@ import {
 const QUICK_ACTIONS = [
   { label: 'Skills', prompt: 'Tell me about Hardik skills', icon: FiCpu },
   { label: 'Projects', prompt: 'Show featured projects', icon: FiBriefcase },
-  { label: 'Hire', prompt: 'How can I hire Hardik?', icon: FiUser },
   { label: 'Message', prompt: 'send message', icon: FiMail },
 ];
 
@@ -44,10 +43,7 @@ const PORTFOLIO_INTENT_WORDS = [
   'work',
   'app',
   'demo',
-  'hire',
   'service',
-  'freelance',
-  'available',
   'consult',
   'experience',
   'job',
@@ -309,7 +305,7 @@ export default function Chatbot() {
       };
     }
 
-    if (containsAny(clean, ['hire', 'service', 'freelance', 'available', 'consult', 'build'])) {
+    if (containsAny(clean, ['service', 'consult', 'build'])) {
       return {
         content: [
           'Hardik can help with full stack web apps, API development, frontend implementation, database design, performance work, and technical consulting.',
