@@ -3377,7 +3377,7 @@ export default function AdminDashboard() {
                       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                         <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiSettings size={20} /> General Settings</h3>
                         <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, marginBottom: '20px' }}>
-                          Configure general site behavior, branding text, analytics tracking, and maintenance mode status.
+                          Configure general site behavior, branding text, and maintenance mode status.
                         </p>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -3388,10 +3388,6 @@ export default function AdminDashboard() {
                           <div>
                             <label style={profileLabelStyle}>Logo Text</label>
                             <input style={profileInputStyle} placeholder="HP.dev" value={settingsForm.siteLogoText || ''} onChange={e => setSettingsForm({ ...settingsForm, siteLogoText: e.target.value })} />
-                          </div>
-                          <div style={{ gridColumn: '1 / -1' }}>
-                            <label style={profileLabelStyle}>Google Analytics ID</label>
-                            <input style={profileInputStyle} placeholder="G-XXXXXXXXXX" value={settingsForm.googleAnalyticsId || ''} onChange={e => setSettingsForm({ ...settingsForm, googleAnalyticsId: e.target.value })} />
                           </div>
 
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
