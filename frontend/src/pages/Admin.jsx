@@ -2338,13 +2338,31 @@ export default function AdminDashboard() {
   };
 
   const handleToggleVisibility = async (type, item) => {
+    const dataKey = type === 'skill' ? 'skills' : null;
+    let originalItems = null;
+    const newVisibility = item.isVisible !== false ? false : true;
+
+    if (dataKey) {
+      originalItems = data[dataKey];
+      // Optimistic update: instantly toggle visibility locally
+      setData(prev => ({
+        ...prev,
+        [dataKey]: prev[dataKey].map(s => s._id === item._id ? { ...s, isVisible: newVisibility } : s)
+      }));
+    }
+
     try {
       const url = apiMap[type];
-      const newVisibility = item.isVisible !== false ? false : true;
       await adminApi.put(`${url}/${item._id}`, { ...item, isVisible: newVisibility }, token);
-      fetchData();
       showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} visibility updated!`, 'success');
     } catch (err) {
+      // Rollback state if the API call fails
+      if (dataKey && originalItems) {
+        setData(prev => ({
+          ...prev,
+          [dataKey]: originalItems
+        }));
+      }
       console.error("Error toggling visibility:", err);
       showToast("Error updating visibility: " + (err.response?.data?.message || err.message), "error");
     }
