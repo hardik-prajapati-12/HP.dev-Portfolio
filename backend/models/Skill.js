@@ -16,6 +16,7 @@ const skillSchema = new mongoose.Schema({
     min: [0, 'Display Order cannot be negative'],
     max: [999, 'Display Order cannot exceed 999']
   },
+  isVisible: { type: Boolean, default: true },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Skill', skillSchema);

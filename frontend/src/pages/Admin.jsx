@@ -616,6 +616,11 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               </div>
 
               <ImageUpload label="Skill Image (Original Technology Logo)" value={form.image || ''} onChange={(url) => setForm({ ...form, image: url })} token={token} isDark={isDark} labelStyle={labelStyle} />
+
+              <div style={{ display: 'flex', alignItems: 'center', height: '44px', gap: '8px', marginBottom: '12px' }}>
+                <input type="checkbox" checked={form.isVisible !== false} onChange={e => setForm({ ...form, isVisible: e.target.checked })} style={{ cursor: 'pointer', width: '18px', height: '18px', accentColor: '#6366F1' }} />
+                <span style={{ fontFamily: 'Inter', fontSize: '0.88rem', color: isDark ? '#E2E8F0' : '#1E293B' }}>Visible on frontend</span>
+              </div>
             </>
           )}
 
@@ -1780,7 +1785,7 @@ function ConfirmDeleteModal({ isOpen, message, onConfirm, onCancel, isDark }) {
 }
 
 /* ─────────── GENERIC CRUD LIST ─────────── */
-function CrudList({ items, type, label, onAdd, onEdit, onDelete, renderItem, isDark }) {
+function CrudList({ items, type, label, onAdd, onEdit, onDelete, onToggleVisibility, renderItem, isDark }) {
   const [searchQuery, setSearchQuery] = useState('');
   const cardBg = isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF';
   const cardBorder = isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid #E2E8F0';
@@ -1890,6 +1895,27 @@ function CrudList({ items, type, label, onAdd, onEdit, onDelete, renderItem, isD
                 {renderItem(item, textMain, textMuted)}
               </div>
               <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                {onToggleVisibility && (
+                  <button
+                    type="button"
+                    onClick={() => onToggleVisibility(item)}
+                    style={{
+                      padding: '8px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      background: item.isVisible !== false ? (isDark ? 'rgba(16,185,129,0.15)' : 'rgba(16,185,129,0.08)') : (isDark ? 'rgba(148,163,184,0.15)' : 'rgba(100,116,139,0.08)'),
+                      color: item.isVisible !== false ? '#10B981' : (isDark ? '#94A3B8' : '#64748B'),
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s'
+                    }}
+                    title={item.isVisible !== false ? "Hide from frontend" : "Show on frontend"}
+                  >
+                    {item.isVisible !== false ? <FiEye size={14} /> : <FiEyeOff size={14} />}
+                  </button>
+                )}
                 <button onClick={() => onEdit(item)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(99,102,241,0.08)', color: '#6366F1', display: 'flex' }}><FiEdit2 size={14} /></button>
                 <button onClick={() => onDelete(item)} style={{ padding: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.1)', color: '#EF4444', display: 'flex' }}><FiTrash2 size={14} /></button>
               </div>
@@ -2143,7 +2169,7 @@ export default function AdminDashboard() {
     blog: { title: '', category: '', image: '', tags: '', readTime: '', excerpt: '', content: '', featured: false, categoryColor: '#6366F1' },
     testimonial: { name: '', role: '', company: '', avatar: '', rating: 5, content: '', color: '#6366F1' },
     certification: { title: '', issuer: '', date: new Date().toISOString().split('T')[0], color: '#6366F1', badge: '🏆', credentialUrl: '', description: '', skills: '', logo: '', image: '' },
-    skill: { name: '', category: 'Frontend', level: 100, icon: '⚡', order: 0, image: '' },
+    skill: { name: '', category: 'Frontend', level: 100, icon: '⚡', order: 0, image: '', isVisible: true },
     experience: { title: '', company: '', year: '', type: '', description: '', tech: '', icon: '💼', image: '', color: '#6366F1', order: 0 },
     education: { degree: '', institution: '', year: '', grade: '', icon: '🎓', color: '#6366F1', order: 0, currentlyPursuing: false, image: '' },
     service: { title: '', desc: '', icon: '🚀', color: '#6366F1', image: '' },
@@ -2309,6 +2335,19 @@ export default function AdminDashboard() {
         }
       }
     });
+  };
+
+  const handleToggleVisibility = async (type, item) => {
+    try {
+      const url = apiMap[type];
+      const newVisibility = item.isVisible !== false ? false : true;
+      await adminApi.put(`${url}/${item._id}`, { ...item, isVisible: newVisibility }, token);
+      fetchData();
+      showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} visibility updated!`, 'success');
+    } catch (err) {
+      console.error("Error toggling visibility:", err);
+      showToast("Error updating visibility: " + (err.response?.data?.message || err.message), "error");
+    }
   };
 
   const handleRemoveTag = (tag) => {
@@ -3282,7 +3321,7 @@ export default function AdminDashboard() {
                   </div>
 
                   {skillsSubTab === 'skills' ? (
-                    <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(s) => handleDelete('skill', s._id)} isDark={isDark}
+                    <CrudList items={data.skills} type="skill" label="skills" onAdd={() => openCreateModal('skill')} onEdit={(item) => openEditModal('skill', item)} onDelete={(s) => handleDelete('skill', s._id)} onToggleVisibility={(item) => handleToggleVisibility('skill', item)} isDark={isDark}
                       renderItem={(s, tm, tmut) => {
                         const iconDetails = getSkillIconDetails(s.name, isDark) || {
                           icon: <FiCpu />,

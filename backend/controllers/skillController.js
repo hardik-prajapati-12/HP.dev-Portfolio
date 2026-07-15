@@ -1,5 +1,7 @@
 const Skill = require('../models/Skill');
 const SkillCategory = require('../models/SkillCategory');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const validateSkillData = async (data) => {
   const { name, order, category } = data;
@@ -31,7 +33,23 @@ const validateSkillData = async (data) => {
 
 exports.getSkills = async (req, res) => {
   try {
-    const skills = await Skill.find().sort({ category: 1, order: 1, name: 1 });
+    let isAdmin = false;
+    const authHeader = req.header('Authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.replace('Bearer ', '');
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+        if (user && user.role === 'admin') {
+          isAdmin = true;
+        }
+      } catch (err) {
+        // Ignore verification error and treat as guest
+      }
+    }
+
+    const query = isAdmin ? {} : { isVisible: { $ne: false } };
+    const skills = await Skill.find(query).sort({ category: 1, order: 1, name: 1 });
     res.json(skills);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
