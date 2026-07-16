@@ -13,6 +13,7 @@ export const PERSONAL_INFO = {
   resumeUrl: "#",
   heroTitle: "Full Stack Developer & Software Engineer",
   heroDesc: "I build scalable, high-performance web applications with clean code and exceptional user experiences.",
+  heroSkills: ["Java", "React", "Node.js", "MongoDB", "AI / ML", "DSA"],
 };
 
 export const ROLES = [

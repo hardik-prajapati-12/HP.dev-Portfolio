@@ -92,6 +92,16 @@ const profileSchema = new mongoose.Schema({
     default: 'Turning ideas into impact',
     maxLength: [100, 'Laptop Screen Passion cannot exceed 100 characters']
   },
+  heroSkills: {
+    type: [{ type: String }],
+    default: ["Java", "React", "Node.js", "MongoDB", "AI / ML", "DSA"],
+    validate: {
+      validator: function(v) {
+        return v.join(', ').length <= 200;
+      },
+      message: 'Hero skills cannot exceed 200 characters'
+    }
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Profile', profileSchema);

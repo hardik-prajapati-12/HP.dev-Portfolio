@@ -87,6 +87,14 @@ const seedDatabase = async () => {
         "Java Developer",
         "Problem Solver",
         "Open Source Contributor",
+      ],
+      heroSkills: [
+        "Java",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "AI / ML",
+        "DSA"
       ]
     });
     console.log('Profile seeded successfully.');

@@ -59,6 +59,12 @@ exports.updateProfile = async (req, res) => {
       }
       payload.laptopSkills = payload.laptopSkills.split(',').map(s => s.trim()).filter(Boolean);
     }
+    if (typeof payload.heroSkills === 'string') {
+      if (payload.heroSkills.length > 200) {
+        return res.status(400).json({ message: 'Hero skills cannot exceed 200 characters' });
+      }
+      payload.heroSkills = payload.heroSkills.split(',').map(s => s.trim()).filter(Boolean);
+    }
     if (typeof payload.roles === 'string') {
       if (payload.roles.length > 200) {
         return res.status(400).json({ message: 'Roles cannot exceed 200 characters' });

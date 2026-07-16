@@ -500,38 +500,38 @@ export default function Hero() {
     { icon: FiMail, href: `https://mail.google.com/mail/?view=cm&fs=1&to=${profile.email}`, label: 'Email' },
   ];
 
-  const HERO_TECH_KEYS = ['Java', 'React', 'Node.js', 'MongoDB', 'AI / ML', 'DSA'];
+  const heroTechKeys = profile.heroSkills || PERSONAL_INFO.heroSkills || ['Java', 'React', 'Node.js', 'MongoDB', 'AI / ML', 'DSA'];
   const techStacks = [];
 
   if (skillsLoaded) {
-    HERO_TECH_KEYS.forEach(techKey => {
+    heroTechKeys.forEach(techKey => {
       const normTech = techKey.toLowerCase().replace(/[\s\.\-\/]+/g, '');
       const dbSkill = dbSkills.find(s => {
         const normName = s.name.toLowerCase().replace(/[\s\.\-\/]+/g, '');
         return normName === normTech || normName.startsWith(normTech) || normTech.startsWith(normName);
       });
 
-      if (dbSkill) {
-        const iconDetails = getSkillIconDetails(dbSkill.name, isDark) || {};
-        techStacks.push({
-          name: dbSkill.name,
-          image: dbSkill.image || '',
-          icon: iconDetails.icon || null,
-          color: iconDetails.color || '#6366F1',
-          glow: iconDetails.glow || 'rgba(99,102,241,0.15)'
-        });
-      }
+      const iconDetails = getSkillIconDetails(dbSkill ? dbSkill.name : techKey, isDark) || {};
+      techStacks.push({
+        name: dbSkill ? dbSkill.name : techKey,
+        image: dbSkill?.image || '',
+        icon: iconDetails.icon || null,
+        color: iconDetails.color || '#6366F1',
+        glow: iconDetails.glow || 'rgba(99,102,241,0.15)'
+      });
     });
   } else {
     // Default static fallback before DB loads
-    techStacks.push(
-      { name: 'Java', icon: <FaJava />, color: '#F89820', glow: 'rgba(248,152,32,0.15)' },
-      { name: 'React', icon: <FaReact className="animate-spin-slow" style={{ animationDuration: '10s' }} />, color: '#61DAFB', glow: 'rgba(97,218,251,0.15)' },
-      { name: 'Node.js', icon: <FaNodeJs />, color: '#339933', glow: 'rgba(51,153,51,0.15)' },
-      { name: 'MongoDB', icon: <SiMongodb />, color: '#47A248', glow: 'rgba(71,162,72,0.15)' },
-      { name: 'AI / ML', icon: <FaBrain />, color: '#A855F7', glow: 'rgba(168,85,247,0.15)' },
-      { name: 'DSA', icon: <span style={{ fontFamily: 'monospace', fontWeight: 900 }}>{"{}"}</span>, color: '#06B6D4', glow: 'rgba(6,182,212,0.15)' }
-    );
+    heroTechKeys.forEach(techKey => {
+      const iconDetails = getSkillIconDetails(techKey, isDark) || {};
+      techStacks.push({
+        name: techKey,
+        image: '',
+        icon: iconDetails.icon || null,
+        color: iconDetails.color || '#6366F1',
+        glow: iconDetails.glow || 'rgba(99,102,241,0.15)'
+      });
+    });
   }
 
   return (

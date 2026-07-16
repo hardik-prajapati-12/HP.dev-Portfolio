@@ -2122,7 +2122,12 @@ export default function AdminDashboard() {
       };
       setData(newData);
       if (prof.data && prof.data.name) {
-        setProfileForm({ ...prof.data, roles: (prof.data.roles || []).join(', '), laptopSkills: (prof.data.laptopSkills || []).join(', ') });
+        setProfileForm({ 
+          ...prof.data, 
+          roles: (prof.data.roles || []).join(', '), 
+          laptopSkills: (prof.data.laptopSkills || []).join(', '),
+          heroSkills: (prof.data.heroSkills || []).join(', ')
+        });
       }
       if (sett && sett.data) {
         setSettingsForm(sett.data);
@@ -3155,6 +3160,10 @@ export default function AdminDashboard() {
                         <div>
                           <label style={profileLabelStyle}>Roles (comma-separated)</label>
                           <input style={profileInputStyle} value={profileForm.roles || ''} onChange={e => setProfileForm({ ...profileForm, roles: e.target.value })} placeholder="MERN Stack Developer, Full Stack Engineer" />
+                        </div>
+                        <div style={{ gridColumn: '1 / -1' }}>
+                          <label style={profileLabelStyle}>Hero Section Skills (comma-separated)</label>
+                          <input style={profileInputStyle} value={profileForm.heroSkills || ''} onChange={e => setProfileForm({ ...profileForm, heroSkills: e.target.value })} placeholder="Java, React, Node.js, MongoDB, AI/ML, DSA" />
                         </div>
                       </div>
                     </div>
