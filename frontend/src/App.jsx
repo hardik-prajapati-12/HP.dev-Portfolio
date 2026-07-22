@@ -2,6 +2,7 @@ import { useState, useEffect, Component } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { AdminSessionProvider, useAdminSession } from './context/AdminSessionContext';
+import BackgroundEffect from './components/BackgroundEffect';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -188,6 +189,7 @@ function NotFound() {
 }
 
 function AppRoutes() {
+  const { isDark } = useTheme();
   const { isAdmin, checking } = useAdminSession();
   const location = useLocation();
   const [publicSettings, setPublicSettings] = useState(null);
@@ -238,17 +240,20 @@ function AppRoutes() {
   }
 
   return (
-    <Routes>
-      <Route path="/"      element={<PortfolioHome publicSettings={publicSettings} />} />
-      <Route path="/service/:id" element={<ServiceDetails />} />
-      <Route path="/recognition/:type/:id" element={<RecognitionDetails />} />
-      <Route path="/blog/:id" element={<BlogDetails />} />
-      <Route path="/tag/:tag" element={<TagPage />} />
-      <Route path="/project/:id" element={<ProjectDetails />} />
-      <Route path="/case-study/:id" element={<CaseStudyProject />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="*"      element={<NotFound />} />
-    </Routes>
+    <>
+      {!isAdminPath && <BackgroundEffect isDark={isDark} />}
+      <Routes>
+        <Route path="/"      element={<PortfolioHome publicSettings={publicSettings} />} />
+        <Route path="/service/:id" element={<ServiceDetails />} />
+        <Route path="/recognition/:type/:id" element={<RecognitionDetails />} />
+        <Route path="/blog/:id" element={<BlogDetails />} />
+        <Route path="/tag/:tag" element={<TagPage />} />
+        <Route path="/project/:id" element={<ProjectDetails />} />
+        <Route path="/case-study/:id" element={<CaseStudyProject />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="*"      element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 
