@@ -124,17 +124,25 @@ function CodeEditorMockup({ name, title, skills, passion }) {
         overflowX: 'hidden', 
         width: '100%', 
         height: '100%', 
-        boxSizing: 'border-box' 
+        boxSizing: 'border-box',
+        textAlign: 'left'
       }}
     >
-      <div style={{ width: '100%' }}>
-        {visibleLines.map((line, idx) => (
-          <div key={idx} style={{ display: 'flex', gap: '10px', marginBottom: '2px' }}>
-            <span style={{ color: '#585b70', width: '18px', textAlign: 'right', userSelect: 'none', flexShrink: 0 }}>{idx + 1}</span>
-            <span style={{ color: line.color, whiteSpace: 'pre-wrap', wordBreak: 'break-word', flex: 1 }}>{line.text}</span>
-          </div>
-        ))}
-        <span className="code-cursor" style={{ display: 'inline-block', width: '6px', height: '14px', background: '#89b4fa', marginLeft: '2px', animation: 'blink 0.8s step-end infinite' }} />
+      <div style={{ width: '100%', textAlign: 'left' }}>
+        {visibleLines.map((line, idx) => {
+          const isCursorHere = idx === currentLineIdx || (currentLineIdx >= codeLines.length && idx === visibleLines.length - 1);
+          return (
+            <div key={idx} style={{ display: 'flex', gap: '10px', marginBottom: '2px', textAlign: 'left', alignItems: 'flex-start' }}>
+              <span style={{ color: '#585b70', width: '18px', textAlign: 'right', userSelect: 'none', flexShrink: 0 }}>{idx + 1}</span>
+              <span style={{ color: line.color, whiteSpace: 'pre-wrap', wordBreak: 'break-word', flex: 1, textAlign: 'left' }}>
+                {line.text}
+                {isCursorHere && (
+                  <span className="code-cursor" style={{ display: 'inline-block', width: '6px', height: '14px', background: '#89b4fa', marginLeft: '2px', verticalAlign: 'middle', animation: 'blink 0.8s step-end infinite' }} />
+                )}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -977,7 +985,11 @@ export default function Hero() {
             display: none !important;
           }
         }
-        /* Laptop terminal custom horizontal slider */
+        /* Laptop terminal custom horizontal slider & strict left-align */
+        .laptop-terminal-screen,
+        .laptop-terminal-screen * {
+          text-align: left !important;
+        }
         .laptop-terminal-screen::-webkit-scrollbar {
           width: 5px;
           height: 5px;
