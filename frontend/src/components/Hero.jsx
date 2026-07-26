@@ -24,6 +24,7 @@ function CodeEditorMockup({ name, title, skills, passion }) {
     : ["React", "Node.js", "Express", "MongoDB", "Java", "AI/ML", "DSA"];
 
   const skillsKey = devSkills.join(',');
+  const containerRef = useRef(null);
 
   const codeLines = useMemo(() => {
     // Format skills dynamically (chunked into lines of 3 elements)
