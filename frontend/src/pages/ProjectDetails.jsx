@@ -687,20 +687,97 @@ export default function ProjectDetails() {
               </div>
 
               <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                   <FiCheckCircle size={18} color={projectColor} />
-                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>Feature Focus</h4>
+                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Feature Focus</h4>
                 </div>
-                <ul style={{ margin: 0, paddingLeft: '18px', color: mutedColor, lineHeight: 1.75 }}>
-                  {primaryFeatures.map((feature, idx) => <li key={idx}>{feature}</li>)}
-                </ul>
+                <div style={{ display: 'grid', gap: '8px' }}>
+                  {primaryFeatures.map((feature, idx) => {
+                    const cleanFeature = (typeof feature === 'string' ? feature : '').replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
+                    let title = cleanFeature;
+                    let detail = '';
+                    if (cleanFeature.includes(':')) {
+                      const parts = cleanFeature.split(':');
+                      title = parts[0].trim();
+                      detail = parts.slice(1).join(':').trim();
+                    }
+
+                    return (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '10px',
+                          padding: '8px 12px',
+                          borderRadius: '10px',
+                          background: isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.02)',
+                          border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        <FiCheckCircle size={15} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
+                        <div style={{ flex: 1 }}>
+                          <span style={{ color: textColor, fontFamily: 'Inter', fontWeight: 600, fontSize: '0.88rem', lineHeight: '1.45' }}>
+                            {title}
+                          </span>
+                          {detail && (
+                            <span style={{ display: 'block', color: mutedColor, fontFamily: 'Inter', fontSize: '0.82rem', lineHeight: '1.45', marginTop: '2px' }}>
+                              {detail}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </section>
 
               <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-                <h4 style={{ margin: '0 0 12px', color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>Outcomes</h4>
-                <ul style={{ margin: 0, paddingLeft: '18px', color: mutedColor, lineHeight: 1.75 }}>
-                  {outcomes.map((outcome, idx) => <li key={idx}>{outcome}</li>)}
-                </ul>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                  <FiStar size={18} color={projectColor} />
+                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Outcomes</h4>
+                </div>
+                <div style={{ display: 'grid', gap: '8px' }}>
+                  {outcomes.map((outcome, idx) => {
+                    const cleanOutcome = (typeof outcome === 'string' ? outcome : '').replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
+                    let title = cleanOutcome;
+                    let detail = '';
+                    if (cleanOutcome.includes(':')) {
+                      const parts = cleanOutcome.split(':');
+                      title = parts[0].trim();
+                      detail = parts.slice(1).join(':').trim();
+                    }
+
+                    return (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '10px',
+                          padding: '8px 12px',
+                          borderRadius: '10px',
+                          background: isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.02)',
+                          border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        <FiStar size={14} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
+                        <div style={{ flex: 1 }}>
+                          <span style={{ color: textColor, fontFamily: 'Inter', fontWeight: 600, fontSize: '0.88rem', lineHeight: '1.45' }}>
+                            {title}
+                          </span>
+                          {detail && (
+                            <span style={{ display: 'block', color: mutedColor, fontFamily: 'Inter', fontSize: '0.82rem', lineHeight: '1.45', marginTop: '2px' }}>
+                              {detail}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </section>
             </aside>
           </div>

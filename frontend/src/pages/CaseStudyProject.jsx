@@ -181,12 +181,34 @@ export default function CaseStudyProject() {
             </div>
 
             <div style={{ padding: 24, borderRadius: 24, background: cardBg, border: `1px solid ${borderColor}` }}>
-              <h3 style={{ margin: '0 0 16px', fontSize: '1rem', color: textColor }}>Feature Focus</h3>
-              <ul style={{ margin: 0, paddingLeft: 20, color: mutedColor, lineHeight: 1.8 }}>
-                {project.features?.map((feature, idx) => (
-                  <li key={idx}>{feature}</li>
-                ))}
-              </ul>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                <FiCheckCircle size={18} color={projectColor} />
+                <h3 style={{ margin: 0, fontSize: '1rem', color: textColor, fontFamily: 'Poppins', fontWeight: 700 }}>Feature Focus</h3>
+              </div>
+              <div style={{ display: 'grid', gap: 8 }}>
+                {project.features?.map((feature, idx) => {
+                  const cleanFeature = (typeof feature === 'string' ? feature : '').replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: 10,
+                        padding: '8px 12px',
+                        borderRadius: '10px',
+                        background: isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.02)',
+                        border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
+                      }}
+                    >
+                      <FiCheckCircle size={15} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
+                      <span style={{ color: textColor, fontFamily: 'Inter', fontWeight: 600, fontSize: '0.88rem', lineHeight: '1.45' }}>
+                        {cleanFeature}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             <div style={{ padding: 24, borderRadius: 24, background: cardBg, border: `1px solid ${borderColor}` }}>
