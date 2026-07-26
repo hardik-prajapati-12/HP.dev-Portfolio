@@ -439,7 +439,7 @@ export default function Hero() {
   return (
     <section id="home" ref={containerRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={{ minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', overflow: 'hidden', paddingTop: '100px', background: 'inherit' }}>
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', width: '100%', position: 'relative', zIndex: 2 }}>
+      <div className="hero-section-padding" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', width: '100%', position: 'relative', zIndex: 2, boxSizing: 'border-box' }}>
         <div className="hero-container">
 
           {/* Left Column — Text & CTAs & Tech ribbon */}
@@ -505,15 +505,15 @@ export default function Hero() {
             </div>
 
             {/* CTA Buttons */}
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '40px' }}>
+            <div className="hero-cta-buttons" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '40px', width: '100%', boxSizing: 'border-box' }}>
               <motion.a href="#projects" whileHover={{ scale: 1.03, boxShadow: '0 8px 30px rgba(99,102,241,0.4)' }} whileTap={{ scale: 0.97 }}
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 30px', borderRadius: '8px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 4px 20px rgba(99,102,241,0.25)', transition: 'all 0.25s' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 30px', borderRadius: '8px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 4px 20px rgba(99,102,241,0.25)', transition: 'all 0.25s', boxSizing: 'border-box' }}
               >
                 View My Work <FiArrowRight />
               </motion.a>
 
               <motion.a href="#contact" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 30px', borderRadius: '8px', background: 'transparent', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none', border: isDark ? '1.5px solid rgba(255,255,255,0.15)' : '1.5px solid rgba(0,0,0,0.15)', transition: 'all 0.25s' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 30px', borderRadius: '8px', background: 'transparent', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none', border: isDark ? '1.5px solid rgba(255,255,255,0.15)' : '1.5px solid rgba(0,0,0,0.15)', transition: 'all 0.25s', boxSizing: 'border-box' }}
               >
                 Contact Me <FiMail />
               </motion.a>
@@ -1011,6 +1011,16 @@ export default function Hero() {
             text-align: center!important;
             width: 100%!important;
           }
+          .hero-cta-buttons {
+            justify-content: center!important;
+            width: 100%!important;
+            max-width: 100%!important;
+            gap: 12px!important;
+          }
+          .hero-cta-buttons a {
+            padding: 12px 22px!important;
+            font-size: 0.88rem!important;
+          }
           .hero-role-wrapper {
             justify-content: center!important;
             width: 100%!important;
@@ -1020,14 +1030,14 @@ export default function Hero() {
           }
           .hero-logo-container {
             width: 100%!important;
-            max-width: 420px!important;
+            max-width: 380px!important;
             margin-left: auto!important;
             margin-right: auto!important;
             flex-shrink: 0!important;
           }
           .hero-logo-container img {
             width: 100%!important;
-            max-width: 420px!important;
+            max-width: 380px!important;
             height: auto!important;
             margin: 0 auto!important;
           }
@@ -1036,15 +1046,24 @@ export default function Hero() {
           }
         }
         @media (max-width: 480px) {
+          .hero-section-padding {
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+          }
           .hero-container {
-            padding: 0 4px !important;
-            gap: 32px !important;
+            padding: 0 !important;
+            gap: 28px !important;
           }
           .hero-logo-container {
             max-width: 100%!important;
+            padding: 0 4px!important;
           }
           .hero-logo-container img {
             max-width: 100%!important;
+          }
+          .hero-cta-buttons a {
+            padding: 11px 18px!important;
+            font-size: 0.82rem!important;
           }
           .tech-item span {
             font-size: 0.7rem !important;
