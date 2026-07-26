@@ -9,6 +9,7 @@ import { adminApi, getAdminHeaders, isAdminAccessVerified, setAdminAccessKey, re
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logo-dark.png';
 import { getSkillIconDetails } from '../utils/skillIcons';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 
 /* ─────────── IMAGE UPLOAD ─────────── */
@@ -1937,7 +1938,7 @@ export default function AdminDashboard() {
   const [section, setSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, message: '', onConfirm: null });
-  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [], skillCategories: [], chatbotFaqs: [] });
+  const [data, setData] = useState({ projects: [], messages: [], blogs: [], tags: [], comments: [], testimonials: [], certifications: [], skills: [], experience: [], education: [], services: [], achievements: [], profile: null, stats: [], projectCategories: [], blogCategories: [], experienceTypes: [], skillCategories: [], chatbotFaqs: [], analytics: {} });
 
   // Sub-tabs state
   const [experienceSubTab, setExperienceSubTab] = useState('experiences');
@@ -2098,7 +2099,8 @@ export default function AdminDashboard() {
       adminApi.get('/api/experience/types', token).catch(() => ({ data: [] })),
       adminApi.get('/api/skills/categories', token).catch(() => ({ data: [] })),
       adminApi.get('/api/chatbot-faq', token).catch(() => ({ data: [] })),
-    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett, pCats, bCats, expTypes, skCats, faqs]) => {
+      adminApi.get('/api/analytics/dashboard', token).catch(() => ({ data: {} })),
+    ]).then(([p, c, b, cc, tg, t, certs, sk, exp, edu, svc, ach, prof, st, sett, pCats, bCats, expTypes, skCats, faqs, analyticsRes]) => {
       const newData = {
         projects: p.data.data || [],
         messages: c.data.data || [],
@@ -2119,6 +2121,7 @@ export default function AdminDashboard() {
         experienceTypes: Array.isArray(expTypes.data) ? expTypes.data : [],
         skillCategories: Array.isArray(skCats.data) ? skCats.data : [],
         chatbotFaqs: Array.isArray(faqs.data) ? faqs.data : [],
+        analytics: analyticsRes.data || {},
       };
       setData(newData);
       if (prof.data && prof.data.name) {
@@ -2977,6 +2980,125 @@ export default function AdminDashboard() {
                     <DashboardStatCard icon={<FiStar size={18} />} label="Featured Projects" value={data.projects.filter(p => p.featured).length} color="#EAB308" isDark={isDark} />
                     <DashboardStatCard icon={<FiEyeOff size={18} />} label="Draft Posts" value={data.blogs.filter(b => !b.published).length} color="#EF4444" isDark={isDark} />
                     <DashboardStatCard icon={<FiHash size={18} />} label="Stat Cards" value={data.stats?.length || 0} color="#6366F1" isDark={isDark} />
+                    <DashboardStatCard icon={<FiEye size={18} />} label="Visitors Analysis" value={data.analytics?.totalVisitors || 0} color="#10B981" isDark={isDark} badge="● Live" badgeColor="#10B981" />
+                  </div>
+
+                  {/* ── Visitors Activity & Analytics Graph Section ── */}
+                  <div style={{ background: cardBg, border: cardBorder, borderRadius: '20px', padding: '24px', marginBottom: '32px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.1)', color: '#6366F1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <FiActivity size={22} />
+                        </div>
+                        <div>
+                          <h3 style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: '1.1rem', color: textMain, margin: 0 }}>
+                            Visitors Activity & Traffic Analytics
+                          </h3>
+                          <p style={{ fontFamily: 'Inter', fontSize: '0.83rem', color: textMuted, margin: '2px 0 0' }}>
+                            Real-time visitor trends, daily traffic analysis, and popular page metrics.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Metric Badge Pills */}
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <div style={{ padding: '8px 14px', borderRadius: '10px', background: isDark ? 'rgba(16,185,129,0.1)' : 'rgba(16,185,129,0.06)', border: isDark ? '1px solid rgba(16,185,129,0.2)' : '1px solid rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+                          <span style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>Today:</span>
+                          <strong style={{ fontFamily: 'Poppins', fontSize: '0.88rem', color: isDark ? '#F1F5F9' : '#0F172A' }}>{data.analytics?.todayVisitors || 0} visits</strong>
+                        </div>
+                        <div style={{ padding: '8px 14px', borderRadius: '10px', background: isDark ? 'rgba(99,102,241,0.1)' : 'rgba(99,102,241,0.06)', border: isDark ? '1px solid rgba(99,102,241,0.2)' : '1px solid rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366F1', boxShadow: '0 0 8px #6366F1' }} />
+                          <span style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>Unique IPs:</span>
+                          <strong style={{ fontFamily: 'Poppins', fontSize: '0.88rem', color: isDark ? '#F1F5F9' : '#0F172A' }}>{data.analytics?.uniqueVisitors || 0} visitors</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Main Traffic Graph */}
+                    <div style={{ height: '320px', width: '100%', marginTop: '10px' }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={data.analytics?.visitorTrend || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                          <defs>
+                            <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4} />
+                              <stop offset="95%" stopColor="#6366F1" stopOpacity={0.0} />
+                            </linearGradient>
+                            <linearGradient id="colorUnique" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#10B981" stopOpacity={0.4} />
+                              <stop offset="95%" stopColor="#10B981" stopOpacity={0.0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke={isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'} />
+                          <XAxis dataKey="date" stroke={textMuted} tick={{ fontSize: 12 }} />
+                          <YAxis stroke={textMuted} tick={{ fontSize: 12 }} allowDecimals={false} />
+                          <Tooltip
+                            contentStyle={{
+                              background: isDark ? '#1F2937' : '#FFFFFF',
+                              border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #CBD5E1',
+                              borderRadius: '12px',
+                              boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+                              color: textMain,
+                              fontFamily: 'Inter',
+                              fontSize: '0.82rem'
+                            }}
+                          />
+                          <Area type="monotone" dataKey="views" name="Page Views" stroke="#6366F1" strokeWidth={3} fillOpacity={1} fill="url(#colorViews)" />
+                          <Area type="monotone" dataKey="unique" name="Unique Visitors" stroke="#10B981" strokeWidth={2} fillOpacity={1} fill="url(#colorUnique)" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+
+                    {/* Analytics Grid: Top Visited Pages & Device Breakdown */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '24px' }}>
+                      {/* Top Visited Pages */}
+                      <div style={{ padding: '18px', borderRadius: '14px', background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0' }}>
+                        <h4 style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.9rem', color: textMain, margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <FiMonitor size={16} color="#6366F1" /> Top Visited Routes
+                        </h4>
+                        <div style={{ display: 'grid', gap: '10px' }}>
+                          {(data.analytics?.topPages || []).map((p, idx) => {
+                            const maxHits = data.analytics?.topPages?.[0]?.count || 1;
+                            const pct = Math.round((p.count / maxHits) * 100);
+                            return (
+                              <div key={idx}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontFamily: 'Inter', color: textMain, marginBottom: '4px' }}>
+                                  <span style={{ fontWeight: 600 }}>{p.page}</span>
+                                  <span style={{ color: textMuted }}>{p.count} views</span>
+                                </div>
+                                <div style={{ width: '100%', height: '6px', borderRadius: '3px', background: isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0', overflow: 'hidden' }}>
+                                  <div style={{ width: `${pct}%`, height: '100%', borderRadius: '3px', background: 'linear-gradient(90deg, #6366F1, #8B5CF6)' }} />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Device Breakdown */}
+                      <div style={{ padding: '18px', borderRadius: '14px', background: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0' }}>
+                        <h4 style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.9rem', color: textMain, margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <FiUsers size={16} color="#10B981" /> Device & Platform Distribution
+                        </h4>
+                        <div style={{ display: 'grid', gap: '14px' }}>
+                          {(data.analytics?.deviceBreakdown || []).map((d, idx) => {
+                            const total = (data.analytics?.deviceBreakdown || []).reduce((acc, curr) => acc + curr.value, 0) || 1;
+                            const pct = Math.round((d.value / total) * 100);
+                            return (
+                              <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF', border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0' }}>
+                                <div>
+                                  <span style={{ fontFamily: 'Inter', fontSize: '0.85rem', fontWeight: 600, color: textMain, display: 'block' }}>{d.name}</span>
+                                  <span style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: textMuted }}>{d.value} Sessions</span>
+                                </div>
+                                <div style={{ padding: '4px 10px', borderRadius: '20px', background: idx === 0 ? 'rgba(99,102,241,0.12)' : 'rgba(16,185,129,0.12)', color: idx === 0 ? '#6366F1' : '#10B981', fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.8rem' }}>
+                                  {pct}%
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               )}
