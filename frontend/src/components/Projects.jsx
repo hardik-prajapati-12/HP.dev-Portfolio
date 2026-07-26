@@ -62,7 +62,7 @@ export default function Projects() {
   const FILTERS = projectCategories.length > 0
     ? [
         { label: 'All', value: 'all' },
-        ...projectCategories.map(c => ({ label: c.name, value: c.name })),
+        ...projectCategories.filter(c => c.isVisible !== false).map(c => ({ label: c.name, value: c.name })),
         ...(hasUncategorized ? [{ label: 'Uncategorized', value: 'Uncategorized' }] : [])
       ]
     : [

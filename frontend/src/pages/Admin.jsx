@@ -2183,7 +2183,7 @@ export default function AdminDashboard() {
     service: { title: '', desc: '', icon: '🚀', color: '#6366F1', image: '' },
     achievement: { title: '', desc: '', icon: '🏆', value: '', details: '', skills: '', image: '', certificateImage: '', color: '#8B5CF6', order: 0 },
     stat: { label: '', value: 0, suffix: '', icon: '🚀', description: '', order: 0, image: '' },
-    projectCategory: { name: '', color: '#6366F1' },
+    projectCategory: { name: '', color: '#6366F1', isVisible: true },
     blogCategory: { name: '', color: '#6366F1' },
     experienceType: { name: '' },
     tag: { name: '' },
@@ -2346,7 +2346,7 @@ export default function AdminDashboard() {
   };
 
   const handleToggleVisibility = async (type, item) => {
-    const dataKey = type === 'skill' ? 'skills' : null;
+    const dataKey = type === 'skill' ? 'skills' : (type === 'projectCategory' ? 'projectCategories' : null);
     let originalItems = null;
     const newVisibility = item.isVisible !== false ? false : true;
 
@@ -3434,7 +3434,7 @@ export default function AdminDashboard() {
                         </div>
                       )} />
                   ) : (
-                    <CrudList items={data.projectCategories} type="projectCategory" label="project categories" onAdd={() => openCreateModal('projectCategory')} onEdit={(item) => openEditModal('projectCategory', item)} onDelete={(c) => handleDelete('projectCategory', c._id)} isDark={isDark}
+                    <CrudList items={data.projectCategories} type="projectCategory" label="project categories" onAdd={() => openCreateModal('projectCategory')} onEdit={(item) => openEditModal('projectCategory', item)} onDelete={(c) => handleDelete('projectCategory', c._id)} onToggleVisibility={(item) => handleToggleVisibility('projectCategory', item)} isDark={isDark}
                       renderItem={(c, tm, tmut) => (
                         <span style={{ fontFamily: 'Poppins', fontWeight: 600, color: tm, display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: c.color }} />

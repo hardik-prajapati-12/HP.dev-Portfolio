@@ -12,6 +12,10 @@ const projectCategorySchema = new mongoose.Schema({
     type: String,
     default: '#6366F1',
     trim: true
+  },
+  isVisible: {
+    type: Boolean,
+    default: true
   }
 }, { timestamps: true });
 

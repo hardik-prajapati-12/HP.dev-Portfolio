@@ -125,14 +125,18 @@ exports.getProjectCategories = async (req, res) => {
 
 exports.createProjectCategory = async (req, res) => {
   try {
-    const { name, color } = req.body;
+    const { name, color, isVisible } = req.body;
     if (!name || name.trim().length === 0) {
       return res.status(400).json({ message: 'Category Name is required' });
     }
     if (name.trim().length > 50) {
       return res.status(400).json({ message: 'Category Name cannot exceed 50 characters' });
     }
-    const category = await ProjectCategory.create({ name: name.trim(), color: color || '#6366F1' });
+    const category = await ProjectCategory.create({
+      name: name.trim(),
+      color: color || '#6366F1',
+      isVisible: isVisible !== undefined ? isVisible : true
+    });
     res.status(201).json(category);
   } catch (error) {
     if (error.code === 11000) {
@@ -144,34 +148,33 @@ exports.createProjectCategory = async (req, res) => {
 
 exports.updateProjectCategory = async (req, res) => {
   try {
-    const { name, color } = req.body;
-    if (!name || name.trim().length === 0) {
-      return res.status(400).json({ message: 'Category Name is required' });
-    }
-    if (name.trim().length > 50) {
-      return res.status(400).json({ message: 'Category Name cannot exceed 50 characters' });
-    }
-
+    const { name, color, isVisible } = req.body;
     const category = await ProjectCategory.findById(req.params.id);
     if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
 
     const oldName = category.name;
-    const newName = name.trim();
+    const newName = name ? name.trim() : oldName;
 
-    // Check if new name already exists (excluding this document)
-    const duplicate = await ProjectCategory.findOne({ name: newName, _id: { $ne: req.params.id } });
-    if (duplicate) {
-      return res.status(400).json({ message: 'Category name already exists' });
+    if (name && newName.length > 50) {
+      return res.status(400).json({ message: 'Category Name cannot exceed 50 characters' });
     }
 
-    category.name = newName;
-    if (color) category.color = color;
-    await category.save();
+    // Check if new name already exists (excluding this document)
+    if (name && newName !== oldName) {
+      const duplicate = await ProjectCategory.findOne({ name: newName, _id: { $ne: req.params.id } });
+      if (duplicate) {
+        return res.status(400).json({ message: 'Category name already exists' });
+      }
+      category.name = newName;
+      await Project.updateMany({ category: oldName }, { category: newName });
+    }
 
-    // Update all matching projects to the new category name
-    await Project.updateMany({ category: oldName }, { category: newName });
+    if (color) category.color = color;
+    if (typeof isVisible === 'boolean') category.isVisible = isVisible;
+
+    await category.save();
 
     res.json({ message: 'Category updated successfully', category });
   } catch (error) {
