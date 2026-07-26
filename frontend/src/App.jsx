@@ -227,6 +227,13 @@ function AppRoutes() {
     }
   }, [publicSettings, location.pathname]);
 
+  // Automatic real-time visitor tracking on page load/navigation
+  useEffect(() => {
+    if (!location.pathname.startsWith('/admin')) {
+      axios.post('/api/analytics/visit', { page: location.pathname }).catch(() => {});
+    }
+  }, [location.pathname]);
+
   // Don't block render if checking is taking too long — only block briefly
   if (settingsLoading && checking) {
     return <div style={{ background: '#0B1120', minHeight: '100vh' }} />;
