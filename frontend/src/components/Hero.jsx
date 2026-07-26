@@ -105,19 +105,19 @@ function CodeEditorMockup({ name, title, skills, passion }) {
   return (
     <div style={{ 
       fontFamily: 'Fira Code, monospace', 
-      fontSize: '0.75rem', 
-      lineHeight: '1.5', 
-      padding: '12px 14px', 
+      fontSize: 'clamp(0.64rem, 2.2vw, 0.78rem)', 
+      lineHeight: '1.4', 
+      padding: '10px 12px', 
       color: '#cdd6f4',
-      height: '240px',
-      minHeight: '240px',
-      maxHeight: '240px',
+      height: '100%',
+      minHeight: '250px',
+      maxHeight: '260px',
       overflow: 'hidden',
       boxSizing: 'border-box'
     }}>
       {visibleLines.map((line, idx) => (
-        <div key={idx} style={{ display: 'flex', gap: '8px', overflow: 'hidden' }}>
-          <span style={{ color: '#585b70', width: '18px', flexShrink: 0, textAlign: 'right', userSelect: 'none' }}>{idx + 1}</span>
+        <div key={idx} style={{ display: 'flex', gap: '6px', overflow: 'hidden' }}>
+          <span style={{ color: '#585b70', width: '16px', flexShrink: 0, textAlign: 'right', userSelect: 'none' }}>{idx + 1}</span>
           <span style={{ color: line.color, whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{line.text}</span>
         </div>
       ))}
@@ -1040,6 +1040,17 @@ export default function Hero() {
             max-width: 380px!important;
             height: auto!important;
             margin: 0 auto!important;
+          }
+          .hero-tech-ribbon {
+            justify-content: center !important;
+            gap: 16px !important;
+            padding: 16px 0 !important;
+          }
+          .hero-tech-divider {
+            display: none !important;
+          }
+          .hero-tech-wrapper {
+            margin: 0 !important;
           }
           .hero-brain-hud {
             display: none !important;
