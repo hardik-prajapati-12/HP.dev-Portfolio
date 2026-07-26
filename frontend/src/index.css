@@ -11,16 +11,38 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
   background: #030712;
-  /* default dark — overridden by ThemeContext */
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   font-family: 'Poppins', 'Inter', sans-serif;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
   background: #030712;
-  /* default dark — overridden by ThemeContext */
   min-height: 100vh;
   transition: background 0.3s ease, color 0.3s ease;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Prevent automatic mobile screen zoom on input focus */
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* Every section gets the background so there are no gaps */

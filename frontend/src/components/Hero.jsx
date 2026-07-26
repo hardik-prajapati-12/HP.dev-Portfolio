@@ -935,20 +935,39 @@ export default function Hero() {
           .hero-container {
             grid-template-columns: 1fr;
             text-align: center;
-            gap: 56px;
+            gap: 40px;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
           }
           .hero-left {
             align-items: center!important;
             text-align: center;
+            width: 100%;
+            max-width: 100%;
           }
           .hero-left h1, .hero-left h2 {
             text-align: center!important;
           }
           .hero-left div {
             align-self: center!important;
+            max-width: 100%;
+          }
+          .hero-left img {
+            max-width: 100%!important;
+            height: auto!important;
           }
           .hero-brain-hud {
             display: none !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .hero-container {
+            padding: 0 4px !important;
+            gap: 32px !important;
+          }
+          .tech-item span {
+            font-size: 0.7rem !important;
           }
         }
       `}</style>

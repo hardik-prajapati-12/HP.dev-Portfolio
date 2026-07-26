@@ -136,7 +136,7 @@ export default function BackgroundEffect({ isDark }) {
   useParticles(canvasRef, isDark);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+    <div style={{ position: 'fixed', inset: 0, width: '100%', height: '100vh', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
       
       {/* Light Mode Floating Ambient Glowing Orbs */}
       {!isDark && (
