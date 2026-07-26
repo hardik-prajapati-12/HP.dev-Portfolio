@@ -103,11 +103,22 @@ function CodeEditorMockup({ name, title, skills, passion }) {
   }, [currentLineIdx, currentCharIdx, codeLines]);
 
   return (
-    <div style={{ fontFamily: 'Fira Code, monospace', fontSize: '0.8rem', lineHeight: '1.6', padding: '16px', color: '#cdd6f4' }}>
+    <div style={{ 
+      fontFamily: 'Fira Code, monospace', 
+      fontSize: '0.75rem', 
+      lineHeight: '1.5', 
+      padding: '12px 14px', 
+      color: '#cdd6f4',
+      height: '240px',
+      minHeight: '240px',
+      maxHeight: '240px',
+      overflow: 'hidden',
+      boxSizing: 'border-box'
+    }}>
       {visibleLines.map((line, idx) => (
-        <div key={idx} style={{ display: 'flex', gap: '12px' }}>
-          <span style={{ color: '#585b70', width: '20px', textAlign: 'right', userSelect: 'none' }}>{idx + 1}</span>
-          <span style={{ color: line.color, whiteSpace: 'pre' }}>{line.text}</span>
+        <div key={idx} style={{ display: 'flex', gap: '8px', overflow: 'hidden' }}>
+          <span style={{ color: '#585b70', width: '18px', flexShrink: 0, textAlign: 'right', userSelect: 'none' }}>{idx + 1}</span>
+          <span style={{ color: line.color, whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{line.text}</span>
         </div>
       ))}
       <span className="code-cursor" style={{ display: 'inline-block', width: '6px', height: '14px', background: '#89b4fa', marginLeft: '2px', animation: 'blink 0.8s step-end infinite' }} />
@@ -787,7 +798,10 @@ export default function Hero() {
                   ? '0 20px 50px rgba(0,0,0,0.5), 0 0 35px rgba(99,102,241,0.18)'
                   : '0 20px 40px rgba(0,0,0,0.15), 0 0 25px rgba(99,102,241,0.08)',
                 aspectRatio: '16/10.2',
-                overflow: 'hidden'
+                minHeight: '260px',
+                maxHeight: '280px',
+                overflow: 'hidden',
+                boxSizing: 'border-box'
               }}>
                 {/* Editor Top Tab Bar */}
                 <div style={{ height: '26px', background: '#0f0f15', display: 'flex', alignItems: 'center', padding: '0 10px', gap: '5px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
