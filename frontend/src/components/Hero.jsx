@@ -38,16 +38,16 @@ function CodeEditorMockup({ name, title, skills, passion }) {
 
     return [
       { text: 'const developer = {', color: '#89b4fa' },
-      { text: `  name: "${devName}",`, color: '#a6e3a1' },
-      { text: `  title: "${devTitle}",`, color: '#a6e3a1' },
-      { text: '  skills: [', color: '#cdd6f4' },
+      { text: `  name: "${devName}",`, color: '#f5c2e7' },
+      { text: `  title: "${devTitle}",`, color: '#f5c2e7' },
+      { text: '  skills: [', color: '#f9e2af' },
       ...skillsLines,
-      { text: '  ],', color: '#cdd6f4' },
+      { text: '  ],', color: '#f9e2af' },
       { text: `  passion: "${devPassion}",`, color: '#f5c2e7' },
       { text: '  code: () => {', color: '#cba6f7' },
       { text: '    while (learning) {', color: '#f38ba8' },
       { text: '      build();', color: '#89b4fa' },
-      { text: '      innovate();', color: '#94e2d5' },
+      { text: '      innovate();', color: '#a6e3a1' },
       { text: '    }', color: '#f38ba8' },
       { text: '  }', color: '#cba6f7' },
       { text: '};', color: '#89b4fa' },
@@ -766,13 +766,13 @@ export default function Hero() {
             </div>
 
             {/* Interactive IDE / Laptop Component */}
-            <div style={{ position: 'relative', width: '100%', maxWidth: '440px', flexShrink: 0, boxSizing: 'border-box', zIndex: 2 }}>
+            <div style={{ position: 'relative', width: '100%', maxWidth: '460px', flexShrink: 0, boxSizing: 'border-box', zIndex: 2 }}>
 
-              {/* Laptop Screen Body - Fixed height clamp to prevent expansion */}
+              {/* Laptop Screen Body - Centered 90% width over 100% chassis base per Photo 2 */}
               <div style={{
                 position: 'relative',
-                width: '100%',
-                maxWidth: '100%',
+                width: '90%',
+                maxWidth: '90%',
                 height: 'clamp(210px, 30vw, 250px)',
                 margin: '0 auto',
                 background: '#151521',
