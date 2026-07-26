@@ -29,35 +29,35 @@ function useParticles(canvasRef, isDark) {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Particles
-      particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      if (isDark) {
+        // Particles
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = isDark ? `rgba(99,102,241,${p.a * 0.35})` : `rgba(99,102,241,0.18)`;
-        ctx.fill();
-      });
-
-      // Connected lines
-      particles.forEach((p, i) => {
-        particles.slice(i + 1).forEach(q => {
-          const dist = Math.hypot(p.x - q.x, p.y - q.y);
-          if (dist < 140) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(q.x, q.y);
-            ctx.strokeStyle = isDark
-              ? `rgba(99,102,241,${0.12 * (1 - dist / 140)})`
-              : `rgba(99,102,241,0.08 * (1 - dist / 140))`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(99,102,241,${p.a * 0.35})`;
+          ctx.fill();
         });
-      });
+
+        // Connected lines
+        particles.forEach((p, i) => {
+          particles.slice(i + 1).forEach(q => {
+            const dist = Math.hypot(p.x - q.x, p.y - q.y);
+            if (dist < 140) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.strokeStyle = `rgba(99,102,241,${0.12 * (1 - dist / 140)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          });
+        });
+      }
 
       raf = requestAnimationFrame(draw);
     };
@@ -75,6 +75,7 @@ export function BinaryStream({ isDark }) {
   const [streams, setStreams] = useState([]);
 
   useEffect(() => {
+    if (!isDark) return;
     const cols = 14;
     const newStreams = Array.from({ length: cols }, (_, i) => ({
       id: i,
@@ -85,7 +86,9 @@ export function BinaryStream({ isDark }) {
       chars: Array.from({ length: 14 }, () => Math.round(Math.random()).toString()),
     }));
     setStreams(newStreams);
-  }, []);
+  }, [isDark]);
+
+  if (!isDark) return null;
 
   return (
     <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
@@ -101,12 +104,12 @@ export function BinaryStream({ isDark }) {
             fontFamily: 'monospace',
             fontSize: '0.8rem',
             fontWeight: 'bold',
-            color: isDark ? '#10B981' : '#3B82F6',
+            color: '#10B981',
             opacity: s.opacity,
             writingMode: 'vertical-rl',
             textOrientation: 'upright',
             letterSpacing: '6px',
-            textShadow: isDark ? '0 0 6px rgba(16,185,129,0.5)' : 'none'
+            textShadow: '0 0 6px rgba(16,185,129,0.5)'
           }}
         >
           {s.chars.join('')}
@@ -133,6 +136,8 @@ export default function BackgroundEffect({ isDark }) {
   const canvasRef = useRef(null);
   useParticles(canvasRef, isDark);
 
+  if (!isDark) return null;
+
   return (
     <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
       {/* Particle Canvas Network */}
@@ -146,15 +151,13 @@ export default function BackgroundEffect({ isDark }) {
         position: 'absolute',
         inset: 0,
         zIndex: 1,
-        backgroundImage: isDark
-          ? `linear-gradient(rgba(99,102,241,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.018) 1px,transparent 1px)`
-          : `linear-gradient(rgba(99,102,241,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.035) 1px,transparent 1px)`,
+        backgroundImage: `linear-gradient(rgba(99,102,241,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.018) 1px,transparent 1px)`,
         backgroundSize: '60px 60px'
       }} />
 
       {/* Ambient Grid Dots */}
-      <GridDots color={isDark ? 'rgba(99,102,241,0.2)' : 'rgba(99,102,241,0.12)'} style={{ position: 'absolute', left: '40px', top: '110px', zIndex: 1, pointerEvents: 'none' }} />
-      <GridDots color={isDark ? 'rgba(6,182,212,0.2)' : 'rgba(6,182,212,0.12)'} style={{ position: 'absolute', right: '40px', bottom: '150px', zIndex: 1, pointerEvents: 'none' }} />
+      <GridDots color="rgba(99,102,241,0.2)" style={{ position: 'absolute', left: '40px', top: '110px', zIndex: 1, pointerEvents: 'none' }} />
+      <GridDots color="rgba(6,182,212,0.2)" style={{ position: 'absolute', right: '40px', bottom: '150px', zIndex: 1, pointerEvents: 'none' }} />
     </div>
   );
 }

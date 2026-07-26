@@ -537,210 +537,212 @@ export default function Hero() {
             <div style={{ position: 'absolute', width: '420px', height: '420px', borderRadius: '50%', background: isDark ? 'radial-gradient(circle,rgba(99,102,241,0.08) 0%,transparent 70%)' : 'radial-gradient(circle,rgba(99,102,241,0.05) 0%,transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none', zIndex: 0 }} />
 
             {/* Glowing Circuit paths behind the laptop */}
-            <div
-              style={{ position: 'absolute', top: '-10%', left: '-10%', right: '-10%', bottom: '8%', zIndex: 0, pointerEvents: 'none' }}
-            >
-              <svg width="100%" height="100%" viewBox="0 0 800 600" fill="none" style={{ position: 'absolute', inset: 0 }}>
-                <defs>
-                  <linearGradient id="cyanBlueCircuit" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#00d8ff" />
-                    <stop offset="50%" stopColor="#3b82f6" />
-                    <stop offset="100%" stopColor="#00f0ff" />
-                  </linearGradient>
+            {isDark && (
+              <div
+                style={{ position: 'absolute', top: '-10%', left: '-10%', right: '-10%', bottom: '8%', zIndex: 0, pointerEvents: 'none' }}
+              >
+                <svg width="100%" height="100%" viewBox="0 0 800 600" fill="none" style={{ position: 'absolute', inset: 0 }}>
+                  <defs>
+                    <linearGradient id="cyanBlueCircuit" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#00d8ff" />
+                      <stop offset="50%" stopColor="#3b82f6" />
+                      <stop offset="100%" stopColor="#00f0ff" />
+                    </linearGradient>
 
-                  {/* Subtle blur filters for glow */}
-                  <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                  <filter id="blueGlow" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur stdDeviation="8" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
+                    {/* Subtle blur filters for glow */}
+                    <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="3" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                    <filter id="blueGlow" x="-30%" y="-30%" width="160%" height="160%">
+                      <feGaussianBlur stdDeviation="8" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
 
-                {/* --- Background Static Dark Blue Traces (Layer 1) --- */}
-                <g stroke="rgba(30, 64, 175, 0.15)" strokeWidth="1.2" fill="none">
-                  {/* Bank 1: Mid-Bottom Horizontal Parallel Traces */}
-                  <path d="M 80 420 L 400 420 L 460 480 L 700 480" />
-                  <path d="M 110 460 L 380 460 L 440 520 L 670 520" />
-                  <path d="M 50 380 L 420 380 L 480 440 L 730 440" />
+                  {/* --- Background Static Dark Blue Traces (Layer 1) --- */}
+                  <g stroke="rgba(30, 64, 175, 0.15)" strokeWidth="1.2" fill="none">
+                    {/* Bank 1: Mid-Bottom Horizontal Parallel Traces */}
+                    <path d="M 80 420 L 400 420 L 460 480 L 700 480" />
+                    <path d="M 110 460 L 380 460 L 440 520 L 670 520" />
+                    <path d="M 50 380 L 420 380 L 480 440 L 730 440" />
 
-                  {/* Bank 2: Mid-Top Horizontal Parallel Traces */}
-                  <path d="M 100 350 L 350 350 L 410 290 L 650 290" />
-                  <path d="M 130 310 L 330 310 L 390 250 L 620 250" />
-                  <path d="M 160 270 L 310 270 L 370 210 L 590 210" />
+                    {/* Bank 2: Mid-Top Horizontal Parallel Traces */}
+                    <path d="M 100 350 L 350 350 L 410 290 L 650 290" />
+                    <path d="M 130 310 L 330 310 L 390 250 L 620 250" />
+                    <path d="M 160 270 L 310 270 L 370 210 L 590 210" />
 
-                  {/* Bank 3: Top Traces */}
-                  <path d="M 150 140 L 320 140 L 380 80 L 600 80" />
-                  <path d="M 180 180 L 300 180 L 360 120 L 570 120" />
-                  <path d="M 220 220 L 280 220 L 340 160 L 540 160" />
+                    {/* Bank 3: Top Traces */}
+                    <path d="M 150 140 L 320 140 L 380 80 L 600 80" />
+                    <path d="M 180 180 L 300 180 L 360 120 L 570 120" />
+                    <path d="M 220 220 L 280 220 L 340 160 L 540 160" />
 
-                  {/* New Right-to-Bottom Vertical Background Traces */}
-                  <path d="M 720 200 L 720 380 L 620 480 L 620 560" />
-                  <path d="M 690 220 L 690 370 L 600 460 L 600 540" />
-                  <path d="M 660 240 L 660 360 L 580 440 L 580 520" />
+                    {/* New Right-to-Bottom Vertical Background Traces */}
+                    <path d="M 720 200 L 720 380 L 620 480 L 620 560" />
+                    <path d="M 690 220 L 690 370 L 600 460 L 600 540" />
+                    <path d="M 660 240 L 660 360 L 580 440 L 580 520" />
 
-                  {/* Background Parallel Diagonals (Top Right area, matches reference photo) */}
-                  <path d="M 380 50 L 530 200" />
-                  <path d="M 410 50 L 560 200" />
-                  <path d="M 440 50 L 590 200" />
-                  <path d="M 470 50 L 620 200" />
-                  <path d="M 500 50 L 650 200" />
+                    {/* Background Parallel Diagonals (Top Right area, matches reference photo) */}
+                    <path d="M 380 50 L 530 200" />
+                    <path d="M 410 50 L 560 200" />
+                    <path d="M 440 50 L 590 200" />
+                    <path d="M 470 50 L 620 200" />
+                    <path d="M 500 50 L 650 200" />
 
-                  {/* Background Parallel Diagonals (Bottom Right area) */}
-                  <path d="M 250 450 L 370 570" strokeOpacity="0.7" />
-                  <path d="M 280 450 L 400 570" strokeOpacity="0.7" />
-                  <path d="M 310 450 L 430 570" strokeOpacity="0.7" />
-                </g>
-
-                {/* --- Foreground Glowing Blue/Cyan Active Traces (Layer 2) --- */}
-                <g stroke="url(#cyanBlueCircuit)" strokeWidth="1.8" fill="none" opacity="0.85" filter="url(#cyanGlow)">
-                  {/* Pulse lines flowing over paths. pathLength="100" ensures standard scaling for flow synchronization */}
-                  <path d="M 80 420 L 400 420 L 460 480 L 700 480" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.5s linear infinite' }} />
-                  <path d="M 110 460 L 380 460 L 440 520 L 670 520" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 2.8s linear infinite', animationDelay: '0.5s' }} />
-                  <path d="M 50 380 L 420 380 L 480 440 L 730 440" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 4s linear infinite', animationDelay: '1.2s' }} />
-
-                  <path d="M 100 350 L 350 350 L 410 290 L 650 290" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.2s linear infinite', animationDelay: '0.2s' }} />
-                  <path d="M 130 310 L 330 310 L 390 250 L 620 250" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 2.5s linear infinite', animationDelay: '0.8s' }} />
-                  <path d="M 160 270 L 310 270 L 370 210 L 590 210" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.8s linear infinite', animationDelay: '1.5s' }} />
-
-                  <path d="M 150 140 L 320 140 L 380 80 L 600 80" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3s linear infinite', animationDelay: '0.4s' }} />
-                  <path d="M 220 220 L 280 220 L 340 160 L 540 160" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.6s linear infinite', animationDelay: '1s' }} />
-
-                  {/* New Active Right-to-Bottom Vertical Traces */}
-                  <path d="M 720 200 L 720 380 L 620 480 L 620 560" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.5s linear infinite' }} />
-                  <path d="M 690 220 L 690 370 L 600 460 L 600 540" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 2.8s linear infinite', animationDelay: '0.5s' }} />
-                  <path d="M 660 240 L 660 360 L 580 440 L 580 520" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 4.2s linear infinite', animationDelay: '1.2s' }} />
-                </g>
-
-                {/* --- Glowing Double-Circle Nodes (Layer 3) --- */}
-                {/* Node brightness/glow flares up using node-pulse-hit synchronized with line animation durations and delays */}
-                <g>
-                  {/* Left-side Nodes */}
-                  <g>
-                    <circle cx="80" cy="420" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="80" cy="420" r="2.5" fill="#ffffff" />
-                  </g>
-                  <g>
-                    <circle cx="100" cy="350" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="100" cy="350" r="2.5" fill="#ffffff" />
-                  </g>
-                  <g>
-                    <circle cx="130" cy="310" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="130" cy="310" r="2.5" fill="#ffffff" />
-                  </g>
-                  <g>
-                    <circle cx="150" cy="140" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="150" cy="140" r="2.5" fill="#ffffff" />
+                    {/* Background Parallel Diagonals (Bottom Right area) */}
+                    <path d="M 250 450 L 370 570" strokeOpacity="0.7" />
+                    <path d="M 280 450 L 400 570" strokeOpacity="0.7" />
+                    <path d="M 310 450 L 430 570" strokeOpacity="0.7" />
                   </g>
 
-                  {/* Mid/Junction Nodes */}
-                  <g>
-                    <circle cx="350" cy="350" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="350" cy="350" r="2.5" fill="#ffffff" />
-                  </g>
-                  <g>
-                    <circle cx="410" cy="290" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="410" cy="290" r="2.5" fill="#ffffff" />
-                  </g>
-                  <g>
-                    <circle cx="380" cy="460" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="380" cy="460" r="2.5" fill="#ffffff" />
+                  {/* --- Foreground Glowing Blue/Cyan Active Traces (Layer 2) --- */}
+                  <g stroke="url(#cyanBlueCircuit)" strokeWidth="1.8" fill="none" opacity="0.85" filter="url(#cyanGlow)">
+                    {/* Pulse lines flowing over paths. pathLength="100" ensures standard scaling for flow synchronization */}
+                    <path d="M 80 420 L 400 420 L 460 480 L 700 480" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.5s linear infinite' }} />
+                    <path d="M 110 460 L 380 460 L 440 520 L 670 520" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 2.8s linear infinite', animationDelay: '0.5s' }} />
+                    <path d="M 50 380 L 420 380 L 480 440 L 730 440" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 4s linear infinite', animationDelay: '1.2s' }} />
+
+                    <path d="M 100 350 L 350 350 L 410 290 L 650 290" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.2s linear infinite', animationDelay: '0.2s' }} />
+                    <path d="M 130 310 L 330 310 L 390 250 L 620 250" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 2.5s linear infinite', animationDelay: '0.8s' }} />
+                    <path d="M 160 270 L 310 270 L 370 210 L 590 210" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.8s linear infinite', animationDelay: '1.5s' }} />
+
+                    <path d="M 150 140 L 320 140 L 380 80 L 600 80" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3s linear infinite', animationDelay: '0.4s' }} />
+                    <path d="M 220 220 L 280 220 L 340 160 L 540 160" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.6s linear infinite', animationDelay: '1s' }} />
+
+                    {/* New Active Right-to-Bottom Vertical Traces */}
+                    <path d="M 720 200 L 720 380 L 620 480 L 620 560" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 3.5s linear infinite' }} />
+                    <path d="M 690 220 L 690 370 L 600 460 L 600 540" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 2.8s linear infinite', animationDelay: '0.5s' }} />
+                    <path d="M 660 240 L 660 360 L 580 440 L 580 520" pathLength="100" strokeDasharray="25 120" style={{ animation: 'circuit-flow 4.2s linear infinite', animationDelay: '1.2s' }} />
                   </g>
 
-                  {/* Right-side Terminus Nodes (Pulsing in sync with active line animation arrival) */}
+                  {/* --- Glowing Double-Circle Nodes (Layer 3) --- */}
+                  {/* Node brightness/glow flares up using node-pulse-hit synchronized with line animation durations and delays */}
                   <g>
-                    <circle cx="650" cy="290" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 3.2s linear infinite', animationDelay: '0.2s' }} />
-                    <circle cx="650" cy="290" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 3.2s linear infinite', animationDelay: '0.2s' }} />
-                  </g>
-                  <g>
-                    <circle cx="620" cy="250" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 2.5s linear infinite', animationDelay: '0.8s' }} />
-                    <circle cx="620" cy="250" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 2.5s linear infinite', animationDelay: '0.8s' }} />
-                  </g>
-                  <g>
-                    <circle cx="590" cy="210" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 3.8s linear infinite', animationDelay: '1.5s' }} />
-                    <circle cx="590" cy="210" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 3.8s linear infinite', animationDelay: '1.5s' }} />
-                  </g>
-                  <g>
-                    <circle cx="700" cy="480" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 3.5s linear infinite' }} />
-                    <circle cx="700" cy="480" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 3.5s linear infinite' }} />
-                  </g>
-                  <g>
-                    <circle cx="730" cy="440" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 4s linear infinite', animationDelay: '1.2s' }} />
-                    <circle cx="730" cy="440" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 4s linear infinite', animationDelay: '1.2s' }} />
-                  </g>
-                  <g>
-                    <circle cx="670" cy="520" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 2.8s linear infinite', animationDelay: '0.5s' }} />
-                    <circle cx="670" cy="520" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 2.8s linear infinite', animationDelay: '0.5s' }} />
-                  </g>
-                  <g>
-                    <circle cx="600" cy="80" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 3s linear infinite', animationDelay: '0.4s' }} />
-                    <circle cx="600" cy="80" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 3s linear infinite', animationDelay: '0.4s' }} />
-                  </g>
-                  <g>
-                    <circle cx="540" cy="160" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 3.6s linear infinite', animationDelay: '1s' }} />
-                    <circle cx="540" cy="160" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 3.6s linear infinite', animationDelay: '1s' }} />
-                  </g>
+                    {/* Left-side Nodes */}
+                    <g>
+                      <circle cx="80" cy="420" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="80" cy="420" r="2.5" fill="#ffffff" />
+                    </g>
+                    <g>
+                      <circle cx="100" cy="350" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="100" cy="350" r="2.5" fill="#ffffff" />
+                    </g>
+                    <g>
+                      <circle cx="130" cy="310" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="130" cy="310" r="2.5" fill="#ffffff" />
+                    </g>
+                    <g>
+                      <circle cx="150" cy="140" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="150" cy="140" r="2.5" fill="#ffffff" />
+                    </g>
 
-                  {/* New Right-to-Bottom Start Nodes */}
-                  <g>
-                    <circle cx="720" cy="200" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="720" cy="200" r="2.5" fill="#ffffff" />
-                  </g>
-                  <g>
-                    <circle cx="690" cy="220" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="690" cy="220" r="2.5" fill="#ffffff" />
-                  </g>
-                  <g>
-                    <circle cx="660" cy="240" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
-                    <circle cx="660" cy="240" r="2.5" fill="#ffffff" />
-                  </g>
+                    {/* Mid/Junction Nodes */}
+                    <g>
+                      <circle cx="350" cy="350" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="350" cy="350" r="2.5" fill="#ffffff" />
+                    </g>
+                    <g>
+                      <circle cx="410" cy="290" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="410" cy="290" r="2.5" fill="#ffffff" />
+                    </g>
+                    <g>
+                      <circle cx="380" cy="460" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="380" cy="460" r="2.5" fill="#ffffff" />
+                    </g>
 
-                  {/* New Right-to-Bottom Terminus Nodes */}
-                  <g>
-                    <circle cx="620" cy="560" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 3.5s linear infinite' }} />
-                    <circle cx="620" cy="560" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 3.5s linear infinite' }} />
+                    {/* Right-side Terminus Nodes (Pulsing in sync with active line animation arrival) */}
+                    <g>
+                      <circle cx="650" cy="290" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 3.2s linear infinite', animationDelay: '0.2s' }} />
+                      <circle cx="650" cy="290" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 3.2s linear infinite', animationDelay: '0.2s' }} />
+                    </g>
+                    <g>
+                      <circle cx="620" cy="250" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 2.5s linear infinite', animationDelay: '0.8s' }} />
+                      <circle cx="620" cy="250" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 2.5s linear infinite', animationDelay: '0.8s' }} />
+                    </g>
+                    <g>
+                      <circle cx="590" cy="210" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 3.8s linear infinite', animationDelay: '1.5s' }} />
+                      <circle cx="590" cy="210" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 3.8s linear infinite', animationDelay: '1.5s' }} />
+                    </g>
+                    <g>
+                      <circle cx="700" cy="480" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 3.5s linear infinite' }} />
+                      <circle cx="700" cy="480" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 3.5s linear infinite' }} />
+                    </g>
+                    <g>
+                      <circle cx="730" cy="440" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 4s linear infinite', animationDelay: '1.2s' }} />
+                      <circle cx="730" cy="440" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 4s linear infinite', animationDelay: '1.2s' }} />
+                    </g>
+                    <g>
+                      <circle cx="670" cy="520" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 2.8s linear infinite', animationDelay: '0.5s' }} />
+                      <circle cx="670" cy="520" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 2.8s linear infinite', animationDelay: '0.5s' }} />
+                    </g>
+                    <g>
+                      <circle cx="600" cy="80" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 3s linear infinite', animationDelay: '0.4s' }} />
+                      <circle cx="600" cy="80" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 3s linear infinite', animationDelay: '0.4s' }} />
+                    </g>
+                    <g>
+                      <circle cx="540" cy="160" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 3.6s linear infinite', animationDelay: '1s' }} />
+                      <circle cx="540" cy="160" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 3.6s linear infinite', animationDelay: '1s' }} />
+                    </g>
+
+                    {/* New Right-to-Bottom Start Nodes */}
+                    <g>
+                      <circle cx="720" cy="200" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="720" cy="200" r="2.5" fill="#ffffff" />
+                    </g>
+                    <g>
+                      <circle cx="690" cy="220" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="690" cy="220" r="2.5" fill="#ffffff" />
+                    </g>
+                    <g>
+                      <circle cx="660" cy="240" r="5" fill="#00d8ff" opacity="0.3" filter="url(#cyanGlow)" />
+                      <circle cx="660" cy="240" r="2.5" fill="#ffffff" />
+                    </g>
+
+                    {/* New Right-to-Bottom Terminus Nodes */}
+                    <g>
+                      <circle cx="620" cy="560" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 3.5s linear infinite' }} />
+                      <circle cx="620" cy="560" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 3.5s linear infinite' }} />
+                    </g>
+                    <g>
+                      <circle cx="600" cy="540" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 2.8s linear infinite', animationDelay: '0.5s' }} />
+                      <circle cx="600" cy="540" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 2.8s linear infinite', animationDelay: '0.5s' }} />
+                    </g>
+                    <g>
+                      <circle cx="580" cy="520" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
+                        style={{ animation: 'node-pulse-hit 4.2s linear infinite', animationDelay: '1.2s' }} />
+                      <circle cx="580" cy="520" r="2.5" fill="#ffffff"
+                        style={{ animation: 'node-pulse-hit 4.2s linear infinite', animationDelay: '1.2s' }} />
+                    </g>
                   </g>
-                  <g>
-                    <circle cx="600" cy="540" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 2.8s linear infinite', animationDelay: '0.5s' }} />
-                    <circle cx="600" cy="540" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 2.8s linear infinite', animationDelay: '0.5s' }} />
-                  </g>
-                  <g>
-                    <circle cx="580" cy="520" r="6" fill="#0055ff" opacity="0.4" filter="url(#blueGlow)"
-                      style={{ animation: 'node-pulse-hit 4.2s linear infinite', animationDelay: '1.2s' }} />
-                    <circle cx="580" cy="520" r="2.5" fill="#ffffff"
-                      style={{ animation: 'node-pulse-hit 4.2s linear infinite', animationDelay: '1.2s' }} />
-                  </g>
-                </g>
-              </svg>
-            </div>
+                </svg>
+              </div>
+            )}
 
             {/* Interactive IDE / Laptop Component */}
             <div style={{ position: 'relative', width: '100%', maxWidth: '440px', zIndex: 2 }}>
@@ -869,23 +871,25 @@ export default function Hero() {
       </div>
 
       {/* Cyber Wave SVGs at the bottom */}
-      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none" style={{ position: 'absolute', bottom: -5, left: 0, width: '100%', height: '80px', pointerEvents: 'none', zIndex: 1 }}>
-        <defs>
-          <linearGradient id="pinkPurpleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ec4899" />
-            <stop offset="50%" stopColor="#8b5cf6" />
-            <stop offset="100%" stopColor="#3b82f6" />
-          </linearGradient>
-          <linearGradient id="cyanBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#06b6d4" />
-            <stop offset="50%" stopColor="#3b82f6" />
-            <stop offset="100%" stopColor="#10b981" />
-          </linearGradient>
-        </defs>
-        <path d="M0,80 C240,110 480,50 720,90 C960,130 1200,60 1440,90 L1440,120 L0,120 Z" fill={isDark ? 'rgba(99,102,241,0.015)' : 'rgba(99,102,241,0.01)'} />
-        <path d="M0,80 C240,110 480,50 720,90 C960,130 1200,60 1440,90" stroke="url(#pinkPurpleGrad)" strokeWidth="2.5" opacity="0.45" />
-        <path d="M0,95 C240,65 480,125 720,85 C960,45 1200,115 1440,85" stroke="url(#cyanBlueGrad)" strokeWidth="1.5" opacity="0.35" />
-      </svg>
+      {isDark && (
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none" style={{ position: 'absolute', bottom: -5, left: 0, width: '100%', height: '80px', pointerEvents: 'none', zIndex: 1 }}>
+          <defs>
+            <linearGradient id="pinkPurpleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ec4899" />
+              <stop offset="50%" stopColor="#8b5cf6" />
+              <stop offset="100%" stopColor="#3b82f6" />
+            </linearGradient>
+            <linearGradient id="cyanBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#06b6d4" />
+              <stop offset="50%" stopColor="#3b82f6" />
+              <stop offset="100%" stopColor="#10b981" />
+            </linearGradient>
+          </defs>
+          <path d="M0,80 C240,110 480,50 720,90 C960,130 1200,60 1440,90 L1440,120 L0,120 Z" fill="rgba(99,102,241,0.015)" />
+          <path d="M0,80 C240,110 480,50 720,90 C960,130 1200,60 1440,90" stroke="url(#pinkPurpleGrad)" strokeWidth="2.5" opacity="0.45" />
+          <path d="M0,95 C240,65 480,125 720,85 C960,45 1200,115 1440,85" stroke="url(#cyanBlueGrad)" strokeWidth="1.5" opacity="0.35" />
+        </svg>
+      )}
 
       <style>{`
         .hero-container {
