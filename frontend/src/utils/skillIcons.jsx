@@ -46,9 +46,9 @@ export const getSkillIconDetails = (name, isDark) => {
       glow: 'rgba(168,85,247,0.35)'
     };
   }
-  if (norm === 'dsa') {
+  if (norm === 'dsa' || norm.includes('data structure') || norm.includes('algorithm')) {
     return {
-      icon: <span style={{ fontFamily: 'monospace', fontWeight: 900 }}>{"{}"}</span>,
+      icon: <span style={{ fontFamily: 'Space Grotesk, Fira Code, monospace', fontWeight: 800, fontSize: '1.45rem', lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{"{}"}</span>,
       color: '#06B6D4',
       glow: 'rgba(6,182,212,0.35)'
     };
