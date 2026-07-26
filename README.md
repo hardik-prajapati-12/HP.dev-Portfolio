@@ -1,56 +1,103 @@
-# HP.dev-Portfolio 🚀 — Premium MERN Stack Portfolio Website
+# 🚀 HP.dev-Portfolio — Premium MERN Stack Portfolio Website
 
-Welcome to **HP.dev-Portfolio**, a state-of-the-art, fully dynamic, and responsive professional portfolio website built using the MERN stack (MongoDB, Express, React, Node.js). 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-v19.2-61DAFB?logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-v20+-339933?logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-v4.21-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-v8.9-47A248?logo=mongodb&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4.3-38B2AC?logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-v8.0-646CFF?logo=vite&logoColor=white)
+![Deployment](https://img.shields.io/badge/Deployment-Vercel%20%7C%20Render-000000?logo=vercel&logoColor=white)
 
-This platform not only showcases your professional skills, projects, certifications, experiences, and blogs but also features a comprehensive **Admin Dashboard** to control and update all content dynamically, track visitor analytics, manage site settings (including a maintenance mode toggle), and interact with an integrated **AI Chatbot** powered by OpenAI.
+Welcome to **HP.dev-Portfolio**, a state-of-the-art, dynamic, and responsive developer portfolio platform built on the MERN stack. Designed with visual excellence and administrative control in mind, this project seamlessly combines modern web aesthetics with robust backend management, dynamic content toggles, AI-driven interactivity, and cloud image management.
+
+---
+
+## 📋 Table of Contents
+
+- [✨ Overview](#-overview)
+- [🌟 Key Features](#-key-features)
+- [🚀 Recent Enhancements](#-recent-enhancements)
+- [🛠️ Tech Stack & Architecture](#️-tech-stack--architecture)
+- [📁 Folder Structure](#-folder-structure)
+- [⚙️ Environment Setup & Getting Started](#️-environment-setup--getting-started)
+- [📡 API Endpoints Overview](#-api-endpoints-overview)
+- [🔒 Security & Authentication](#-security--authentication)
+- [🚢 Deployment Guide](#-deployment-guide)
+- [📄 License & Author](#-license--author)
+
+---
+
+## ✨ Overview
+
+**HP.dev-Portfolio** goes beyond a standard static portfolio. It functions as a complete content management ecosystem:
+
+- **Public Client**: Showcases skills, projects, certifications, experiences, services, blogs, and testimonials with interactive background visual effects, fluid animations, and a sleek dark/light mode engine.
+- **Admin Dashboard**: A secure portal allowing site owners to update profile details, manage content CRUD operations, control section visibilities instantly, analyze traffic with interactive charts, and train an AI assistant.
+- **OpenAI & Q&A Assistant**: An intelligent chatbot capable of answering visitor queries using a hybrid approach—leveraging tokenized Jaccard Similarity matching for custom admin FAQs alongside fallback AI capabilities.
 
 ---
 
 ## 🌟 Key Features
 
-### 🖥️ Frontend & UI/UX
-- **Dynamic Theming**: Smooth dark mode and light mode switching.
-- **Micro-Animations**: Fluid transitions and hover effects powered by `Framer Motion`.
-- **Pixel-Perfect Responsiveness**: Flex layouts and automated grid system adjustments ensure a gorgeous presentation across mobile screens (down to Galaxy Fold), tablets (iPad Mini), laptops, and high-DPI PC monitors.
-- **Custom Cursor & Loading Screen**: Sleek entry animation with custom loading states.
-- **Section Controls**: Dynamically toggle sections (About, Skills, Projects, Services, Experience, Blogs, Testimonials, Contact) on or off from the Admin Panel.
+### 🎨 Frontend & UI/UX Experience
+- **Interactive Background Effects**: Dynamic full-page ambient visual effects and floating particle canvas overlays.
+- **Dynamic Hero Section & Skills Showcase**: Manage hero titles, taglines, resume links, and hero-featured skills directly from the admin dashboard.
+- **Instant Section Visibility Toggles**: Turn any section (About, Skills, Projects, Services, Experience, Blogs, Testimonials, Contact) on or off with zero-delay updates.
+- **Micro-Animations & Motion**: Smooth page transitions, hover interactions, and counters powered by `Framer Motion` and `React CountUp`.
+- **Pixel-Perfect Responsiveness**: Tailored design for mobile devices (down to Galaxy Fold), tablets, laptops, and ultra-wide monitors.
+- **Dynamic Light & Dark Modes**: Fluid color transition system across all pages and administrative interfaces.
 
-### ⚙️ Admin Dashboard (Control Center)
-- **Content Management (CRUD)**: Manage all profile data, skills, projects, experiences, services, blogs, testimonials, and certifications directly.
-- **Live Search & Filter**: Integrated search bars in all lists (Skills, Projects, Services, Certifications, Blogs, Tags, Categories, and blog comments) to query data instantly in real-time.
-- **Custom Delete Popups**: Standard browser alerts are replaced with custom theme-aware frosted-glass delete confirmation cards.
-- **Visitor Analytics**: Interactive analytics charts using `Recharts` for page views, unique visits, and geographical/device statistics.
-- **Maintenance Mode Switch**: Instantly lock/unlock the site with a custom maintenance message.
-- **Global Settings Panel**: Change the site title, logos, social links, contact email, and visibility settings in real-time.
+### 🎛️ Admin Control Center
+- **Full CRUD Management**: Complete control over projects, skills, services, work experience, education, certifications, blogs, and user testimonials.
+- **Live Search & Real-Time Filtering**: Instant real-time filtering across all admin data tables (Skills, Projects, Services, Certifications, Blogs, Categories, Comments).
+- **Frosted-Glass Confirmation Modals**: Elegant theme-aware delete modals replacing default browser alerts.
+- **Visitor Analytics Dashboard**: Recharts-powered graphs analyzing daily page views, unique visits, operating system splits, and traffic sources.
+- **Maintenance Mode System**: One-click global site locking with custom maintenance messaging.
 
-### 🤖 Advanced Integrations
-- **AI Chatbot**: An embedded assistant trained to answer questions about you.
-  * **Similarity Q&A Matcher**: Uses tokenized Jaccard Similarity to compare and reply with custom Q&A answers created in the Admin Panel if user queries are highly related.
-  * **Admin Button Configuration**: Manage custom button responses (Skills, Projects, Services) directly from the dashboard.
-- **Cloudinary Storage**: Direct image hosting to Cloudinary with automatic local disk buffer cleanups and seamless filesystem fallbacks.
-- **Contact Notifications**: SMTP integration with `Nodemailer` for immediate email notification whenever a visitor fills out the contact form.
-- **Payment Processing**: Integrated structures for Stripe and Razorpay payment support.
+### 🤖 AI Assistant & Smart Integrations
+- **AI Chatbot**: Embedded floating assistant configured to answer visitor inquiries about your background and technical skills.
+- **Similarity Q&A Engine**: Uses tokenized similarity comparison to match user queries with custom Q&A items defined in the admin panel.
+- **Cloudinary Image Hosting**: Direct cloud file upload with automatic disk buffer cleanup and fallback path resolution.
+- **SMTP Email Dispatch**: Instant email delivery via Nodemailer whenever visitors submit the contact form.
 
 ---
 
-## 🛠️ Technology Stack
+## 🚀 Recent Enhancements
+
+- 🌌 **Full-Page Ambient Background Effect**: Added smooth, modern ambient visual backdrop across the entire application interface.
+- ⚡ **Zero-Delay Hide/Unhide Visibility System**: Optimized section and item visibility toggles across both public client and dashboard with instant state updates.
+- 🎯 **Admin Hero Skills Management**: Dynamically customize skills displayed in the Hero section directly from the admin workspace.
+- 👤 **Synchronized User Avatar Updates**: Avatar updates in profile settings seamlessly synchronize across top navigation, sidebar, and admin sessions.
+- 🖼️ **Dynamic Fallback Image Resolution**: Dynamic relative fallback upload resolution preventing broken image links across local and production environments.
+- 🌐 **Wildcard Admin IP & Dynamic CORS Whitelisting**: Improved security setup supporting wildcard IP matching (`*`) and dynamic origin validation for cloud platforms (Vercel, Render).
+- ⚙️ **Vercel SPA Rewrites Configuration**: Pre-configured `vercel.json` for single-page app (SPA) routing without 404 errors on page reloads.
+
+---
+
+## 🛠️ Tech Stack & Architecture
 
 ### **Frontend**
-- **Framework**: [React.js](https://react.dev/) (v19)
-- **Build Tool**: [Vite](https://vite.dev/) (v8)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) (v4) & Vanilla CSS
-- **Animations**: [Framer Motion](https://www.framer.com/motion/) & [React Type Animation](https://github.com/lucasbasquerotto/react-type-animation)
-- **Charts & Graphs**: [Recharts](https://recharts.org/)
-- **Icons**: [React Icons](https://react-icons.github.io/react-icons/) & [Lucide React](https://lucide.dev/)
+| Library / Framework | Purpose |
+| :--- | :--- |
+| **React 19** | UI Component Architecture |
+| **Vite 8** | Next-generation frontend build tool |
+| **Tailwind CSS v4** | Utility-first styling & theme system |
+| **Redux Toolkit** | Centralized application state management |
+| **Framer Motion** | Declarative animations and UI transitions |
+| **Recharts** | Data visualization for admin analytics |
+| **Lucide & React Icons** | Modern icon set |
 
-### **Backend & Database**
-- **Runtime Environment**: [Node.js](https://nodejs.org/)
-- **Framework**: [Express.js](https://expressjs.com/)
-- **Database**: [MongoDB](https://www.mongodb.com/) (via [Mongoose](https://mongoosejs.com/))
-- **File & Cloud Storage**: [Multer](https://github.com/expressjs/multer) & [Cloudinary SDK](https://cloudinary.com/)
-- **Security**: [Helmet](https://helmetjs.github.io/), CORS, and rate-limiting middleware
-- **Email Dispatch**: [Nodemailer](https://nodemailer.com/)
-- **AI Integration**: [OpenAI Node.js SDK](https://github.com/openai/openai-node)
+### **Backend**
+| Technology | Purpose |
+| :--- | :--- |
+| **Node.js** | Server runtime environment |
+| **Express 4** | Web framework & REST API architecture |
+| **MongoDB & Mongoose 8** | NoSQL database & object modeling |
+| **Cloudinary SDK** | Cloud storage & image asset optimization |
+| **Nodemailer** | SMTP email notification delivery |
+| **OpenAI Node SDK** | AI assistance and query processing |
+| **Helmet & CORS** | HTTP header security & cross-origin authorization |
 
 ---
 
@@ -59,99 +106,172 @@ This platform not only showcases your professional skills, projects, certificati
 ```
 HP.dev-Portfolio/
 ├── backend/
-│   ├── config/             # Mongoose/DB configuration
-│   ├── controllers/        # Route handlers for CRUD and business logic
-│   ├── middleware/         # Auth, validation, error-handling, and security middlewares
-│   ├── models/             # Mongoose schemas (Blog, Project, User, Analytics, etc.)
-│   ├── routes/             # Express API routes
-│   ├── utils/              # Helper utilities (Email, seed script, etc.)
-│   ├── .env.example        # Environment variables template
-│   └── server.js           # Server entry point
+│   ├── config/             # Mongoose DB connection & Cloudinary config
+│   ├── controllers/        # REST API controllers & business logic
+│   ├── middleware/         # Auth (JWT), security, validation, & rate limiters
+│   ├── models/             # Database schemas (User, Project, Skill, Blog, etc.)
+│   ├── routes/             # Express API endpoints
+│   ├── uploads/            # Local temporary upload storage
+│   ├── utils/              # Admin seed scripts & mail helpers
+│   ├── .env.example        # Backend environment template
+│   └── server.js           # Express app entry point
 ├── frontend/
-│   ├── public/             # Static assets (Favicons, generic SVGs)
+│   ├── public/             # Favicons and static web assets
 │   ├── src/
-│   │   ├── assets/         # App-specific images & logo branding
-│   │   ├── components/     # UI components (Hero, About, Skills, Projects, Navbar, etc.)
-│   │   ├── context/        # Theme & Admin Session context providers
-│   │   ├── data/           # Config lists (Country codes, local data)
-│   │   ├── pages/          # Main page views (Admin dashboard, BlogDetails, ProjectDetails)
-│   │   ├── utils/          # Client API calls & layout helpers
-│   │   ├── App.jsx         # App router and layout manager
-│   │   └── main.jsx        # Frontend entry point
-│   ├── .env.example        # Frontend environment variables template
-│   └── vite.config.js      # Vite compilation configurations
-├── package.json            # Workspace dev dependencies and runner scripts
+│   │   ├── assets/         # App logos, illustrations, & graphics
+│   │   ├── components/     # Reusable UI components (Hero, Navbar, Section Cards)
+│   │   ├── context/        # React context (Theme, Admin state)
+│   │   ├── pages/          # Main client & admin page views
+│   │   ├── utils/          # API helper functions & Axios instance
+│   │   ├── App.jsx         # Client routing & layout manager
+│   │   └── main.jsx        # React root entry point
+│   ├── vercel.json         # SPA fallback routes for Vercel deployment
+│   ├── .env.example        # Frontend environment template
+│   └── vite.config.js      # Vite configuration file
+├── package.json            # Root workspace scripts & concurrency runner
 └── README.md               # Project documentation
 ```
 
 ---
 
-## 🚀 Getting Started (Local Setup)
-
-Follow these steps to configure and run the project locally on your machine.
+## ⚙️ Environment Setup & Getting Started
 
 ### **Prerequisites**
-- **Node.js** (v18 or higher recommended)
-- **MongoDB** running locally or a MongoDB Atlas connection URI
+- **Node.js**: v18.0.0 or higher
+- **MongoDB**: Local instance running on `mongodb://localhost:27017` OR a MongoDB Atlas cluster URI
+- **Cloudinary Account**: For hosting image uploads (optional, local fallbacks supported)
 
 ---
 
-### **1. Clone & Install Dependencies**
-Navigate to the root directory and install dependencies for the root, backend, and frontend with a single command:
+### **1. Clone Repository & Install Dependencies**
+
+Clone the project and install dependencies for root, backend, and frontend with a single command:
+
 ```bash
+git clone https://github.com/hardik-prajapati-12/HP.dev-Portfolio.git
+cd HP.dev-Portfolio
 npm run install-all
 ```
 
 ---
 
-### **2. Setup Environment Variables**
+### **2. Environment Variables Configuration**
 
-#### **Backend Setup**
-1. Copy the backend environment example file:
-   ```bash
-   cp backend/.env.example backend/.env
-   ```
-2. Open `backend/.env` and update the variables:
-   - `MONGODB_URI`: Your MongoDB connection string.
-   - `JWT_SECRET`: A secure key used for signing session tokens.
-   - `ADMIN_ACCESS_KEY` & `ADMIN_ALLOWED_IPS`: Keys and controls to restrict/secure admin login.
-   - `SMTP_USER` & `SMTP_PASS`: Your Gmail/SMTP credentials for the contact form notifications.
-   - `OPENAI_API_KEY`: Your OpenAI API key for training and powering the chatbot.
-   - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`: Cloudinary API parameters for cloud storage support.
+#### **Backend Setup (`backend/.env`)**
+Copy the backend `.env.example` file and configure your values:
 
-#### **Frontend Setup**
-1. Copy the frontend environment example file:
-   ```bash
-   cp frontend/.env.example frontend/.env
-   ```
-2. Open `frontend/.env` and set the backend base URL:
-   ```env
-   VITE_API_URL=http://localhost:5000/api
-   ```
+```bash
+cp backend/.env.example backend/.env
+```
+
+| Key | Description |
+| :--- | :--- |
+| `PORT` | Server port (default: `5000`) |
+| `MONGODB_URI` | MongoDB connection string |
+| `JWT_SECRET` | Secret key for JWT token signatures |
+| `ADMIN_EMAIL` | Default admin email for seeding |
+| `ADMIN_PASSWORD` | Default admin password for seeding |
+| `ADMIN_ACCESS_KEY` | Header key for admin endpoint security |
+| `ADMIN_ALLOWED_IPS` | IP whitelist (`127.0.0.1` or `*` for cloud) |
+| `CLIENT_URL` | Allowed frontend origin URL |
+| `CLOUDINARY_*` | Cloudinary Cloud Name, API Key, and Secret |
+| `OPENAI_API_KEY` | API Key for AI Chatbot functionality |
+| `SMTP_*` | Nodemailer credentials for contact email alerts |
+
+#### **Frontend Setup (`frontend/.env`)**
+Copy the frontend `.env.example` file:
+
+```bash
+cp frontend/.env.example frontend/.env
+```
+
+Set the backend API base URL:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
 ---
 
-### **3. Seed the Admin User**
-Create your default administrator credentials by running the seeding script:
+### **3. Seed Administrator Credentials**
+
+Run the seed script to create the initial admin user in your database:
+
 ```bash
 npm run seed
 ```
-*(This script will create the default admin account using the `ADMIN_EMAIL` and `ADMIN_PASSWORD` defined in your `backend/.env` file)*
 
 ---
 
-### **4. Start the Application**
-Launch both the backend server and frontend development client concurrently:
+### **4. Start Development Server**
+
+Launch both backend API server and frontend Vite client simultaneously:
+
 ```bash
 npm run dev
 ```
 
-Your React development server will start (normally at `http://localhost:5173`) and automatically open the website in your browser!
+- **Frontend Client**: `http://localhost:5173`
+- **Backend API**: `http://localhost:5000`
 
 ---
 
-## 🔒 Security Practices
-- Environment variables are properly separated and ignored by Git history.
-- API requests to sensitive admin endpoints are protected by JSON Web Tokens (JWT) and custom access key authorization headers.
-- Rate-limiting headers are applied on authorization and upload routes to prevent brute-force attacks.
-- Inputs are validated using `express-validator` to protect against command and script injections.
+## 📡 API Endpoints Overview
+
+| Category | Endpoint Base | Functionality | Access |
+| :--- | :--- | :--- | :--- |
+| **Auth** | `/api/auth` | Login, verify token, security check | Public / Admin |
+| **Profile** | `/api/profile` | Manage bio, title, social links, resume | Public / Admin |
+| **Skills** | `/api/skills` | Manage skills list & hero skill highlights | Public / Admin |
+| **Projects** | `/api/projects` | CRUD project showcase & tech tags | Public / Admin |
+| **Services** | `/api/services` | Manage offered services & pricing | Public / Admin |
+| **Blogs** | `/api/blogs` | Manage articles, categories, comments | Public / Admin |
+| **Chat & AI** | `/api/chat`, `/api/chatbot-faq` | AI assistant queries & custom FAQ management | Public / Admin |
+| **Analytics** | `/api/analytics` | Fetch page views, visitors, and stats | Admin |
+| **Settings** | `/api/settings` | Maintenance mode & site configuration | Public / Admin |
+
+---
+
+## 🔒 Security & Authentication
+
+- **JWT Authentication**: Protected administrative routes require valid Bearer token authentication headers.
+- **Access Key Authorization**: Sensitive operations double-check explicit admin access header keys.
+- **Dynamic CORS & IP Whitelisting**: Strict cross-origin request validation supporting wildcard matching for cloud dynamic IPs.
+- **Rate Limiting**: Integrated express rate limiters for authentication attempts, uploads, and public APIs.
+- **Input Sanitization**: Request validation using `express-validator` and `helmet` security headers.
+
+---
+
+## 🚢 Deployment Guide
+
+### **Frontend (Vercel)**
+1. Connect your repository to **Vercel**.
+2. Set the Root Directory to `frontend`.
+3. Set the Build Command to `npm run build` and Output Directory to `dist`.
+4. Add Environment Variable `VITE_API_URL` pointing to your deployed backend URL.
+
+### **Backend (Render / Railway)**
+1. Create a Web Service pointing to `backend`.
+2. Build Command: `npm install`.
+3. Start Command: `node server.js`.
+4. Add environment variables from `backend/.env`.
+
+---
+
+## 📄 Available Scripts
+
+| Command | Description |
+| :--- | :--- |
+| `npm run dev` | Runs frontend and backend concurrently |
+| `npm run install-all` | Installs root, backend, and frontend dependencies |
+| `npm run build` | Builds frontend production assets |
+| `npm run seed` | Seeds default admin credentials in database |
+| `npm run server` | Starts backend server in development mode |
+| `npm run client` | Starts frontend Vite development server |
+
+---
+
+## 👨‍💻 Author & License
+
+Developed with ❤️ by **Hardik Prajapati**.
+
+Distributed under the **MIT License**. See `LICENSE` for more information.
