@@ -871,25 +871,23 @@ export default function Hero() {
       </div>
 
       {/* Cyber Wave SVGs at the bottom */}
-      {isDark && (
-        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none" style={{ position: 'absolute', bottom: -5, left: 0, width: '100%', height: '80px', pointerEvents: 'none', zIndex: 1 }}>
-          <defs>
-            <linearGradient id="pinkPurpleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ec4899" />
-              <stop offset="50%" stopColor="#8b5cf6" />
-              <stop offset="100%" stopColor="#3b82f6" />
-            </linearGradient>
-            <linearGradient id="cyanBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#06b6d4" />
-              <stop offset="50%" stopColor="#3b82f6" />
-              <stop offset="100%" stopColor="#10b981" />
-            </linearGradient>
-          </defs>
-          <path d="M0,80 C240,110 480,50 720,90 C960,130 1200,60 1440,90 L1440,120 L0,120 Z" fill="rgba(99,102,241,0.015)" />
-          <path d="M0,80 C240,110 480,50 720,90 C960,130 1200,60 1440,90" stroke="url(#pinkPurpleGrad)" strokeWidth="2.5" opacity="0.45" />
-          <path d="M0,95 C240,65 480,125 720,85 C960,45 1200,115 1440,85" stroke="url(#cyanBlueGrad)" strokeWidth="1.5" opacity="0.35" />
-        </svg>
-      )}
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none" style={{ position: 'absolute', bottom: -5, left: 0, width: '100%', height: '80px', pointerEvents: 'none', zIndex: 1 }}>
+        <defs>
+          <linearGradient id="pinkPurpleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#ec4899" />
+            <stop offset="50%" stopColor="#8b5cf6" />
+            <stop offset="100%" stopColor="#3b82f6" />
+          </linearGradient>
+          <linearGradient id="cyanBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#06b6d4" />
+            <stop offset="50%" stopColor="#3b82f6" />
+            <stop offset="100%" stopColor="#10b981" />
+          </linearGradient>
+        </defs>
+        <path d="M0,80 C240,110 480,50 720,90 C960,130 1200,60 1440,90 L1440,120 L0,120 Z" fill={isDark ? 'rgba(99,102,241,0.015)' : 'rgba(99,102,241,0.01)'} />
+        <path d="M0,80 C240,110 480,50 720,90 C960,130 1200,60 1440,90" stroke="url(#pinkPurpleGrad)" strokeWidth="2.5" opacity={isDark ? 0.45 : 0.25} />
+        <path d="M0,95 C240,65 480,125 720,85 C960,45 1200,115 1440,85" stroke="url(#cyanBlueGrad)" strokeWidth="1.5" opacity={isDark ? 0.35 : 0.2} />
+      </svg>
 
       <style>{`
         .hero-container {

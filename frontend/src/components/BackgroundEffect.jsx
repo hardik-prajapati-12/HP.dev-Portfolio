@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
-const PARTICLE_COUNT = 55;
+const PARTICLE_COUNT = 50;
 
 function useParticles(canvasRef, isDark) {
   useEffect(() => {
@@ -20,44 +20,46 @@ function useParticles(canvasRef, isDark) {
     const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 2 + 1,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: Math.random() * 2 + 1.2,
       a: Math.random(),
     }));
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (isDark) {
-        // Particles
-        particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      // Particles
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(99,102,241,${p.a * 0.35})`;
-          ctx.fill();
-        });
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = isDark
+          ? `rgba(99, 102, 241, ${p.a * 0.35})`
+          : `rgba(99, 102, 241, ${p.a * 0.22})`;
+        ctx.fill();
+      });
 
-        // Connected lines
-        particles.forEach((p, i) => {
-          particles.slice(i + 1).forEach(q => {
-            const dist = Math.hypot(p.x - q.x, p.y - q.y);
-            if (dist < 140) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(q.x, q.y);
-              ctx.strokeStyle = `rgba(99,102,241,${0.12 * (1 - dist / 140)})`;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
-          });
+      // Connected lines (Ultra soft in light mode to prevent harsh dark lines)
+      particles.forEach((p, i) => {
+        particles.slice(i + 1).forEach(q => {
+          const dist = Math.hypot(p.x - q.x, p.y - q.y);
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = isDark
+              ? `rgba(99, 102, 241, ${0.12 * (1 - dist / 130)})`
+              : `rgba(99, 102, 241, ${0.045 * (1 - dist / 130)})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
         });
-      }
+      });
 
       raf = requestAnimationFrame(draw);
     };
@@ -75,20 +77,17 @@ export function BinaryStream({ isDark }) {
   const [streams, setStreams] = useState([]);
 
   useEffect(() => {
-    if (!isDark) return;
-    const cols = 14;
+    const cols = 12;
     const newStreams = Array.from({ length: cols }, (_, i) => ({
       id: i,
-      x: 3 + i * 7.2,
+      x: 4 + i * 8,
       speed: 1.2 + Math.random() * 1.5,
       delay: Math.random() * -10,
-      opacity: 0.07 + Math.random() * 0.09,
-      chars: Array.from({ length: 14 }, () => Math.round(Math.random()).toString()),
+      opacity: isDark ? (0.07 + Math.random() * 0.08) : (0.035 + Math.random() * 0.04),
+      chars: Array.from({ length: 12 }, () => Math.round(Math.random()).toString()),
     }));
     setStreams(newStreams);
   }, [isDark]);
-
-  if (!isDark) return null;
 
   return (
     <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
@@ -97,19 +96,19 @@ export function BinaryStream({ isDark }) {
           key={s.id}
           initial={{ y: '-50%' }}
           animate={{ y: '100%' }}
-          transition={{ duration: 12 / s.speed, repeat: Infinity, ease: 'linear', delay: s.delay }}
+          transition={{ duration: 14 / s.speed, repeat: Infinity, ease: 'linear', delay: s.delay }}
           style={{
             position: 'absolute',
             left: `${s.x}%`,
             fontFamily: 'monospace',
             fontSize: '0.8rem',
             fontWeight: 'bold',
-            color: '#10B981',
+            color: isDark ? '#10B981' : '#3B82F6',
             opacity: s.opacity,
             writingMode: 'vertical-rl',
             textOrientation: 'upright',
             letterSpacing: '6px',
-            textShadow: '0 0 6px rgba(16,185,129,0.5)'
+            textShadow: isDark ? '0 0 6px rgba(16,185,129,0.5)' : 'none'
           }}
         >
           {s.chars.join('')}
@@ -136,10 +135,61 @@ export default function BackgroundEffect({ isDark }) {
   const canvasRef = useRef(null);
   useParticles(canvasRef, isDark);
 
-  if (!isDark) return null;
-
   return (
     <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+      
+      {/* Light Mode Floating Ambient Glowing Orbs */}
+      {!isDark && (
+        <>
+          <motion.div
+            animate={{ scale: [1, 1.1, 1], x: [0, 20, 0], y: [0, -15, 0] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+            style={{
+              position: 'absolute',
+              top: '-8%',
+              left: '-5%',
+              width: '550px',
+              height: '550px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(99,102,241,0.09) 0%, rgba(139,92,246,0.04) 45%, transparent 70%)',
+              filter: 'blur(50px)',
+              zIndex: 0
+            }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], x: [0, -25, 0], y: [0, 20, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            style={{
+              position: 'absolute',
+              bottom: '5%',
+              right: '-5%',
+              width: '600px',
+              height: '600px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(6,182,212,0.08) 0%, rgba(59,130,246,0.03) 50%, transparent 70%)',
+              filter: 'blur(55px)',
+              zIndex: 0
+            }}
+          />
+          <motion.div
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+            style={{
+              position: 'absolute',
+              top: '40%',
+              left: '45%',
+              transform: 'translate(-50%, -50%)',
+              width: '450px',
+              height: '450px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 70%)',
+              filter: 'blur(45px)',
+              zIndex: 0
+            }}
+          />
+        </>
+      )}
+
       {/* Particle Canvas Network */}
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }} />
 
@@ -151,13 +201,15 @@ export default function BackgroundEffect({ isDark }) {
         position: 'absolute',
         inset: 0,
         zIndex: 1,
-        backgroundImage: `linear-gradient(rgba(99,102,241,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.018) 1px,transparent 1px)`,
+        backgroundImage: isDark
+          ? `linear-gradient(rgba(99,102,241,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.018) 1px,transparent 1px)`
+          : `linear-gradient(rgba(99,102,241,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.02) 1px,transparent 1px)`,
         backgroundSize: '60px 60px'
       }} />
 
       {/* Ambient Grid Dots */}
-      <GridDots color="rgba(99,102,241,0.2)" style={{ position: 'absolute', left: '40px', top: '110px', zIndex: 1, pointerEvents: 'none' }} />
-      <GridDots color="rgba(6,182,212,0.2)" style={{ position: 'absolute', right: '40px', bottom: '150px', zIndex: 1, pointerEvents: 'none' }} />
+      <GridDots color={isDark ? 'rgba(99,102,241,0.2)' : 'rgba(99,102,241,0.08)'} style={{ position: 'absolute', left: '40px', top: '110px', zIndex: 1, pointerEvents: 'none' }} />
+      <GridDots color={isDark ? 'rgba(6,182,212,0.2)' : 'rgba(6,182,212,0.08)'} style={{ position: 'absolute', right: '40px', bottom: '150px', zIndex: 1, pointerEvents: 'none' }} />
     </div>
   );
 }
