@@ -102,13 +102,35 @@ function CodeEditorMockup({ name, title, skills, passion }) {
     return () => clearTimeout(timeout);
   }, [currentLineIdx, currentCharIdx, codeLines]);
 
+  // Auto-scroll terminal container as lines type out
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [visibleLines]);
+
   return (
-    <div className="laptop-terminal-screen" style={{ fontFamily: 'Fira Code, monospace', fontSize: '0.8rem', lineHeight: '1.6', padding: '16px', color: '#cdd6f4', overflowX: 'auto', overflowY: 'auto', width: '100%', height: '100%', boxSizing: 'border-box' }}>
-      <div style={{ width: 'max-content', minWidth: '100%' }}>
+    <div 
+      ref={containerRef} 
+      className="laptop-terminal-screen" 
+      style={{ 
+        fontFamily: 'Fira Code, monospace', 
+        fontSize: '0.78rem', 
+        lineHeight: '1.55', 
+        padding: '12px 14px', 
+        color: '#cdd6f4', 
+        overflowY: 'auto', 
+        overflowX: 'hidden', 
+        width: '100%', 
+        height: '100%', 
+        boxSizing: 'border-box' 
+      }}
+    >
+      <div style={{ width: '100%' }}>
         {visibleLines.map((line, idx) => (
-          <div key={idx} style={{ display: 'flex', gap: '12px', whiteSpace: 'nowrap' }}>
-            <span style={{ color: '#585b70', width: '20px', textAlign: 'right', userSelect: 'none', flexShrink: 0 }}>{idx + 1}</span>
-            <span style={{ color: line.color, whiteSpace: 'pre' }}>{line.text}</span>
+          <div key={idx} style={{ display: 'flex', gap: '10px', marginBottom: '2px' }}>
+            <span style={{ color: '#585b70', width: '18px', textAlign: 'right', userSelect: 'none', flexShrink: 0 }}>{idx + 1}</span>
+            <span style={{ color: line.color, whiteSpace: 'pre-wrap', wordBreak: 'break-word', flex: 1 }}>{line.text}</span>
           </div>
         ))}
         <span className="code-cursor" style={{ display: 'inline-block', width: '6px', height: '14px', background: '#89b4fa', marginLeft: '2px', animation: 'blink 0.8s step-end infinite' }} />
@@ -745,11 +767,12 @@ export default function Hero() {
             {/* Interactive IDE / Laptop Component */}
             <div style={{ position: 'relative', width: '100%', maxWidth: '440px', flexShrink: 0, boxSizing: 'border-box', zIndex: 2 }}>
 
-              {/* Laptop Screen Body */}
+              {/* Laptop Screen Body - Fixed height clamp to prevent expansion */}
               <div style={{
                 position: 'relative',
                 width: '100%',
                 maxWidth: '100%',
+                height: 'clamp(210px, 30vw, 250px)',
                 margin: '0 auto',
                 background: '#151521',
                 borderRadius: '12px 12px 0 0',
@@ -757,7 +780,6 @@ export default function Hero() {
                 boxShadow: isDark
                   ? '0 20px 50px rgba(0,0,0,0.5), 0 0 35px rgba(99,102,241,0.18)'
                   : '0 20px 40px rgba(0,0,0,0.15), 0 0 25px rgba(99,102,241,0.08)',
-                aspectRatio: '16/10.5',
                 overflow: 'hidden',
                 boxSizing: 'border-box'
               }}>
