@@ -378,7 +378,11 @@ export default function Hero() {
     }).catch(() => { });
   }, []);
 
-  const typeSequence = roles.flatMap(r => [r, 1800]);
+  const typeSequence = roles.flatMap(r => {
+    let cleanRole = r;
+    if (cleanRole === "Full Stack Developer & Software Engineer") cleanRole = "Full Stack Engineer";
+    return [cleanRole, 1800];
+  });
 
   const socialLinks = [
     { icon: FiGithub, href: profile.github, label: 'GitHub' },
@@ -457,8 +461,36 @@ export default function Hero() {
             </p>
 
             {/* Role cycler (Typing animation) */}
-            <div style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: 'clamp(1.05rem, 2vw, 1.5rem)', marginBottom: '24px', minHeight: '52px', width: '100%', maxWidth: '100%', display: 'block', overflow: 'hidden', boxSizing: 'border-box' }}>
-              <TypeAnimation key={roles.join(',')} sequence={typeSequence} wrapper="span" repeat={Infinity} style={{ display: 'inline-block', background: 'linear-gradient(135deg,#8B5CF6,#3B82F6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }} />
+            <div className="hero-role-wrapper" style={{ 
+              fontFamily: 'Poppins', 
+              fontWeight: 700, 
+              fontSize: 'clamp(0.95rem, 3.8vw, 1.4rem)', 
+              marginBottom: '24px', 
+              height: '42px',
+              minHeight: '42px',
+              maxHeight: '42px', 
+              width: '100%', 
+              maxWidth: '100%', 
+              display: 'flex',
+              alignItems: 'center',
+              overflow: 'hidden', 
+              boxSizing: 'border-box',
+              flexShrink: 0
+            }}>
+              <TypeAnimation 
+                key={roles.join(',')} 
+                sequence={typeSequence} 
+                wrapper="span" 
+                repeat={Infinity} 
+                style={{ 
+                  display: 'inline-block', 
+                  whiteSpace: 'nowrap',
+                  background: 'linear-gradient(135deg,#8B5CF6,#3B82F6)', 
+                  WebkitBackgroundClip: 'text', 
+                  WebkitTextFillColor: 'transparent', 
+                  backgroundClip: 'text' 
+                }} 
+              />
             </div>
 
             {/* CTA Buttons */}
@@ -894,6 +926,7 @@ export default function Hero() {
           width: 100%;
           max-width: 100%;
           box-sizing: border-box;
+          contain: layout;
         }
         .hero-left {
           display: flex;
@@ -902,6 +935,7 @@ export default function Hero() {
           width: 100%;
           max-width: 100%;
           box-sizing: border-box;
+          contain: layout;
         }
         @keyframes blink {
           50% { opacity: 0; }
@@ -946,7 +980,7 @@ export default function Hero() {
           .hero-container {
             grid-template-columns: 1fr;
             text-align: center;
-            gap: 40px;
+            gap: 36px;
             width: 100%;
             max-width: 100%;
             overflow: hidden;
@@ -963,16 +997,23 @@ export default function Hero() {
             text-align: center!important;
             width: 100%!important;
           }
+          .hero-role-wrapper {
+            justify-content: center!important;
+            width: 100%!important;
+            height: 42px!important;
+            min-height: 42px!important;
+            max-height: 42px!important;
+          }
           .hero-logo-container {
             width: 100%!important;
-            max-width: 440px!important;
+            max-width: 420px!important;
             margin-left: auto!important;
             margin-right: auto!important;
             flex-shrink: 0!important;
           }
           .hero-logo-container img {
             width: 100%!important;
-            max-width: 440px!important;
+            max-width: 420px!important;
             height: auto!important;
             margin: 0 auto!important;
           }
