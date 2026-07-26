@@ -271,7 +271,7 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <input style={inputStyle} value={form.caseStudyTitle || ''} onChange={e => setForm({ ...form, caseStudyTitle: e.target.value })} placeholder="How this project is structured and delivered" />
 
               <label style={labelStyle}>Case Study Badge</label>
-              <input style={inputStyle} value={form.caseStudyBadge || ''} onChange={e => setProfileForm ? setForm({ ...form, caseStudyBadge: e.target.value }) : setForm({ ...form, caseStudyBadge: e.target.value })} placeholder="Production-focused build" />
+              <input style={inputStyle} value={form.caseStudyBadge || ''} onChange={e => setForm({ ...form, caseStudyBadge: e.target.value })} placeholder="Production-focused build" />
 
               <label style={labelStyle}>Problem & Goal</label>
               <textarea style={{ ...inputStyle, height: '100px', resize: 'vertical' }} value={form.caseStudyProblem || ''} onChange={e => setForm({ ...form, caseStudyProblem: e.target.value })} placeholder="Explain the project challenge, goals, and user needs..." />
