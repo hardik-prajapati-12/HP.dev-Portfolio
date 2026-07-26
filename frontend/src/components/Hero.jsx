@@ -490,8 +490,8 @@ export default function Hero() {
               {profile.heroDesc || PERSONAL_INFO.heroDesc}
             </p>
 
-            {/* Role cycler (Typing animation - Hidden on Mobile, Visible on Tablet/Desktop) */}
-            <div className="hero-typewriter-container" style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: 'clamp(1.05rem, 2vw, 1.5rem)', marginBottom: '24px', minHeight: '52px', width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+            {/* Role cycler (Typing animation - Displayed after description on all screens) */}
+            <div className="hero-typewriter-container" style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: 'clamp(1.05rem, 2vw, 1.5rem)', marginBottom: '24px', minHeight: '44px', width: '100%', maxWidth: '100%', boxSizing: 'border-box', textAlign: 'left' }}>
               <TypeAnimation key={roles.join(',')} sequence={typeSequence} wrapper="span" repeat={Infinity} style={{ display: 'inline-block', background: 'linear-gradient(135deg,#8B5CF6,#3B82F6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }} />
             </div>
 
@@ -981,11 +981,6 @@ export default function Hero() {
         .hero-typewriter-container {
           display: block;
         }
-        @media (max-width: 768px) {
-          .hero-typewriter-container {
-            display: none !important;
-          }
-        }
         /* Laptop terminal custom horizontal slider & strict left-align */
         .laptop-terminal-screen,
         .laptop-terminal-screen * {
@@ -1009,23 +1004,23 @@ export default function Hero() {
         @media (max-width: 991px) {
           .hero-container {
             grid-template-columns: 1fr;
-            text-align: center;
+            text-align: left;
             gap: 40px;
             width: 100%;
             max-width: 100%;
             overflow: hidden;
           }
           .hero-left {
-            align-items: center!important;
-            text-align: center;
+            align-items: flex-start !important;
+            text-align: left !important;
             width: 100%;
             max-width: 100%;
           }
-          .hero-left h1, .hero-left h2 {
-            text-align: center!important;
+          .hero-left h1, .hero-left h2, .hero-left p, .hero-typewriter-container {
+            text-align: left !important;
           }
           .hero-left div {
-            align-self: center!important;
+            align-self: flex-start !important;
             max-width: 100%;
           }
           .hero-left img {
