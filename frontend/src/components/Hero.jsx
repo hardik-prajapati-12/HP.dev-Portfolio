@@ -103,22 +103,11 @@ function CodeEditorMockup({ name, title, skills, passion }) {
   }, [currentLineIdx, currentCharIdx, codeLines]);
 
   return (
-    <div style={{ 
-      fontFamily: 'Fira Code, monospace', 
-      fontSize: 'clamp(0.64rem, 2.2vw, 0.78rem)', 
-      lineHeight: '1.4', 
-      padding: '10px 12px', 
-      color: '#cdd6f4',
-      height: '100%',
-      minHeight: '250px',
-      maxHeight: '260px',
-      overflow: 'hidden',
-      boxSizing: 'border-box'
-    }}>
+    <div style={{ fontFamily: 'Fira Code, monospace', fontSize: '0.8rem', lineHeight: '1.6', padding: '16px', color: '#cdd6f4' }}>
       {visibleLines.map((line, idx) => (
-        <div key={idx} style={{ display: 'flex', gap: '6px', overflow: 'hidden' }}>
-          <span style={{ color: '#585b70', width: '16px', flexShrink: 0, textAlign: 'right', userSelect: 'none' }}>{idx + 1}</span>
-          <span style={{ color: line.color, whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{line.text}</span>
+        <div key={idx} style={{ display: 'flex', gap: '12px' }}>
+          <span style={{ color: '#585b70', width: '20px', textAlign: 'right', userSelect: 'none' }}>{idx + 1}</span>
+          <span style={{ color: line.color, whiteSpace: 'pre' }}>{line.text}</span>
         </div>
       ))}
       <span className="code-cursor" style={{ display: 'inline-block', width: '6px', height: '14px', background: '#89b4fa', marginLeft: '2px', animation: 'blink 0.8s step-end infinite' }} />
@@ -389,11 +378,7 @@ export default function Hero() {
     }).catch(() => { });
   }, []);
 
-  const typeSequence = roles.flatMap(r => {
-    let cleanRole = r;
-    if (cleanRole === "Full Stack Developer & Software Engineer") cleanRole = "Full Stack Engineer";
-    return [cleanRole, 1800];
-  });
+  const typeSequence = roles.flatMap(r => [r, 1800]);
 
   const socialLinks = [
     { icon: FiGithub, href: profile.github, label: 'GitHub' },
@@ -439,7 +424,7 @@ export default function Hero() {
   return (
     <section id="home" ref={containerRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={{ minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', overflow: 'hidden', paddingTop: '100px', background: 'inherit' }}>
 
-      <div className="hero-section-padding" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', width: '100%', position: 'relative', zIndex: 2, boxSizing: 'border-box' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', width: '100%', position: 'relative', zIndex: 2 }}>
         <div className="hero-container">
 
           {/* Left Column — Text & CTAs & Tech ribbon */}
@@ -447,13 +432,13 @@ export default function Hero() {
 
 
             {/* Headline Logo */}
-            <div className="hero-logo-container" style={{ margin: '0 0 24px 0', maxWidth: '440px', width: '100%', flexShrink: 0, boxSizing: 'border-box' }}>
+            <div style={{ margin: '0 0 24px 0', maxWidth: '440px', width: '100%', flexShrink: 0, boxSizing: 'border-box' }}>
               <img 
                 src={isDark ? heroLogoWhite : heroLogoDark} 
                 alt="HARDIK. PRAJAPATI." 
                 style={{ 
                   width: '100%', 
-                  maxWidth: '440px',
+                  maxWidth: '100%',
                   height: 'auto', 
                   objectFit: 'contain',
                   display: 'block'
@@ -472,48 +457,20 @@ export default function Hero() {
             </p>
 
             {/* Role cycler (Typing animation) */}
-            <div className="hero-role-wrapper" style={{ 
-              fontFamily: 'Poppins', 
-              fontWeight: 700, 
-              fontSize: 'clamp(0.95rem, 3.8vw, 1.4rem)', 
-              marginBottom: '24px', 
-              height: '42px',
-              minHeight: '42px',
-              maxHeight: '42px', 
-              width: '100%', 
-              maxWidth: '100%', 
-              display: 'flex',
-              alignItems: 'center',
-              overflow: 'hidden', 
-              boxSizing: 'border-box',
-              flexShrink: 0
-            }}>
-              <TypeAnimation 
-                key={roles.join(',')} 
-                sequence={typeSequence} 
-                wrapper="span" 
-                repeat={Infinity} 
-                style={{ 
-                  display: 'inline-block', 
-                  whiteSpace: 'nowrap',
-                  background: 'linear-gradient(135deg,#8B5CF6,#3B82F6)', 
-                  WebkitBackgroundClip: 'text', 
-                  WebkitTextFillColor: 'transparent', 
-                  backgroundClip: 'text' 
-                }} 
-              />
+            <div style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: 'clamp(1.05rem, 2vw, 1.5rem)', marginBottom: '24px', minHeight: '52px', width: '100%', maxWidth: '100%', display: 'block', overflow: 'hidden', boxSizing: 'border-box' }}>
+              <TypeAnimation key={roles.join(',')} sequence={typeSequence} wrapper="span" repeat={Infinity} style={{ display: 'inline-block', background: 'linear-gradient(135deg,#8B5CF6,#3B82F6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }} />
             </div>
 
             {/* CTA Buttons */}
-            <div className="hero-cta-buttons" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '40px', width: '100%', boxSizing: 'border-box' }}>
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '40px' }}>
               <motion.a href="#projects" whileHover={{ scale: 1.03, boxShadow: '0 8px 30px rgba(99,102,241,0.4)' }} whileTap={{ scale: 0.97 }}
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 30px', borderRadius: '8px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 4px 20px rgba(99,102,241,0.25)', transition: 'all 0.25s', boxSizing: 'border-box' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 30px', borderRadius: '8px', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: 'white', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 4px 20px rgba(99,102,241,0.25)', transition: 'all 0.25s' }}
               >
                 View My Work <FiArrowRight />
               </motion.a>
 
               <motion.a href="#contact" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 30px', borderRadius: '8px', background: 'transparent', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none', border: isDark ? '1.5px solid rgba(255,255,255,0.15)' : '1.5px solid rgba(0,0,0,0.15)', transition: 'all 0.25s', boxSizing: 'border-box' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 30px', borderRadius: '8px', background: 'transparent', color: isDark ? '#E2E8F0' : '#1E293B', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none', border: isDark ? '1.5px solid rgba(255,255,255,0.15)' : '1.5px solid rgba(0,0,0,0.15)', transition: 'all 0.25s' }}
               >
                 Contact Me <FiMail />
               </motion.a>
@@ -798,10 +755,7 @@ export default function Hero() {
                   ? '0 20px 50px rgba(0,0,0,0.5), 0 0 35px rgba(99,102,241,0.18)'
                   : '0 20px 40px rgba(0,0,0,0.15), 0 0 25px rgba(99,102,241,0.08)',
                 aspectRatio: '16/10.2',
-                minHeight: '260px',
-                maxHeight: '280px',
-                overflow: 'hidden',
-                boxSizing: 'border-box'
+                overflow: 'hidden'
               }}>
                 {/* Editor Top Tab Bar */}
                 <div style={{ height: '26px', background: '#0f0f15', display: 'flex', alignItems: 'center', padding: '0 10px', gap: '5px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
@@ -940,7 +894,6 @@ export default function Hero() {
           width: 100%;
           max-width: 100%;
           box-sizing: border-box;
-          contain: layout;
         }
         .hero-left {
           display: flex;
@@ -949,7 +902,6 @@ export default function Hero() {
           width: 100%;
           max-width: 100%;
           box-sizing: border-box;
-          contain: layout;
         }
         @keyframes blink {
           50% { opacity: 0; }
@@ -994,87 +946,36 @@ export default function Hero() {
           .hero-container {
             grid-template-columns: 1fr;
             text-align: center;
-            gap: 36px;
+            gap: 40px;
             width: 100%;
             max-width: 100%;
             overflow: hidden;
-            box-sizing: border-box;
           }
           .hero-left {
             align-items: center!important;
             text-align: center;
-            width: 100%!important;
-            max-width: 100%!important;
-            box-sizing: border-box!important;
+            width: 100%;
+            max-width: 100%;
           }
-          .hero-left h1, .hero-left h2, .hero-left p {
+          .hero-left h1, .hero-left h2 {
             text-align: center!important;
-            width: 100%!important;
           }
-          .hero-cta-buttons {
-            justify-content: center!important;
-            width: 100%!important;
+          .hero-left div {
+            align-self: center!important;
+            max-width: 100%;
+          }
+          .hero-left img {
             max-width: 100%!important;
-            gap: 12px!important;
-          }
-          .hero-cta-buttons a {
-            padding: 12px 22px!important;
-            font-size: 0.88rem!important;
-          }
-          .hero-role-wrapper {
-            justify-content: center!important;
-            width: 100%!important;
-            height: 42px!important;
-            min-height: 42px!important;
-            max-height: 42px!important;
-          }
-          .hero-logo-container {
-            width: 100%!important;
-            max-width: 380px!important;
-            margin-left: auto!important;
-            margin-right: auto!important;
-            flex-shrink: 0!important;
-          }
-          .hero-logo-container img {
-            width: 100%!important;
-            max-width: 380px!important;
             height: auto!important;
-            margin: 0 auto!important;
-          }
-          .hero-tech-ribbon {
-            justify-content: center !important;
-            gap: 16px !important;
-            padding: 16px 0 !important;
-          }
-          .hero-tech-divider {
-            display: none !important;
-          }
-          .hero-tech-wrapper {
-            margin: 0 !important;
           }
           .hero-brain-hud {
             display: none !important;
           }
         }
         @media (max-width: 480px) {
-          .hero-section-padding {
-            padding-left: 12px !important;
-            padding-right: 12px !important;
-          }
           .hero-container {
-            padding: 0 !important;
-            gap: 28px !important;
-          }
-          .hero-logo-container {
-            max-width: 100%!important;
-            padding: 0 4px!important;
-          }
-          .hero-logo-container img {
-            max-width: 100%!important;
-          }
-          .hero-cta-buttons a {
-            padding: 11px 18px!important;
-            font-size: 0.82rem!important;
+            padding: 0 4px !important;
+            gap: 32px !important;
           }
           .tech-item span {
             font-size: 0.7rem !important;
