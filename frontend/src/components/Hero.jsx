@@ -103,10 +103,10 @@ function CodeEditorMockup({ name, title, skills, passion }) {
   }, [currentLineIdx, currentCharIdx, codeLines]);
 
   return (
-    <div style={{ fontFamily: 'Fira Code, monospace', fontSize: '0.8rem', lineHeight: '1.6', padding: '16px', color: '#cdd6f4' }}>
+    <div className="laptop-terminal-screen" style={{ fontFamily: 'Fira Code, monospace', fontSize: '0.8rem', lineHeight: '1.6', padding: '16px', color: '#cdd6f4', overflowX: 'auto', overflowY: 'auto', width: '100%', height: '100%', boxSizing: 'border-box' }}>
       {visibleLines.map((line, idx) => (
-        <div key={idx} style={{ display: 'flex', gap: '12px' }}>
-          <span style={{ color: '#585b70', width: '20px', textAlign: 'right', userSelect: 'none' }}>{idx + 1}</span>
+        <div key={idx} style={{ display: 'flex', gap: '12px', minWidth: 'max-content' }}>
+          <span style={{ color: '#585b70', width: '20px', textAlign: 'right', userSelect: 'none', flexShrink: 0 }}>{idx + 1}</span>
           <span style={{ color: line.color, whiteSpace: 'pre' }}>{line.text}</span>
         </div>
       ))}
@@ -456,8 +456,8 @@ export default function Hero() {
               {profile.heroDesc || PERSONAL_INFO.heroDesc}
             </p>
 
-            {/* Role cycler (Typing animation) */}
-            <div style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: 'clamp(1.05rem, 2vw, 1.5rem)', marginBottom: '24px', minHeight: '52px', width: '100%', maxWidth: '100%', display: 'block', overflow: 'hidden', boxSizing: 'border-box' }}>
+            {/* Role cycler (Typing animation - Hidden on Mobile, Visible on Tablet/Desktop) */}
+            <div className="hero-typewriter-container" style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: 'clamp(1.05rem, 2vw, 1.5rem)', marginBottom: '24px', minHeight: '52px', width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
               <TypeAnimation key={roles.join(',')} sequence={typeSequence} wrapper="span" repeat={Infinity} style={{ display: 'inline-block', background: 'linear-gradient(135deg,#8B5CF6,#3B82F6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }} />
             </div>
 
@@ -770,8 +770,8 @@ export default function Hero() {
                   </div>
                 </div>
 
-                {/* Inside Screen Terminal */}
-                <div style={{ height: 'calc(100% - 26px)', overflow: 'auto', background: '#0e0e15' }}>
+                {/* Inside Screen Terminal with custom horizontal slider */}
+                <div className="laptop-terminal-screen" style={{ height: 'calc(100% - 26px)', overflowX: 'auto', overflowY: 'auto', background: '#0e0e15', width: '100%', boxSizing: 'border-box' }}>
                   <CodeEditorMockup 
                     name={profile.laptopName || profile.name} 
                     title={profile.laptopTitle || profile.title} 
@@ -941,6 +941,30 @@ export default function Hero() {
         }
         .tech-item:hover .tech-icon {
           transform: translateY(-5px) scale(1.15);
+        }
+        .hero-typewriter-container {
+          display: block;
+        }
+        @media (max-width: 768px) {
+          .hero-typewriter-container {
+            display: none !important;
+          }
+        }
+        /* Laptop terminal custom horizontal slider */
+        .laptop-terminal-screen::-webkit-scrollbar {
+          width: 5px;
+          height: 5px;
+        }
+        .laptop-terminal-screen::-webkit-scrollbar-track {
+          background: #0e0e15;
+          border-radius: 3px;
+        }
+        .laptop-terminal-screen::-webkit-scrollbar-thumb {
+          background: linear-gradient(90deg, #6366F1, #8B5CF6);
+          border-radius: 3px;
+        }
+        .laptop-terminal-screen::-webkit-scrollbar-thumb:hover {
+          background: #8B5CF6;
         }
         @media (max-width: 991px) {
           .hero-container {
