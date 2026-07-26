@@ -432,13 +432,13 @@ export default function Hero() {
 
 
             {/* Headline Logo */}
-            <div style={{ margin: '0 0 24px 0', maxWidth: '440px', width: '100%', flexShrink: 0, boxSizing: 'border-box' }}>
+            <div className="hero-logo-container" style={{ margin: '0 0 24px 0', maxWidth: '440px', width: '100%', flexShrink: 0, boxSizing: 'border-box' }}>
               <img 
                 src={isDark ? heroLogoWhite : heroLogoDark} 
                 alt="HARDIK. PRAJAPATI." 
                 style={{ 
                   width: '100%', 
-                  maxWidth: '100%',
+                  maxWidth: '440px',
                   height: 'auto', 
                   objectFit: 'contain',
                   display: 'block'
@@ -950,23 +950,31 @@ export default function Hero() {
             width: 100%;
             max-width: 100%;
             overflow: hidden;
+            box-sizing: border-box;
           }
           .hero-left {
             align-items: center!important;
             text-align: center;
-            width: 100%;
-            max-width: 100%;
-          }
-          .hero-left h1, .hero-left h2 {
-            text-align: center!important;
-          }
-          .hero-left div {
-            align-self: center!important;
-            max-width: 100%;
-          }
-          .hero-left img {
+            width: 100%!important;
             max-width: 100%!important;
+            box-sizing: border-box!important;
+          }
+          .hero-left h1, .hero-left h2, .hero-left p {
+            text-align: center!important;
+            width: 100%!important;
+          }
+          .hero-logo-container {
+            width: 100%!important;
+            max-width: 440px!important;
+            margin-left: auto!important;
+            margin-right: auto!important;
+            flex-shrink: 0!important;
+          }
+          .hero-logo-container img {
+            width: 100%!important;
+            max-width: 440px!important;
             height: auto!important;
+            margin: 0 auto!important;
           }
           .hero-brain-hud {
             display: none !important;
@@ -976,6 +984,12 @@ export default function Hero() {
           .hero-container {
             padding: 0 4px !important;
             gap: 32px !important;
+          }
+          .hero-logo-container {
+            max-width: 100%!important;
+          }
+          .hero-logo-container img {
+            max-width: 100%!important;
           }
           .tech-item span {
             font-size: 0.7rem !important;
