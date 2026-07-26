@@ -104,13 +104,15 @@ function CodeEditorMockup({ name, title, skills, passion }) {
 
   return (
     <div className="laptop-terminal-screen" style={{ fontFamily: 'Fira Code, monospace', fontSize: '0.8rem', lineHeight: '1.6', padding: '16px', color: '#cdd6f4', overflowX: 'auto', overflowY: 'auto', width: '100%', height: '100%', boxSizing: 'border-box' }}>
-      {visibleLines.map((line, idx) => (
-        <div key={idx} style={{ display: 'flex', gap: '12px', minWidth: 'max-content' }}>
-          <span style={{ color: '#585b70', width: '20px', textAlign: 'right', userSelect: 'none', flexShrink: 0 }}>{idx + 1}</span>
-          <span style={{ color: line.color, whiteSpace: 'pre' }}>{line.text}</span>
-        </div>
-      ))}
-      <span className="code-cursor" style={{ display: 'inline-block', width: '6px', height: '14px', background: '#89b4fa', marginLeft: '2px', animation: 'blink 0.8s step-end infinite' }} />
+      <div style={{ width: 'max-content', minWidth: '100%' }}>
+        {visibleLines.map((line, idx) => (
+          <div key={idx} style={{ display: 'flex', gap: '12px', whiteSpace: 'nowrap' }}>
+            <span style={{ color: '#585b70', width: '20px', textAlign: 'right', userSelect: 'none', flexShrink: 0 }}>{idx + 1}</span>
+            <span style={{ color: line.color, whiteSpace: 'pre' }}>{line.text}</span>
+          </div>
+        ))}
+        <span className="code-cursor" style={{ display: 'inline-block', width: '6px', height: '14px', background: '#89b4fa', marginLeft: '2px', animation: 'blink 0.8s step-end infinite' }} />
+      </div>
     </div>
   );
 }
@@ -741,12 +743,13 @@ export default function Hero() {
             </div>
 
             {/* Interactive IDE / Laptop Component */}
-            <div style={{ position: 'relative', width: '100%', maxWidth: '440px', zIndex: 2 }}>
+            <div style={{ position: 'relative', width: '100%', maxWidth: '440px', flexShrink: 0, boxSizing: 'border-box', zIndex: 2 }}>
 
               {/* Laptop Screen Body */}
               <div style={{
                 position: 'relative',
-                width: '90%',
+                width: '100%',
+                maxWidth: '100%',
                 margin: '0 auto',
                 background: '#151521',
                 borderRadius: '12px 12px 0 0',
@@ -754,8 +757,9 @@ export default function Hero() {
                 boxShadow: isDark
                   ? '0 20px 50px rgba(0,0,0,0.5), 0 0 35px rgba(99,102,241,0.18)'
                   : '0 20px 40px rgba(0,0,0,0.15), 0 0 25px rgba(99,102,241,0.08)',
-                aspectRatio: '16/10.2',
-                overflow: 'hidden'
+                aspectRatio: '16/10.5',
+                overflow: 'hidden',
+                boxSizing: 'border-box'
               }}>
                 {/* Editor Top Tab Bar */}
                 <div style={{ height: '26px', background: '#0f0f15', display: 'flex', alignItems: 'center', padding: '0 10px', gap: '5px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
