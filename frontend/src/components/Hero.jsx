@@ -130,7 +130,8 @@ function CodeEditorMockup({ name, title, skills, passion }) {
     >
       <div style={{ width: '100%', textAlign: 'left' }}>
         {visibleLines.map((line, idx) => {
-          const isCursorHere = idx === currentLineIdx || (currentLineIdx >= codeLines.length && idx === visibleLines.length - 1);
+          const activeCursorIdx = Math.min(currentLineIdx, visibleLines.length - 1);
+          const isCursorHere = idx === activeCursorIdx && visibleLines.length > 0;
           return (
             <div key={idx} style={{ display: 'flex', gap: '10px', marginBottom: '2px', textAlign: 'left', alignItems: 'flex-start' }}>
               <span style={{ color: '#585b70', width: '18px', textAlign: 'right', userSelect: 'none', flexShrink: 0 }}>{idx + 1}</span>
