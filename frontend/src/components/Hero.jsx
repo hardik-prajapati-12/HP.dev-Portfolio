@@ -534,27 +534,29 @@ export default function Hero() {
                     {idx > 0 && (
                       <div style={{ height: '32px', width: '1px', background: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', marginRight: '20px' }} />
                     )}
-                    <div className="tech-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                    <div className="tech-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: '8px' }}>
                       <div className="tech-icon" style={{
                         color: tech.color,
                         fontSize: '1.65rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        textAlign: 'center',
+                        margin: '0 auto',
                         filter: `drop-shadow(0 0 6px ${tech.glow})`,
                         transition: 'transform 0.3s',
-                        width: hasImage ? '32px' : 'auto',
-                        height: hasImage ? '32px' : 'auto',
+                        width: '32px',
+                        height: '32px',
                         overflow: 'hidden',
-                        borderRadius: hasImage ? '6px' : 'none'
+                        borderRadius: hasImage ? '6px' : '0px'
                       }}>
                         {hasImage ? (
-                          <img src={tech.image} alt={tech.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                          <img src={tech.image} alt={tech.name} style={{ width: '100%', height: '100%', objectFit: 'contain', margin: '0 auto' }} />
                         ) : (
                           tech.icon
                         )}
                       </div>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isDark ? '#94A3B8' : '#475569', fontFamily: 'Poppins' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isDark ? '#94A3B8' : '#475569', fontFamily: 'Poppins', textAlign: 'center', display: 'block', width: '100%' }}>
                         {tech.name}
                       </span>
                     </div>
@@ -974,6 +976,23 @@ export default function Hero() {
         @keyframes brain-circuit-flow {
           0% { stroke-dashoffset: 43; }
           100% { stroke-dashoffset: 0; }
+        }
+        .tech-item {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          justify-content: center !important;
+          text-align: center !important;
+        }
+        .tech-icon {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          margin: 0 auto !important;
+        }
+        .tech-item span {
+          text-align: center !important;
+          display: block !important;
         }
         .tech-item:hover .tech-icon {
           transform: translateY(-5px) scale(1.15);
