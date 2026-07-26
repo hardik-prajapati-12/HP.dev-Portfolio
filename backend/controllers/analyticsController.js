@@ -42,7 +42,7 @@ exports.getDashboard = async (req, res, next) => {
 
     const uniqueVisitors = uniqueVisitorsArr.length;
 
-    // Build 14-day trend array
+    // Build 14-day trend array using exact database timestamps
     const dateMap = {};
     for (let i = 0; i < 14; i++) {
       const d = new Date();
@@ -71,50 +71,32 @@ exports.getDashboard = async (req, res, next) => {
       }
     });
 
-    // Format trend list
+    // Format 100% pure real trend list from MongoDB
     const visitorTrend = Object.values(dateMap).map(item => ({
       date: item.date,
       views: item.views,
       unique: item.ips.size
     }));
 
-    // Ensure baseline trend values if database has sparse data for visual appeal
-    const hasData = visitorTrend.some(t => t.views > 0);
-    const finalTrend = hasData ? visitorTrend : visitorTrend.map((t, idx) => {
-      const pseudoViews = Math.floor(14 + Math.sin(idx * 0.7) * 7 + (idx % 4) * 3);
-      const pseudoUnique = Math.floor(pseudoViews * 0.65);
-      return { ...t, views: pseudoViews, unique: pseudoUnique };
-    });
-
     const topPages = pageBreakdownRaw.map(p => ({
       page: p._id || '/',
       count: p.count
     }));
 
-    if (topPages.length === 0) {
-      topPages.push(
-        { page: '/', count: Math.max(totalVisitors, 38) },
-        { page: '/projects', count: Math.max(Math.floor(totalVisitors * 0.45), 18) },
-        { page: '/blogs', count: Math.max(Math.floor(totalVisitors * 0.3), 12) },
-        { page: '/about', count: Math.max(Math.floor(totalVisitors * 0.2), 8) },
-        { page: '/contact', count: Math.max(Math.floor(totalVisitors * 0.15), 5) }
-      );
-    }
-
     const deviceBreakdown = [
-      { name: 'Desktop', value: desktopCount || Math.max(Math.floor(totalVisitors * 0.75), 28) },
-      { name: 'Mobile / Tablet', value: mobileCount || Math.max(Math.floor(totalVisitors * 0.25), 10) }
+      { name: 'Desktop', value: desktopCount },
+      { name: 'Mobile / Tablet', value: mobileCount }
     ];
 
     res.json({
       totalProjects,
       totalBlogs,
       totalMessages,
-      totalVisitors: totalVisitors || 38,
-      uniqueVisitors: uniqueVisitors || 24,
-      todayVisitors: todayVisitors || 9,
+      totalVisitors,
+      uniqueVisitors,
+      todayVisitors,
       unreadMessages,
-      visitorTrend: finalTrend,
+      visitorTrend,
       topPages,
       deviceBreakdown
     });
@@ -131,13 +113,17 @@ exports.trackVisit = async (req, res, next) => {
       return res.json({ message: 'Visit tracking disabled by settings' });
     }
 
+    const ip = req.headers['x-forwarded-for']
+      ? req.headers['x-forwarded-for'].split(',')[0].trim()
+      : (req.ip || req.socket.remoteAddress || '127.0.0.1');
+
     await Visitor.create({
-      ip: req.ip || req.headers['x-forwarded-for'] || '127.0.0.1',
+      ip,
       userAgent: req.headers['user-agent'] || '',
       page: req.body.page || '/',
       referrer: req.headers.referer || '',
     });
-    res.json({ message: 'Visit tracked' });
+    res.json({ message: 'Visit tracked successfully' });
   } catch (error) {
     next(error);
   }

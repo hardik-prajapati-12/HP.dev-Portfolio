@@ -3057,21 +3057,27 @@ export default function AdminDashboard() {
                           <FiMonitor size={16} color="#6366F1" /> Top Visited Routes
                         </h4>
                         <div style={{ display: 'grid', gap: '10px' }}>
-                          {(data.analytics?.topPages || []).map((p, idx) => {
-                            const maxHits = data.analytics?.topPages?.[0]?.count || 1;
-                            const pct = Math.round((p.count / maxHits) * 100);
-                            return (
-                              <div key={idx}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontFamily: 'Inter', color: textMain, marginBottom: '4px' }}>
-                                  <span style={{ fontWeight: 600 }}>{p.page}</span>
-                                  <span style={{ color: textMuted }}>{p.count} views</span>
+                          {(data.analytics?.topPages || []).length === 0 ? (
+                            <p style={{ fontFamily: 'Inter', fontSize: '0.82rem', color: textMuted, margin: 0, padding: '8px 0' }}>
+                              No page visits logged yet. Real visits will automatically track here as users view your website.
+                            </p>
+                          ) : (
+                            (data.analytics?.topPages || []).map((p, idx) => {
+                              const maxHits = data.analytics?.topPages?.[0]?.count || 1;
+                              const pct = Math.round((p.count / maxHits) * 100);
+                              return (
+                                <div key={idx}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontFamily: 'Inter', color: textMain, marginBottom: '4px' }}>
+                                    <span style={{ fontWeight: 600 }}>{p.page}</span>
+                                    <span style={{ color: textMuted }}>{p.count} views</span>
+                                  </div>
+                                  <div style={{ width: '100%', height: '6px', borderRadius: '3px', background: isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0', overflow: 'hidden' }}>
+                                    <div style={{ width: `${pct}%`, height: '100%', borderRadius: '3px', background: 'linear-gradient(90deg, #6366F1, #8B5CF6)' }} />
+                                  </div>
                                 </div>
-                                <div style={{ width: '100%', height: '6px', borderRadius: '3px', background: isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0', overflow: 'hidden' }}>
-                                  <div style={{ width: `${pct}%`, height: '100%', borderRadius: '3px', background: 'linear-gradient(90deg, #6366F1, #8B5CF6)' }} />
-                                </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            })
+                          )}
                         </div>
                       </div>
 
