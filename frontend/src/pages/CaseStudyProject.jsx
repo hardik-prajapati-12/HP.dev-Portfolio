@@ -147,25 +147,22 @@ export default function CaseStudyProject() {
               </div>
             </div>
 
-            <div style={{ padding: 24, borderRadius: 24, background: cardBg, border: `1px solid ${borderColor}` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                <FiDatabase size={20} color={projectColor} />
-                <h2 style={{ margin: 0, fontSize: '1.1rem' }}>NoSQL Data Model</h2>
+            {Array.isArray(project.caseStudy?.dataModel) && project.caseStudy.dataModel.filter(item => item.title || item.description).length > 0 && (
+              <div style={{ padding: 24, borderRadius: 24, background: cardBg, border: `1px solid ${borderColor}` }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                  <FiDatabase size={20} color={projectColor} />
+                  <h2 style={{ margin: 0, fontSize: '1.1rem' }}>NoSQL Data Model</h2>
+                </div>
+                <div style={{ display: 'grid', gap: 14 }}>
+                  {project.caseStudy.dataModel.filter(item => item.title || item.description).map((item, idx) => (
+                    <div key={item.title || idx} style={{ padding: 18, borderRadius: 18, background: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${borderColor}` }}>
+                      {item.title && <h3 style={{ margin: 0, fontSize: '1rem', color: textColor }}>{item.title}</h3>}
+                      {item.description && <p style={{ margin: item.title ? '10px 0 0' : 0, color: mutedColor, lineHeight: 1.7 }}>{item.description}</p>}
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div style={{ display: 'grid', gap: 14 }}>
-                {[
-                  { title: 'UserCollection', description: 'User profiles, roles, author metadata, and authentication details.' },
-                  { title: 'PostsCollection', description: 'Articles, drafts, publish status, author refs, and tags.' },
-                  { title: 'CategoryCollection', description: 'Taxonomy, category slugs, and post relationships.' },
-                  { title: 'CommentsCollection', description: 'Post comments, moderation flags, and author references.' },
-                ].map((item) => (
-                  <div key={item.title} style={{ padding: 18, borderRadius: 18, background: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${borderColor}` }}>
-                    <h3 style={{ margin: 0, fontSize: '1rem', color: textColor }}>{item.title}</h3>
-                    <p style={{ margin: '10px 0 0', color: mutedColor, lineHeight: 1.7 }}>{item.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
 
           <aside style={{ display: 'grid', gap: 24 }}>

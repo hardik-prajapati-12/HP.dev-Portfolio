@@ -260,10 +260,43 @@ function CrudModal({ isOpen, onClose, type, data, form, setForm, onSubmit, isDar
               <textarea style={{ ...inputStyle, height: '140px', resize: 'vertical' }} value={form.longDescription || ''} onChange={e => setForm({ ...form, longDescription: e.target.value })} placeholder="Detailed write-up, features, challenges, and implementation overview of this project..." />
 
               <div style={{ margin: '20px 0 16px', padding: '18px', borderRadius: '14px', background: isDark ? 'rgba(99,102,241,0.06)' : 'rgba(99,102,241,0.04)', border: isDark ? '1px solid rgba(99,102,241,0.18)' : '1px solid rgba(99,102,241,0.16)' }}>
-                <h4 style={{ margin: '0 0 6px', fontFamily: 'Poppins', fontWeight: 800, fontSize: '1rem', color: isDark ? '#F1F5F9' : '#0F172A' }}>Case Study Information</h4>
-                <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.82rem', color: isDark ? '#94A3B8' : '#64748B', lineHeight: 1.6 }}>
-                  Manage the structured case study shown on the project details page.
-                </p>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                  <div>
+                    <h4 style={{ margin: '0 0 4px', fontFamily: 'Poppins', fontWeight: 800, fontSize: '1rem', color: isDark ? '#F1F5F9' : '#0F172A' }}>Case Study Information</h4>
+                    <p style={{ margin: 0, fontFamily: 'Inter', fontSize: '0.82rem', color: isDark ? '#94A3B8' : '#64748B', lineHeight: 1.5 }}>
+                      Manage the structured case study shown on the project details page.
+                    </p>
+                  </div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', userSelect: 'none' }}>
+                    <span style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.82rem', color: form.caseStudyEnabled !== false ? '#10B981' : (isDark ? '#94A3B8' : '#64748B') }}>
+                      {form.caseStudyEnabled !== false ? 'Enabled' : 'Disabled'}
+                    </span>
+                    <div
+                      onClick={() => setForm({ ...form, caseStudyEnabled: form.caseStudyEnabled === false ? true : false })}
+                      style={{
+                        width: '44px',
+                        height: '24px',
+                        borderRadius: '12px',
+                        background: form.caseStudyEnabled !== false ? '#10B981' : (isDark ? 'rgba(255,255,255,0.15)' : '#CBD5E1'),
+                        position: 'relative',
+                        transition: 'background 0.2s ease',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{
+                        width: '18px',
+                        height: '18px',
+                        borderRadius: '50%',
+                        background: '#FFFFFF',
+                        position: 'absolute',
+                        top: '3px',
+                        left: form.caseStudyEnabled !== false ? '23px' : '3px',
+                        transition: 'left 0.2s ease',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                      }} />
+                    </div>
+                  </label>
+                </div>
               </div>
 
               <ImageUpload label="Case Study Cover Image" value={form.caseStudyImage || ''} onChange={(url) => setForm({ ...form, caseStudyImage: url })} token={token} isDark={isDark} labelStyle={labelStyle} />
@@ -2173,7 +2206,7 @@ export default function AdminDashboard() {
 
   /* ── Modal helpers ── */
   const defaultForms = {
-    project: { title: '', category: '', image: '', technologies: '', features: '', githubUrl: '', liveUrl: '', featured: false, description: '', longDescription: '', caseStudyTitle: '', caseStudyBadge: 'Production-focused build', caseStudyProblem: '', caseStudyArchitecture: '', caseStudyDataModel: '', caseStudyFeatureFocus: '', caseStudyOutcomes: '', caseStudyInsight: '', caseStudyImage: '', caseStudyArchitectureDiagrams: [] },
+    project: { title: '', category: '', image: '', technologies: '', features: '', githubUrl: '', liveUrl: '', featured: false, description: '', longDescription: '', caseStudyEnabled: true, caseStudyTitle: '', caseStudyBadge: 'Production-focused build', caseStudyProblem: '', caseStudyArchitecture: '', caseStudyDataModel: '', caseStudyFeatureFocus: '', caseStudyOutcomes: '', caseStudyInsight: '', caseStudyImage: '', caseStudyArchitectureDiagrams: [] },
     blog: { title: '', category: '', image: '', tags: '', readTime: '', excerpt: '', content: '', featured: false, categoryColor: '#6366F1' },
     testimonial: { name: '', role: '', company: '', avatar: '', rating: 5, content: '', color: '#6366F1' },
     certification: { title: '', issuer: '', date: new Date().toISOString().split('T')[0], color: '#6366F1', badge: '🏆', credentialUrl: '', description: '', skills: '', logo: '', image: '' },
@@ -2204,6 +2237,7 @@ export default function AdminDashboard() {
     if (type === 'project') {
       formFields.technologies = item.technologies ? item.technologies.join(', ') : '';
       formFields.features = item.features ? item.features.join(', ') : '';
+      formFields.caseStudyEnabled = item.caseStudy?.enabled !== false;
       formFields.caseStudyTitle = item.caseStudy?.title || '';
       formFields.caseStudyBadge = item.caseStudy?.badge || '';
       formFields.caseStudyProblem = item.caseStudy?.problem || '';
@@ -2265,6 +2299,7 @@ export default function AdminDashboard() {
       payload.technologies = typeof payload.technologies === 'string' ? payload.technologies.split(',').map(t => t.trim()).filter(Boolean) : payload.technologies;
       payload.features = typeof payload.features === 'string' ? payload.features.split(',').map(f => f.trim()).filter(Boolean) : payload.features;
       payload.caseStudy = {
+        enabled: payload.caseStudyEnabled !== false,
         title: payload.caseStudyTitle || '',
         badge: payload.caseStudyBadge || '',
         problem: payload.caseStudyProblem || '',
@@ -2276,6 +2311,7 @@ export default function AdminDashboard() {
         caseStudyImage: payload.caseStudyImage || '',
         architectureDiagrams: payload.caseStudyArchitectureDiagrams || [],
       };
+      delete payload.caseStudyEnabled;
       delete payload.caseStudyTitle;
       delete payload.caseStudyBadge;
       delete payload.caseStudyProblem;

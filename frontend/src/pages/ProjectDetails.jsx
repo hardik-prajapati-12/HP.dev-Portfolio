@@ -125,48 +125,50 @@ export default function ProjectDetails() {
   const features = Array.isArray(project.features) ? project.features : [];
   const technologies = Array.isArray(project.technologies) ? project.technologies : [];
   const caseStudy = project.caseStudy || {};
-  const managedFeatureFocus = Array.isArray(caseStudy.featureFocus) ? caseStudy.featureFocus.filter(Boolean) : [];
-  const primaryFeatures = managedFeatureFocus.length ? managedFeatureFocus : features.length ? features.slice(0, 4) : [
-    'Responsive user interface tailored to the project workflow.',
-    'Structured data flow between the interface, logic layer, and storage.',
-    'Reusable components and maintainable implementation patterns.'
-  ];
-  const defaultArchitectureItems = [
-    {
-      title: 'Presentation Layer',
-      description: 'Delivers the primary user experience with responsive layouts, clear navigation, and reusable UI patterns.'
-    },
-    {
-      title: 'Application Logic',
-      description: 'Coordinates feature workflows, validation, state changes, and communication between the interface and data layer.'
-    },
-    {
-      title: 'Data Layer',
-      description: `Organizes the core ${project.category || 'project'} information so content, users, and feature states can be loaded predictably.`
-    }
-  ];
-  const architectureItems = Array.isArray(caseStudy.architecture) && caseStudy.architecture.length
-    ? caseStudy.architecture.filter(item => item.title || item.description)
-    : defaultArchitectureItems;
-  const defaultDataModelItems = [
-    { title: 'Users', description: 'Profiles, roles, permissions, and session-related information.' },
-    { title: 'Content', description: 'Primary project records, publish states, metadata, and searchable fields.' },
-    { title: 'Interactions', description: 'User actions, feedback, comments, saved states, or engagement signals.' },
-    { title: 'System Meta', description: 'Configuration, categories, audit information, and operational settings.' }
-  ];
-  const dataModelItems = Array.isArray(caseStudy.dataModel) && caseStudy.dataModel.length
-    ? caseStudy.dataModel.filter(item => item.title || item.description)
-    : defaultDataModelItems;
-  const outcomes = Array.isArray(caseStudy.outcomes) && caseStudy.outcomes.length ? caseStudy.outcomes.filter(Boolean) : [
-    'Clear project structure that is easier to extend and maintain.',
-    'Focused feature delivery aligned with the real user workflow.',
-    'A polished interface backed by practical technology choices.'
-  ];
-  const caseStudyTitle = caseStudy.title || `How ${project.title} is structured and delivered`;
-  const caseStudyBadge = caseStudy.badge || 'Production-focused build';
-  const caseStudyProblem = caseStudy.problem || 'The goal was to turn the project concept into a dependable digital experience with clear user journeys, practical feature coverage, and a maintainable structure that can grow beyond the first release.';
-  const caseStudyInsight = caseStudy.insight || 'The case study connects the visible interface, feature decisions, technology choices, and delivery structure into one project narrative.';
-  const architectureDiagrams = Array.isArray(caseStudy.architectureDiagrams) ? caseStudy.architectureDiagrams.filter(d => d.label && d.imageUrl) : [];
+  const isCaseStudyEnabled = caseStudy.enabled !== false;
+
+  const caseStudyTitle = (caseStudy.title || '').trim();
+  const caseStudyBadge = (caseStudy.badge || '').trim();
+  const caseStudyProblem = (caseStudy.problem || '').trim();
+  const caseStudyInsight = (caseStudy.insight || '').trim();
+  const caseStudyImage = (caseStudy.caseStudyImage || '').trim();
+
+  const architectureItems = Array.isArray(caseStudy.architecture)
+    ? caseStudy.architecture.filter(item => (item.title && item.title.trim()) || (item.description && item.description.trim()))
+    : [];
+
+  const dataModelItems = Array.isArray(caseStudy.dataModel)
+    ? caseStudy.dataModel.filter(item => (item.title && item.title.trim()) || (item.description && item.description.trim()))
+    : [];
+
+  const featureFocusItems = Array.isArray(caseStudy.featureFocus)
+    ? caseStudy.featureFocus.map(f => (typeof f === 'string' ? f.trim() : '')).filter(Boolean)
+    : [];
+
+  const outcomeItems = Array.isArray(caseStudy.outcomes)
+    ? caseStudy.outcomes.map(o => (typeof o === 'string' ? o.trim() : '')).filter(Boolean)
+    : [];
+
+  const architectureDiagrams = Array.isArray(caseStudy.architectureDiagrams)
+    ? caseStudy.architectureDiagrams.filter(d => d.label && d.label.trim() && d.imageUrl && d.imageUrl.trim())
+    : [];
+
+  const hasCaseStudyContent = Boolean(
+    caseStudyTitle ||
+    caseStudyBadge ||
+    caseStudyProblem ||
+    caseStudyInsight ||
+    caseStudyImage ||
+    architectureItems.length > 0 ||
+    dataModelItems.length > 0 ||
+    featureFocusItems.length > 0 ||
+    outcomeItems.length > 0 ||
+    architectureDiagrams.length > 0
+  );
+
+  const showCaseStudy = isCaseStudyEnabled && hasCaseStudyContent;
+  const hasMainColumn = Boolean(caseStudyProblem || architectureItems.length > 0 || architectureDiagrams.length > 0);
+  const hasAsideColumn = Boolean(caseStudyInsight || caseStudyImage || featureFocusItems.length > 0 || outcomeItems.length > 0);
   const formatProjectDate = (dateStr) => {
     if (!dateStr) return '';
     const dateObj = new Date(dateStr);
@@ -427,147 +429,329 @@ export default function ProjectDetails() {
           </aside>
         </div>
 
-        <div style={{ padding: '32px', borderRadius: '24px', background: panelBg, border: panelBorder }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap', marginBottom: '28px' }}>
-            <div>
-              <span style={{ color: projectColor, fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.76rem', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
-                Case Study
-              </span>
-              <h3 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: 'clamp(1.55rem, 3vw, 2.15rem)', color: textColor, margin: '8px 0 0', lineHeight: 1.2 }}>
-                {caseStudyTitle}
-              </h3>
-            </div>
-            <div style={{ padding: '10px 14px', borderRadius: '14px', background: isDark ? `${projectColor}1A` : `${projectColor}0D`, border: `1px solid ${projectColor}38`, color: projectColor, fontFamily: 'Poppins', fontSize: '0.82rem', fontWeight: 700 }}>
-              {caseStudyBadge}
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '14px', marginBottom: '24px' }} className="project-case-study-stats">
-            {[
-              { label: 'Category', value: project.category || 'Project' },
-              { label: 'Tech Stack', value: `${technologies.length} tools` },
-              { label: 'Feature Scope', value: `${features.length || primaryFeatures.length} modules` }
-            ].map(item => (
-              <div key={item.label} style={{ padding: '18px', borderRadius: '18px', background: insetBg, border: panelBorder }}>
-                <p style={{ margin: 0, color: mutedColor, fontFamily: 'Poppins', fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{item.label}</p>
-                <strong style={{ display: 'block', marginTop: '8px', color: textColor, fontFamily: 'Poppins', fontSize: '1rem' }}>{item.value}</strong>
+        {showCaseStudy && (
+          <div style={{ padding: '32px', borderRadius: '24px', background: panelBg, border: panelBorder }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap', marginBottom: '28px' }}>
+              <div>
+                <span style={{ color: projectColor, fontFamily: 'Poppins', fontWeight: 700, fontSize: '0.76rem', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+                  Case Study
+                </span>
+                <h3 style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: 'clamp(1.55rem, 3vw, 2.15rem)', color: textColor, margin: '8px 0 0', lineHeight: 1.2 }}>
+                  {caseStudyTitle || `How ${project.title} is structured and delivered`}
+                </h3>
               </div>
-            ))}
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(300px, 0.8fr)', gap: '20px', alignItems: 'stretch' }} className="project-case-study-grid">
-            <div style={{ display: 'grid', gap: '18px' }}>
-              <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                  <FiTarget size={18} color={projectColor} />
-                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>Problem & Goal</h4>
+              {caseStudyBadge && (
+                <div style={{ padding: '10px 14px', borderRadius: '14px', background: isDark ? `${projectColor}1A` : `${projectColor}0D`, border: `1px solid ${projectColor}38`, color: projectColor, fontFamily: 'Poppins', fontSize: '0.82rem', fontWeight: 700 }}>
+                  {caseStudyBadge}
                 </div>
-                <p style={{ margin: 0, color: mutedColor, lineHeight: 1.8 }}>
-                  {caseStudyProblem}
-                </p>
-              </section>
+              )}
+            </div>
 
-              <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                  <FiGitBranch size={18} color={projectColor} />
-                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Architecture & Flow</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '14px', marginBottom: '24px' }} className="project-case-study-stats">
+              {[
+                { label: 'Category', value: project.category || 'Project' },
+                { label: 'Tech Stack', value: `${technologies.length} tools` },
+                { label: 'Feature Scope', value: `${features.length || featureFocusItems.length} modules` }
+              ].map(item => (
+                <div key={item.label} style={{ padding: '18px', borderRadius: '18px', background: insetBg, border: panelBorder }}>
+                  <p style={{ margin: 0, color: mutedColor, fontFamily: 'Poppins', fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{item.label}</p>
+                  <strong style={{ display: 'block', marginTop: '8px', color: textColor, fontFamily: 'Poppins', fontSize: '1rem' }}>{item.value}</strong>
                 </div>
-                <div style={{ display: 'grid', gap: '14px' }}>
-                  {groupCaseStudyItems(architectureItems).map((group, idx) => (
-                    <div
-                      key={group.title + idx}
-                      style={{
-                        padding: '18px 20px',
-                        borderRadius: '16px',
-                        background: insetPanelBg,
-                        border: panelBorder,
-                        boxShadow: isDark ? '0 4px 14px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.03)',
-                      }}
-                    >
-                      {/* Main Section Header */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span
-                          style={{
-                            width: '8px',
-                            height: '8px',
-                            borderRadius: '50%',
-                            background: projectColor,
-                            boxShadow: `0 0 10px ${projectColor}80`,
-                            display: 'inline-block',
-                            flexShrink: 0,
-                          }}
-                        />
-                        <strong style={{ color: textColor, fontFamily: 'Poppins', fontSize: '0.98rem', fontWeight: 700 }}>
-                          {group.title}
-                        </strong>
-                      </div>
+              ))}
+            </div>
 
-                      {/* Main Section Description */}
-                      {group.description && (
-                        <p style={{ margin: '8px 0 0 18px', color: mutedColor, lineHeight: 1.7, fontSize: '0.9rem' }}>
-                          {group.description}
+            {(hasMainColumn || hasAsideColumn) && (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: hasMainColumn && hasAsideColumn ? 'minmax(0, 1.2fr) minmax(300px, 0.8fr)' : '1fr',
+                  gap: '20px',
+                  alignItems: 'stretch'
+                }}
+                className="project-case-study-grid"
+              >
+                {hasMainColumn && (
+                  <div style={{ display: 'grid', gap: '18px' }}>
+                    {caseStudyProblem && (
+                      <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                          <FiTarget size={18} color={projectColor} />
+                          <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>Problem & Goal</h4>
+                        </div>
+                        <p style={{ margin: 0, color: mutedColor, lineHeight: 1.8 }}>
+                          {caseStudyProblem}
                         </p>
-                      )}
+                      </section>
+                    )}
 
-                      {/* Subpoints List */}
-                      {group.subpoints && group.subpoints.length > 0 && (
-                        <div
-                          style={{
-                            marginTop: '12px',
-                            marginLeft: '4px',
-                            paddingLeft: '14px',
-                            borderLeft: `2px solid ${projectColor}40`,
-                            display: 'grid',
-                            gap: '8px',
-                          }}
-                        >
-                          {group.subpoints.map((sub, sIdx) => {
-                            let displayTitle = sub.title;
-                            let displayDesc = sub.description;
-                            if (!displayDesc && displayTitle.includes(':')) {
-                              const parts = displayTitle.split(':');
-                              displayTitle = parts[0].trim();
-                              displayDesc = parts.slice(1).join(':').trim();
+                    {architectureItems.length > 0 && (
+                      <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                          <FiGitBranch size={18} color={projectColor} />
+                          <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Architecture & Flow</h4>
+                        </div>
+                        <div style={{ display: 'grid', gap: '14px' }}>
+                          {groupCaseStudyItems(architectureItems).map((group, idx) => (
+                            <div
+                              key={group.title + idx}
+                              style={{
+                                padding: '18px 20px',
+                                borderRadius: '16px',
+                                background: insetPanelBg,
+                                border: panelBorder,
+                                boxShadow: isDark ? '0 4px 14px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.03)',
+                              }}
+                            >
+                              {/* Main Section Header */}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <span
+                                  style={{
+                                    width: '8px',
+                                    height: '8px',
+                                    borderRadius: '50%',
+                                    background: projectColor,
+                                    boxShadow: `0 0 10px ${projectColor}80`,
+                                    display: 'inline-block',
+                                    flexShrink: 0,
+                                  }}
+                                />
+                                <strong style={{ color: textColor, fontFamily: 'Poppins', fontSize: '0.98rem', fontWeight: 700 }}>
+                                  {group.title}
+                                </strong>
+                              </div>
+
+                              {/* Main Section Description */}
+                              {group.description && (
+                                <p style={{ margin: '8px 0 0 18px', color: mutedColor, lineHeight: 1.7, fontSize: '0.9rem' }}>
+                                  {group.description}
+                                </p>
+                              )}
+
+                              {/* Subpoints List */}
+                              {group.subpoints && group.subpoints.length > 0 && (
+                                <div
+                                  style={{
+                                    marginTop: '12px',
+                                    marginLeft: '4px',
+                                    paddingLeft: '14px',
+                                    borderLeft: `2px solid ${projectColor}40`,
+                                    display: 'grid',
+                                    gap: '8px',
+                                  }}
+                                >
+                                  {group.subpoints.map((sub, sIdx) => {
+                                    let displayTitle = sub.title;
+                                    let displayDesc = sub.description;
+                                    if (!displayDesc && displayTitle.includes(':')) {
+                                      const parts = displayTitle.split(':');
+                                      displayTitle = parts[0].trim();
+                                      displayDesc = parts.slice(1).join(':').trim();
+                                    }
+
+                                    return (
+                                      <div
+                                        key={sub.title + sIdx}
+                                        style={{
+                                          display: 'flex',
+                                          alignItems: 'flex-start',
+                                          gap: '8px',
+                                          padding: '7px 11px',
+                                          borderRadius: '8px',
+                                          background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                                          border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
+                                        }}
+                                      >
+                                        <FiChevronRight size={14} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
+                                        <div style={{ flex: 1 }}>
+                                          <span
+                                            style={{
+                                              color: textColor,
+                                              fontFamily: 'Inter',
+                                              fontWeight: 600,
+                                              fontSize: '0.88rem',
+                                              lineHeight: '1.4',
+                                            }}
+                                          >
+                                            {displayTitle}
+                                          </span>
+                                          {displayDesc && (
+                                            <span
+                                              style={{
+                                                display: 'block',
+                                                color: mutedColor,
+                                                fontFamily: 'Inter',
+                                                fontSize: '0.82rem',
+                                                lineHeight: '1.45',
+                                                marginTop: '2px',
+                                              }}
+                                            >
+                                              {displayDesc}
+                                            </span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+
+                    {/* System Architecture — inline card */}
+                    {architectureDiagrams.length > 0 && (
+                      <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <FiLayers size={18} color={projectColor} />
+                            <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>System Architecture</h4>
+                          </div>
+                        </div>
+
+                        {/* Diagram tabs */}
+                        {architectureDiagrams.length > 1 && (
+                          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                            {architectureDiagrams.map((diag, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => setArchActiveTab(idx)}
+                                style={{
+                                  padding: '9px 18px',
+                                  borderRadius: '10px',
+                                  border: archActiveTab === idx
+                                    ? `1.5px solid ${projectColor}`
+                                    : (isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0'),
+                                  background: archActiveTab === idx
+                                    ? `${projectColor}15`
+                                    : 'transparent',
+                                  color: archActiveTab === idx ? projectColor : mutedColor,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: archActiveTab === idx ? 700 : 500,
+                                  fontSize: '0.82rem',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s ease',
+                                }}
+                                onMouseEnter={e => { if (archActiveTab !== idx) { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : '#F8FAFC'; } }}
+                                onMouseLeave={e => { if (archActiveTab !== idx) { e.currentTarget.style.background = 'transparent'; } }}
+                              >
+                                {diag.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Diagram viewer */}
+                        <div style={{
+                          position: 'relative',
+                          borderRadius: '14px',
+                          overflow: 'hidden',
+                          border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0',
+                          background: isDark ? 'rgba(0,0,0,0.3)' : '#F1F5F9',
+                        }}>
+                          <button
+                            onClick={() => setArchMaximized(true)}
+                            style={{
+                              position: 'absolute',
+                              top: '14px',
+                              right: '14px',
+                              zIndex: 2,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '8px',
+                              padding: '8px 16px',
+                              borderRadius: '8px',
+                              border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
+                              background: isDark ? 'rgba(15,23,42,0.85)' : 'rgba(255,255,255,0.9)',
+                              backdropFilter: 'blur(8px)',
+                              color: textColor,
+                              fontFamily: 'Poppins',
+                              fontWeight: 600,
+                              fontSize: '0.78rem',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                            }}
+                            onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(15,23,42,0.95)' : '#FFFFFF'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,0,0,0.2)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = isDark ? 'rgba(15,23,42,0.85)' : 'rgba(255,255,255,0.9)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)'; }}
+                          >
+                            <FiMaximize2 size={14} />
+                            Maximize
+                          </button>
+                          <img
+                            src={resolveImageUrl(architectureDiagrams[archActiveTab]?.imageUrl)}
+                            alt={architectureDiagrams[archActiveTab]?.label || 'Architecture Diagram'}
+                            style={{
+                              width: '100%',
+                              height: 'auto',
+                              display: 'block',
+                              transition: 'opacity 0.3s ease',
+                            }}
+                          />
+                        </div>
+                      </section>
+                    )}
+                  </div>
+                )}
+
+                {hasAsideColumn && (
+                  <aside style={{ display: 'grid', gap: '18px' }}>
+                    {(caseStudyInsight || caseStudyImage) && (
+                      <div style={{ borderRadius: '20px', overflow: 'hidden', border: panelBorder, background: insetBg }}>
+                        {caseStudyImage && (
+                          <img src={resolveImageUrl(caseStudyImage)} alt={`${project.title} preview`} style={{ width: '100%', maxHeight: '320px', objectFit: 'contain', display: 'block', background: isDark ? 'rgba(0,0,0,0.2)' : '#F1F5F9' }} />
+                        )}
+                        {caseStudyInsight && (
+                          <div style={{ padding: '18px' }}>
+                            <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1rem' }}>Live Project Insight</h4>
+                            <p style={{ margin: '8px 0 0', color: mutedColor, lineHeight: 1.7, fontSize: '0.92rem' }}>
+                              {caseStudyInsight}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {featureFocusItems.length > 0 && (
+                      <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                          <FiCheckCircle size={18} color={projectColor} />
+                          <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Feature Focus</h4>
+                        </div>
+                        <div style={{ display: 'grid', gap: '8px' }}>
+                          {featureFocusItems.map((feature, idx) => {
+                            const cleanFeature = (typeof feature === 'string' ? feature : '').replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
+                            let title = cleanFeature;
+                            let detail = '';
+                            if (cleanFeature.includes(':')) {
+                              const parts = cleanFeature.split(':');
+                              title = parts[0].trim();
+                              detail = parts.slice(1).join(':').trim();
                             }
 
                             return (
                               <div
-                                key={sub.title + sIdx}
+                                key={idx}
                                 style={{
                                   display: 'flex',
                                   alignItems: 'flex-start',
-                                  gap: '8px',
-                                  padding: '7px 11px',
-                                  borderRadius: '8px',
-                                  background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                                  gap: '10px',
+                                  padding: '8px 12px',
+                                  borderRadius: '10px',
+                                  background: isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.02)',
                                   border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
+                                  transition: 'all 0.2s ease',
                                 }}
                               >
-                                <FiChevronRight size={14} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
+                                <FiCheckCircle size={15} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
                                 <div style={{ flex: 1 }}>
-                                  <span
-                                    style={{
-                                      color: textColor,
-                                      fontFamily: 'Inter',
-                                      fontWeight: 600,
-                                      fontSize: '0.88rem',
-                                      lineHeight: '1.4',
-                                    }}
-                                  >
-                                    {displayTitle}
+                                  <span style={{ color: textColor, fontFamily: 'Inter', fontWeight: 600, fontSize: '0.88rem', lineHeight: '1.45' }}>
+                                    {title}
                                   </span>
-                                  {displayDesc && (
-                                    <span
-                                      style={{
-                                        display: 'block',
-                                        color: mutedColor,
-                                        fontFamily: 'Inter',
-                                        fontSize: '0.82rem',
-                                        lineHeight: '1.45',
-                                        marginTop: '2px',
-                                      }}
-                                    >
-                                      {displayDesc}
+                                  {detail && (
+                                    <span style={{ display: 'block', color: mutedColor, fontFamily: 'Inter', fontSize: '0.82rem', lineHeight: '1.45', marginTop: '2px' }}>
+                                      {detail}
                                     </span>
                                   )}
                                 </div>
@@ -575,228 +759,80 @@ export default function ProjectDetails() {
                             );
                           })}
                         </div>
-                      )}
+                      </section>
+                    )}
+
+                    {outcomeItems.length > 0 && (
+                      <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                          <FiStar size={18} color={projectColor} />
+                          <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Outcomes</h4>
+                        </div>
+                        <div style={{ display: 'grid', gap: '8px' }}>
+                          {outcomeItems.map((outcome, idx) => {
+                            const cleanOutcome = (typeof outcome === 'string' ? outcome : '').replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
+                            let title = cleanOutcome;
+                            let detail = '';
+                            if (cleanOutcome.includes(':')) {
+                              const parts = cleanOutcome.split(':');
+                              title = parts[0].trim();
+                              detail = parts.slice(1).join(':').trim();
+                            }
+
+                            return (
+                              <div
+                                key={idx}
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'flex-start',
+                                  gap: '10px',
+                                  padding: '8px 12px',
+                                  borderRadius: '10px',
+                                  background: isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.02)',
+                                  border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
+                                  transition: 'all 0.2s ease',
+                                }}
+                              >
+                                <FiStar size={14} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
+                                <div style={{ flex: 1 }}>
+                                  <span style={{ color: textColor, fontFamily: 'Inter', fontWeight: 600, fontSize: '0.88rem', lineHeight: '1.45' }}>
+                                    {title}
+                                  </span>
+                                  {detail && (
+                                    <span style={{ display: 'block', color: mutedColor, fontFamily: 'Inter', fontSize: '0.82rem', lineHeight: '1.45', marginTop: '2px' }}>
+                                      {detail}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    )}
+                  </aside>
+                )}
+              </div>
+            )}
+
+            {dataModelItems.length > 0 && (
+              <section style={{ marginTop: '20px', padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                  <FiDatabase size={18} color={projectColor} />
+                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>Data Model</h4>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '12px' }} className="project-data-model-grid">
+                  {dataModelItems.map((item, idx) => (
+                    <div key={item.title || idx} style={{ padding: '16px', borderRadius: '16px', background: insetPanelBg, border: panelBorder }}>
+                      {item.title && <strong style={{ color: textColor, fontFamily: 'Poppins', fontSize: '0.92rem' }}>{item.title}</strong>}
+                      {item.description && <p style={{ margin: item.title ? '8px 0 0' : 0, color: mutedColor, lineHeight: 1.65, fontSize: '0.9rem' }}>{item.description}</p>}
                     </div>
                   ))}
                 </div>
               </section>
-
-              {/* System Architecture — inline card */}
-              {architectureDiagrams.length > 0 && (
-                <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <FiLayers size={18} color={projectColor} />
-                      <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>System Architecture</h4>
-                    </div>
-                  </div>
-
-                  {/* Diagram tabs */}
-                  {architectureDiagrams.length > 1 && (
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                      {architectureDiagrams.map((diag, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setArchActiveTab(idx)}
-                          style={{
-                            padding: '9px 18px',
-                            borderRadius: '10px',
-                            border: archActiveTab === idx
-                              ? `1.5px solid ${projectColor}`
-                              : (isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #E2E8F0'),
-                            background: archActiveTab === idx
-                              ? `${projectColor}15`
-                              : 'transparent',
-                            color: archActiveTab === idx ? projectColor : mutedColor,
-                            fontFamily: 'Poppins',
-                            fontWeight: archActiveTab === idx ? 700 : 500,
-                            fontSize: '0.82rem',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease',
-                          }}
-                          onMouseEnter={e => { if (archActiveTab !== idx) { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : '#F8FAFC'; } }}
-                          onMouseLeave={e => { if (archActiveTab !== idx) { e.currentTarget.style.background = 'transparent'; } }}
-                        >
-                          {diag.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Diagram viewer */}
-                  <div style={{
-                    position: 'relative',
-                    borderRadius: '14px',
-                    overflow: 'hidden',
-                    border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0',
-                    background: isDark ? 'rgba(0,0,0,0.3)' : '#F1F5F9',
-                  }}>
-                    <button
-                      onClick={() => setArchMaximized(true)}
-                      style={{
-                        position: 'absolute',
-                        top: '14px',
-                        right: '14px',
-                        zIndex: 2,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid #CBD5E1',
-                        background: isDark ? 'rgba(15,23,42,0.85)' : 'rgba(255,255,255,0.9)',
-                        backdropFilter: 'blur(8px)',
-                        color: textColor,
-                        fontFamily: 'Poppins',
-                        fontWeight: 600,
-                        fontSize: '0.78rem',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(15,23,42,0.95)' : '#FFFFFF'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,0,0,0.2)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = isDark ? 'rgba(15,23,42,0.85)' : 'rgba(255,255,255,0.9)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)'; }}
-                    >
-                      <FiMaximize2 size={14} />
-                      Maximize
-                    </button>
-                    <img
-                      src={resolveImageUrl(architectureDiagrams[archActiveTab]?.imageUrl)}
-                      alt={architectureDiagrams[archActiveTab]?.label || 'Architecture Diagram'}
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                        display: 'block',
-                        transition: 'opacity 0.3s ease',
-                      }}
-                    />
-                  </div>
-                </section>
-              )}
-            </div>
-
-            <aside style={{ display: 'grid', gap: '18px' }}>
-              <div style={{ borderRadius: '20px', overflow: 'hidden', border: panelBorder, background: insetBg }}>
-                <img src={resolveImageUrl(caseStudy.caseStudyImage || project.image)} alt={`${project.title} preview`} style={{ width: '100%', maxHeight: '320px', objectFit: 'contain', display: 'block', background: isDark ? 'rgba(0,0,0,0.2)' : '#F1F5F9' }} />
-                <div style={{ padding: '18px' }}>
-                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1rem' }}>Live Project Insight</h4>
-                  <p style={{ margin: '8px 0 0', color: mutedColor, lineHeight: 1.7, fontSize: '0.92rem' }}>
-                    {caseStudyInsight}
-                  </p>
-                </div>
-              </div>
-
-              <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                  <FiCheckCircle size={18} color={projectColor} />
-                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Feature Focus</h4>
-                </div>
-                <div style={{ display: 'grid', gap: '8px' }}>
-                  {primaryFeatures.map((feature, idx) => {
-                    const cleanFeature = (typeof feature === 'string' ? feature : '').replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
-                    let title = cleanFeature;
-                    let detail = '';
-                    if (cleanFeature.includes(':')) {
-                      const parts = cleanFeature.split(':');
-                      title = parts[0].trim();
-                      detail = parts.slice(1).join(':').trim();
-                    }
-
-                    return (
-                      <div
-                        key={idx}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'flex-start',
-                          gap: '10px',
-                          padding: '8px 12px',
-                          borderRadius: '10px',
-                          background: isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.02)',
-                          border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
-                          transition: 'all 0.2s ease',
-                        }}
-                      >
-                        <FiCheckCircle size={15} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
-                        <div style={{ flex: 1 }}>
-                          <span style={{ color: textColor, fontFamily: 'Inter', fontWeight: 600, fontSize: '0.88rem', lineHeight: '1.45' }}>
-                            {title}
-                          </span>
-                          {detail && (
-                            <span style={{ display: 'block', color: mutedColor, fontFamily: 'Inter', fontSize: '0.82rem', lineHeight: '1.45', marginTop: '2px' }}>
-                              {detail}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-
-              <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                  <FiStar size={18} color={projectColor} />
-                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Outcomes</h4>
-                </div>
-                <div style={{ display: 'grid', gap: '8px' }}>
-                  {outcomes.map((outcome, idx) => {
-                    const cleanOutcome = (typeof outcome === 'string' ? outcome : '').replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
-                    let title = cleanOutcome;
-                    let detail = '';
-                    if (cleanOutcome.includes(':')) {
-                      const parts = cleanOutcome.split(':');
-                      title = parts[0].trim();
-                      detail = parts.slice(1).join(':').trim();
-                    }
-
-                    return (
-                      <div
-                        key={idx}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'flex-start',
-                          gap: '10px',
-                          padding: '8px 12px',
-                          borderRadius: '10px',
-                          background: isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.02)',
-                          border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
-                          transition: 'all 0.2s ease',
-                        }}
-                      >
-                        <FiStar size={14} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
-                        <div style={{ flex: 1 }}>
-                          <span style={{ color: textColor, fontFamily: 'Inter', fontWeight: 600, fontSize: '0.88rem', lineHeight: '1.45' }}>
-                            {title}
-                          </span>
-                          {detail && (
-                            <span style={{ display: 'block', color: mutedColor, fontFamily: 'Inter', fontSize: '0.82rem', lineHeight: '1.45', marginTop: '2px' }}>
-                              {detail}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            </aside>
+            )}
           </div>
-
-          <section style={{ marginTop: '20px', padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-              <FiDatabase size={18} color={projectColor} />
-              <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>Data Model</h4>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '12px' }} className="project-data-model-grid">
-              {dataModelItems.map(item => (
-                <div key={item.title} style={{ padding: '16px', borderRadius: '16px', background: insetPanelBg, border: panelBorder }}>
-                  <strong style={{ color: textColor, fontFamily: 'Poppins', fontSize: '0.92rem' }}>{item.title}</strong>
-                  <p style={{ margin: '8px 0 0', color: mutedColor, lineHeight: 1.65, fontSize: '0.9rem' }}>{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
+        )}
 
         <style>{`
           @media (max-width: 900px) {

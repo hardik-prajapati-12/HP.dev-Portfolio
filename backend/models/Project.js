@@ -21,6 +21,7 @@ const projectSchema = new mongoose.Schema({
   status: { type: String, default: 'Completed' },
   date: { type: String, default: '' },
   caseStudy: {
+    enabled: { type: Boolean, default: true },
     title: { 
       type: String, 
       default: '',
