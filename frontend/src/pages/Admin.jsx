@@ -3002,13 +3002,13 @@ export default function AdminDashboard() {
 
                       {/* Metric Badge Pills */}
                       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <div style={{ padding: '8px 14px', borderRadius: '10px', background: isDark ? 'rgba(16,185,129,0.1)' : 'rgba(16,185,129,0.06)', border: isDark ? '1px solid rgba(16,185,129,0.2)' : '1px solid rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+                        <div style={{ padding: '8px 14px', borderRadius: '10px', background: isDark ? 'rgba(99,102,241,0.1)' : 'rgba(99,102,241,0.06)', border: isDark ? '1px solid rgba(99,102,241,0.2)' : '1px solid rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366F1', boxShadow: '0 0 8px #6366F1' }} />
                           <span style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>Today:</span>
                           <strong style={{ fontFamily: 'Poppins', fontSize: '0.88rem', color: isDark ? '#F1F5F9' : '#0F172A' }}>{data.analytics?.todayVisitors || 0} visits</strong>
                         </div>
-                        <div style={{ padding: '8px 14px', borderRadius: '10px', background: isDark ? 'rgba(99,102,241,0.1)' : 'rgba(99,102,241,0.06)', border: isDark ? '1px solid rgba(99,102,241,0.2)' : '1px solid rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366F1', boxShadow: '0 0 8px #6366F1' }} />
+                        <div style={{ padding: '8px 14px', borderRadius: '10px', background: isDark ? 'rgba(16,185,129,0.1)' : 'rgba(16,185,129,0.06)', border: isDark ? '1px solid rgba(16,185,129,0.2)' : '1px solid rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
                           <span style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: textMuted }}>Unique IPs:</span>
                           <strong style={{ fontFamily: 'Poppins', fontSize: '0.88rem', color: isDark ? '#F1F5F9' : '#0F172A' }}>{data.analytics?.uniqueVisitors || 0} visitors</strong>
                         </div>
