@@ -12,7 +12,8 @@ import {
   FiCheckCircle,
   FiActivity,
   FiMaximize2,
-  FiMinimize2
+  FiMinimize2,
+  FiChevronRight
 } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { PROJECTS } from '../data/portfolioData';
@@ -173,6 +174,48 @@ export default function ProjectDetails() {
       return dateObj.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     }
     return dateStr;
+  };
+
+  const groupCaseStudyItems = (items) => {
+    if (!Array.isArray(items) || items.length === 0) return [];
+    const groups = [];
+    let currentGroup = null;
+
+    items.forEach((item) => {
+      const rawTitle = (item.title || '').trim();
+      const rawDesc = (item.description || '').trim();
+      if (!rawTitle && !rawDesc) return;
+
+      const isBulletTitle = /^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/.test(rawTitle);
+      const cleanTitle = rawTitle.replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
+
+      if (isBulletTitle) {
+        const subItem = { title: cleanTitle, description: rawDesc };
+        if (currentGroup) {
+          currentGroup.subpoints.push(subItem);
+        } else {
+          currentGroup = { title: 'Architecture Stack', description: '', subpoints: [subItem] };
+          groups.push(currentGroup);
+        }
+      } else {
+        currentGroup = { title: cleanTitle, description: rawDesc, subpoints: [] };
+        groups.push(currentGroup);
+
+        if (rawDesc && rawDesc.includes('\n')) {
+          const lines = rawDesc.split('\n').map(l => l.trim()).filter(Boolean);
+          const bulletLines = lines.filter(l => /^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/.test(l));
+          if (bulletLines.length > 0 && bulletLines.length === lines.length) {
+            currentGroup.description = '';
+            lines.forEach(l => {
+              const subClean = l.replace(/^[\u2022\u25CF\u25CB\u2219\*\-\+\>\u2192]\s*/, '').trim();
+              currentGroup.subpoints.push({ title: subClean, description: '' });
+            });
+          }
+        }
+      }
+    });
+
+    return groups;
   };
   const detailRows = [
     ['Category', project.category || 'Project'],
@@ -425,20 +468,117 @@ export default function ProjectDetails() {
               </section>
 
               <section style={{ padding: '22px', borderRadius: '20px', background: insetBg, border: panelBorder }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                   <FiGitBranch size={18} color={projectColor} />
-                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem' }}>Architecture & Flow</h4>
+                  <h4 style={{ margin: 0, color: textColor, fontFamily: 'Poppins', fontSize: '1.05rem', fontWeight: 700 }}>Architecture & Flow</h4>
                 </div>
-                <div style={{ display: 'grid', gap: '12px' }}>
-                  {architectureItems.map(item => (
-                    <div key={item.title} style={{ padding: '16px', borderRadius: '16px', background: insetPanelBg, border: panelBorder }}>
-                      <strong style={{ color: textColor, fontFamily: 'Poppins', fontSize: '0.95rem' }}>{item.title}</strong>
-                      <p style={{ margin: '8px 0 0', color: mutedColor, lineHeight: 1.7 }}>{item.description}</p>
+                <div style={{ display: 'grid', gap: '14px' }}>
+                  {groupCaseStudyItems(architectureItems).map((group, idx) => (
+                    <div
+                      key={group.title + idx}
+                      style={{
+                        padding: '18px 20px',
+                        borderRadius: '16px',
+                        background: insetPanelBg,
+                        border: panelBorder,
+                        boxShadow: isDark ? '0 4px 14px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.03)',
+                      }}
+                    >
+                      {/* Main Section Header */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span
+                          style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: projectColor,
+                            boxShadow: `0 0 10px ${projectColor}80`,
+                            display: 'inline-block',
+                            flexShrink: 0,
+                          }}
+                        />
+                        <strong style={{ color: textColor, fontFamily: 'Poppins', fontSize: '0.98rem', fontWeight: 700 }}>
+                          {group.title}
+                        </strong>
+                      </div>
+
+                      {/* Main Section Description */}
+                      {group.description && (
+                        <p style={{ margin: '8px 0 0 18px', color: mutedColor, lineHeight: 1.7, fontSize: '0.9rem' }}>
+                          {group.description}
+                        </p>
+                      )}
+
+                      {/* Subpoints List */}
+                      {group.subpoints && group.subpoints.length > 0 && (
+                        <div
+                          style={{
+                            marginTop: '12px',
+                            marginLeft: '4px',
+                            paddingLeft: '14px',
+                            borderLeft: `2px solid ${projectColor}40`,
+                            display: 'grid',
+                            gap: '8px',
+                          }}
+                        >
+                          {group.subpoints.map((sub, sIdx) => {
+                            let displayTitle = sub.title;
+                            let displayDesc = sub.description;
+                            if (!displayDesc && displayTitle.includes(':')) {
+                              const parts = displayTitle.split(':');
+                              displayTitle = parts[0].trim();
+                              displayDesc = parts.slice(1).join(':').trim();
+                            }
+
+                            return (
+                              <div
+                                key={sub.title + sIdx}
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'flex-start',
+                                  gap: '8px',
+                                  padding: '7px 11px',
+                                  borderRadius: '8px',
+                                  background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                                  border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)',
+                                }}
+                              >
+                                <FiChevronRight size={14} color={projectColor} style={{ marginTop: '3px', flexShrink: 0 }} />
+                                <div style={{ flex: 1 }}>
+                                  <span
+                                    style={{
+                                      color: textColor,
+                                      fontFamily: 'Inter',
+                                      fontWeight: 600,
+                                      fontSize: '0.88rem',
+                                      lineHeight: '1.4',
+                                    }}
+                                  >
+                                    {displayTitle}
+                                  </span>
+                                  {displayDesc && (
+                                    <span
+                                      style={{
+                                        display: 'block',
+                                        color: mutedColor,
+                                        fontFamily: 'Inter',
+                                        fontSize: '0.82rem',
+                                        lineHeight: '1.45',
+                                        marginTop: '2px',
+                                      }}
+                                    >
+                                      {displayDesc}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
-
-
               </section>
 
               {/* System Architecture — inline card */}
