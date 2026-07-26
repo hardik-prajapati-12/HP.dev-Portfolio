@@ -428,16 +428,17 @@ export default function Hero() {
         <div className="hero-container">
 
           {/* Left Column — Text & CTAs & Tech ribbon */}
-          <div className="hero-left" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <div className="hero-left" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
 
 
             {/* Headline Logo */}
-            <div style={{ margin: '0 0 24px 0', maxWidth: '480px', width: '100%' }}>
+            <div style={{ margin: '0 0 24px 0', maxWidth: '440px', width: '100%', flexShrink: 0, boxSizing: 'border-box' }}>
               <img 
                 src={isDark ? heroLogoWhite : heroLogoDark} 
                 alt="HARDIK. PRAJAPATI." 
                 style={{ 
                   width: '100%', 
+                  maxWidth: '100%',
                   height: 'auto', 
                   objectFit: 'contain',
                   display: 'block'
@@ -446,18 +447,18 @@ export default function Hero() {
             </div>
 
             {/* Subtitle / Tagline */}
-            <h2 style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 'clamp(1.1rem, 2.2vw, 1.45rem)', color: isDark ? '#CBD5E1' : '#334155', marginBottom: '16px', lineHeight: 1.3 }}>
+            <h2 style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 'clamp(1.1rem, 2.2vw, 1.45rem)', color: isDark ? '#CBD5E1' : '#334155', marginBottom: '16px', lineHeight: 1.3, width: '100%' }}>
               {profile.heroTitle || PERSONAL_INFO.heroTitle}
             </h2>
 
             {/* Description */}
-            <p style={{ fontFamily: 'Inter', fontSize: '1rem', lineHeight: 1.8, color: isDark ? '#CBD5E1' : '#475569', marginBottom: '24px', maxWidth: '600px' }}>
+            <p style={{ fontFamily: 'Inter', fontSize: '1rem', lineHeight: 1.8, color: isDark ? '#CBD5E1' : '#475569', marginBottom: '24px', maxWidth: '600px', width: '100%' }}>
               {profile.heroDesc || PERSONAL_INFO.heroDesc}
             </p>
 
             {/* Role cycler (Typing animation) */}
-            <div style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: 'clamp(1.05rem, 2vw, 1.5rem)', marginBottom: '24px', minHeight: '1.5em' }}>
-              <TypeAnimation key={roles.join(',')} sequence={typeSequence} wrapper="span" repeat={Infinity} style={{ background: 'linear-gradient(135deg,#8B5CF6,#3B82F6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }} />
+            <div style={{ fontFamily: 'Poppins', fontWeight: 700, fontSize: 'clamp(1.05rem, 2vw, 1.5rem)', marginBottom: '24px', minHeight: '52px', width: '100%', maxWidth: '100%', display: 'block', overflow: 'hidden', boxSizing: 'border-box' }}>
+              <TypeAnimation key={roles.join(',')} sequence={typeSequence} wrapper="span" repeat={Infinity} style={{ display: 'inline-block', background: 'linear-gradient(135deg,#8B5CF6,#3B82F6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }} />
             </div>
 
             {/* CTA Buttons */}
@@ -891,6 +892,16 @@ export default function Hero() {
           align-items: center;
           gap: 48px;
           width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+        .hero-left {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
         }
         @keyframes blink {
           50% { opacity: 0; }
