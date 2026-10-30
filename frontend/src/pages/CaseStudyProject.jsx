@@ -3,14 +3,23 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft, FiLayers, FiDatabase, FiMapPin, FiCheckCircle } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { PROJECTS } from '../data/portfolioData';
+import { getCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 
 export default function CaseStudyProject() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isDark } = useTheme();
-  const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [project, setProject] = useState(() => {
+    const all = getCached(CACHE_KEYS.PROJECTS, PROJECTS);
+    return all.find(x =>
+      x.id === Number(id) ||
+      x.id === id ||
+      x._id === id ||
+      x.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-') === id
+    ) || null;
+  });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -26,7 +35,8 @@ export default function CaseStudyProject() {
         console.warn('Project API lookup failed, falling back to local data.', err);
       }
 
-      const found = PROJECTS.find(x =>
+      const allProjects = getCached(CACHE_KEYS.PROJECTS, PROJECTS);
+      const found = allProjects.find(x =>
         x.id === Number(id) ||
         x.id === id ||
         x._id === id ||

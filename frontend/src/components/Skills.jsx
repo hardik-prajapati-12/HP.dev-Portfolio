@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import { SKILLS } from '../data/portfolioData';
+import { getCached, setCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 import { FiCpu } from 'react-icons/fi';
 import { getSkillIconDetails } from '../utils/skillIcons';
 
 export default function Skills() {
   const { isDark } = useTheme();
-  const [skillsData, setSkillsData] = useState(SKILLS);
+  const [skillsData, setSkillsData] = useState(() => getCached(CACHE_KEYS.SKILLS, SKILLS));
   const [active, setActive] = useState('Frontend');
 
   useEffect(() => {
@@ -20,6 +21,7 @@ export default function Skills() {
           grouped[s.category].push(s);
         });
         setSkillsData(grouped);
+        setCached(CACHE_KEYS.SKILLS, grouped);
         const cats = Object.keys(grouped).filter(cat => cat.toLowerCase() !== 'uncategorized');
         if (cats.length && !cats.includes(active)) setActive(cats[0]);
       }

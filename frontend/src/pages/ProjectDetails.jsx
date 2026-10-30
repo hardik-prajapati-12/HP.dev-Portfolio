@@ -17,6 +17,7 @@ import {
 } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { PROJECTS } from '../data/portfolioData';
+import { getCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 import { resolveImageUrl } from '../utils/adminApi';
 
@@ -28,8 +29,16 @@ export default function ProjectDetails() {
   const navigate = useNavigate();
   const { isDark } = useTheme();
 
-  const [loading, setLoading] = useState(true);
-  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [project, setProject] = useState(() => {
+    const all = getCached(CACHE_KEYS.PROJECTS, PROJECTS);
+    return all.find(x =>
+      x.id === Number(id) ||
+      x.id === id ||
+      x._id === id ||
+      x.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === id
+    ) || null;
+  });
   const [scrolled, setScrolled] = useState(false);
   const [projectCategories, setProjectCategories] = useState([]);
   const [archActiveTab, setArchActiveTab] = useState(0);
@@ -63,7 +72,8 @@ export default function ProjectDetails() {
         console.warn('Failed fetching project from API, trying local lookup:', err);
       }
 
-      const found = PROJECTS.find(x =>
+      const allProjects = getCached(CACHE_KEYS.PROJECTS, PROJECTS);
+      const found = allProjects.find(x =>
         x.id === Number(id) ||
         x.id === id ||
         x._id === id ||

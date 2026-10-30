@@ -5,6 +5,7 @@ import { FiSun, FiMoon, FiMenu, FiX, FiDownload, FiLock, FiGrid } from 'react-ic
 import { useTheme } from '../context/ThemeContext';
 import { useAdminSession } from '../context/AdminSessionContext';
 import { PERSONAL_INFO } from '../data/portfolioData';
+import { getCached, CACHE_KEYS } from '../utils/apiCache';
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logo-dark.png';
 
@@ -214,7 +215,7 @@ export default function Navbar({ visibleSections }) {
               {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
             </motion.button>
 
-            <motion.a href={PERSONAL_INFO.resumeUrl || '#'} target="_blank" rel="noreferrer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+            <motion.a href={getCached(CACHE_KEYS.PROFILE, PERSONAL_INFO).resumeUrl || '#'} target="_blank" rel="noreferrer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
               style={{ textDecoration:'none',padding:'8px 18px',borderRadius:'8px',border:isDark?'1px solid rgba(255,255,255,0.15)':'1px solid rgba(0,0,0,0.12)',background:'transparent',color:isDark?'#F3F4F6':'#0F172A',fontFamily:'Poppins',fontWeight:600,fontSize:'0.85rem',display:'flex',alignItems:'center',gap:'8px' }}
               className="hidden-mobile"
             >

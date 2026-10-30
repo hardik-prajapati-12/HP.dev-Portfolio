@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { clearPortfolioCache } from './apiCache';
 
 export const getAdminAccessKey = () => localStorage.getItem('admin_access_key') || '';
 
@@ -14,7 +15,6 @@ export const clearAdminAccessKey = () => {
 
 export const isAdminAccessVerified = () => localStorage.getItem('admin_access_verified') === '1';
 
-
 export const getAdminHeaders = (token) => {
   const headers = {};
   const accessKey = getAdminAccessKey();
@@ -23,15 +23,30 @@ export const getAdminHeaders = (token) => {
   return headers;
 };
 
+const handleCacheInvalidation = (url) => {
+  if (url && !url.includes('/auth/login') && !url.includes('/analytics/')) {
+    clearPortfolioCache();
+  }
+};
+
 export const adminApi = {
   get: (url, token, config = {}) =>
     axios.get(url, { ...config, headers: { ...getAdminHeaders(token), ...config.headers } }),
-  post: (url, data, token, config = {}) =>
-    axios.post(url, data, { ...config, headers: { ...getAdminHeaders(token), ...config.headers } }),
-  put: (url, data, token, config = {}) =>
-    axios.put(url, data, { ...config, headers: { ...getAdminHeaders(token), ...config.headers } }),
-  delete: (url, token, config = {}) =>
-    axios.delete(url, { ...config, headers: { ...getAdminHeaders(token), ...config.headers } }),
+  post: async (url, data, token, config = {}) => {
+    const res = await axios.post(url, data, { ...config, headers: { ...getAdminHeaders(token), ...config.headers } });
+    handleCacheInvalidation(url);
+    return res;
+  },
+  put: async (url, data, token, config = {}) => {
+    const res = await axios.put(url, data, { ...config, headers: { ...getAdminHeaders(token), ...config.headers } });
+    handleCacheInvalidation(url);
+    return res;
+  },
+  delete: async (url, token, config = {}) => {
+    const res = await axios.delete(url, { ...config, headers: { ...getAdminHeaders(token), ...config.headers } });
+    handleCacheInvalidation(url);
+    return res;
+  },
 };
 
 export const resolveImageUrl = (path) => {

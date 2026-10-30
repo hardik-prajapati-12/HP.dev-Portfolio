@@ -4,17 +4,21 @@ import { FiSend, FiMail, FiPhone, FiMapPin, FiGithub, FiLinkedin, FiCheckCircle,
 import { FaXTwitter } from 'react-icons/fa6';
 import { useTheme } from '../context/ThemeContext';
 import { PERSONAL_INFO } from '../data/portfolioData';
+import { getCached, setCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 
 export default function Contact() {
   const { isDark } = useTheme();
-  const [profile, setProfile] = useState(PERSONAL_INFO);
+  const [profile, setProfile] = useState(() => getCached(CACHE_KEYS.PROFILE, PERSONAL_INFO));
   const [form,   setForm]   = useState({ name:'', email:'', subject:'', message:'' });
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
     axios.get('/api/profile').then(res => {
-      if (res.data && res.data.name) setProfile(res.data);
+      if (res.data && res.data.name) {
+        setProfile(res.data);
+        setCached(CACHE_KEYS.PROFILE, res.data);
+      }
     }).catch(() => {});
   }, []);
 

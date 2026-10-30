@@ -8,9 +8,12 @@ export function LoadingScreen({ onDone }) {
   const steps = ['Initializing...', 'Loading components...', 'Applying styles...', 'Ready!'];
 
   useEffect(() => {
+    const hasVisited = typeof window !== 'undefined' && sessionStorage.getItem('hp_has_visited');
+    const stepIncrement = hasVisited ? 12 : 5;
+    const intervalTime = hasVisited ? 10 : 16;
     let p = 0;
     const interval = setInterval(() => {
-      p += 3;
+      p += stepIncrement;
       setProgress(Math.min(p, 100));
       if (p >= 25 && p < 50) setText(steps[1]);
       else if (p >= 50 && p < 75) setText(steps[2]);
@@ -18,9 +21,12 @@ export function LoadingScreen({ onDone }) {
       if (p >= 100) {
         clearInterval(interval);
         // Simple timeout — no exit animation needed, just call onDone
-        setTimeout(onDone, 300);
+        try {
+          sessionStorage.setItem('hp_has_visited', '1');
+        } catch (e) {}
+        setTimeout(onDone, hasVisited ? 60 : 180);
       }
-    }, 20);
+    }, intervalTime);
     return () => clearInterval(interval);
   }, []);
 

@@ -6,6 +6,7 @@ import { FiSearch, FiCalendar, FiArrowRight, FiClock, FiStar } from 'react-icons
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 import { resolveImageUrl } from '../utils/adminApi';
+import { getCached, setCached, CACHE_KEYS } from '../utils/apiCache';
 
 const SAMPLE_BLOGS = [
   {
@@ -99,7 +100,7 @@ export default function Blog({ initialTag = '', standalone = false }) {
   const { isDark } = useTheme();
   const navigate = useNavigate();
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-  const [blogs, setBlogs] = useState(SAMPLE_BLOGS);
+  const [blogs, setBlogs] = useState(() => getCached(CACHE_KEYS.BLOGS, SAMPLE_BLOGS));
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [tagFilter, setTagFilter] = useState(initialTag);
@@ -110,6 +111,7 @@ export default function Blog({ initialTag = '', standalone = false }) {
       .then(r => {
         if (r.data.data?.length) {
           setBlogs(r.data.data);
+          if (!tagFilter) setCached(CACHE_KEYS.BLOGS, r.data.data);
         } else {
           setBlogs(SAMPLE_BLOGS);
         }

@@ -24,6 +24,8 @@ import ProjectDetails from './pages/ProjectDetails';
 import CaseStudyProject from './pages/CaseStudyProject';
 import Maintenance from './pages/Maintenance';
 import axios from 'axios';
+import { DEFAULT_SETTINGS } from './data/portfolioData';
+import { getCached, setCached, CACHE_KEYS } from './utils/apiCache';
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -74,7 +76,7 @@ function SectionDivider() {
 
 function PortfolioHome({ publicSettings }) {
   const [loading, setLoading] = useState(true);
-  const visible = publicSettings?.visibleSections || {};
+  const visible = publicSettings?.visibleSections || DEFAULT_SETTINGS.visibleSections || {};
 
   const isVisible = (sectionKey) => {
     return visible[sectionKey] !== false;
@@ -192,8 +194,8 @@ function AppRoutes() {
   const { isDark } = useTheme();
   const { isAdmin, checking } = useAdminSession();
   const location = useLocation();
-  const [publicSettings, setPublicSettings] = useState(null);
-  const [settingsLoading, setSettingsLoading] = useState(true);
+  const [publicSettings, setPublicSettings] = useState(() => getCached(CACHE_KEYS.SETTINGS, DEFAULT_SETTINGS));
+  const [settingsLoading, setSettingsLoading] = useState(false);
 
   // Safety timeout: force-render the app if API calls hang too long (backend down)
   useEffect(() => {
@@ -206,7 +208,10 @@ function AppRoutes() {
   useEffect(() => {
     axios.get('/api/settings/public', { timeout: 5000 })
       .then(res => {
-        setPublicSettings(res.data);
+        if (res.data) {
+          setPublicSettings(res.data);
+          setCached(CACHE_KEYS.SETTINGS, res.data);
+        }
       })
       .catch(err => {
         console.error('Error fetching public settings:', err);

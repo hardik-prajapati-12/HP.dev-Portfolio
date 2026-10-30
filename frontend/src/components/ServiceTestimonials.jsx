@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight, FiStar } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { SERVICES, TESTIMONIALS } from '../data/portfolioData';
+import { getCached, setCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 import { resolveImageUrl } from '../utils/adminApi';
 import EmojiIcon from './EmojiIcon';
@@ -14,19 +15,20 @@ const getThemeColor = (color) => {
 
 export function Services() {
   const { isDark } = useTheme();
-  const [dbServices, setDbServices] = useState([]);
+  const [dbServices, setDbServices] = useState(() => getCached(CACHE_KEYS.SERVICES, SERVICES));
   const [servicesLoaded, setServicesLoaded] = useState(false);
 
   useEffect(() => {
     axios.get('/api/services').then(res => {
       if (Array.isArray(res.data)) {
         setDbServices(res.data);
+        setCached(CACHE_KEYS.SERVICES, res.data);
         setServicesLoaded(true);
       }
     }).catch(() => {});
   }, []);
 
-  const servicesToDisplay = servicesLoaded ? dbServices : SERVICES;
+  const servicesToDisplay = dbServices && dbServices.length > 0 ? dbServices : SERVICES;
 
   return (
     <section id="services" style={{ padding:'100px 0' }}>
@@ -96,7 +98,7 @@ export function Services() {
 export function Testimonials() {
   const { isDark } = useTheme();
   const [current, setCurrent] = useState(0);
-  const [dbTestimonials, setDbTestimonials] = useState([]);
+  const [dbTestimonials, setDbTestimonials] = useState(() => getCached(CACHE_KEYS.TESTIMONIALS, TESTIMONIALS));
   const [testimonialsLoaded, setTestimonialsLoaded] = useState(false);
 
   useEffect(() => {
@@ -104,16 +106,17 @@ export function Testimonials() {
       .then(res => {
         if (res.data && Array.isArray(res.data)) {
           setDbTestimonials(res.data);
+          setCached(CACHE_KEYS.TESTIMONIALS, res.data);
           setTestimonialsLoaded(true);
         }
       })
       .catch(err => console.error("Error fetching testimonials:", err));
   }, []);
 
-  const testimonialsToDisplay = testimonialsLoaded ? dbTestimonials.map(t => ({
+  const testimonialsToDisplay = (dbTestimonials && dbTestimonials.length > 0 ? dbTestimonials : TESTIMONIALS).map(t => ({
     ...t,
     message: t.content || t.message
-  })) : TESTIMONIALS;
+  }));
 
   useEffect(() => {
     if (testimonialsToDisplay.length === 0) return;

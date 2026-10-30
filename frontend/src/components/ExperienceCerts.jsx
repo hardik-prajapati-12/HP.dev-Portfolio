@@ -4,24 +4,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import { FiX, FiExternalLink } from 'react-icons/fi';
 import { EXPERIENCE, CERTIFICATIONS, ACHIEVEMENTS } from '../data/portfolioData';
+import { getCached, setCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 import EmojiIcon from './EmojiIcon';
 
 export function Experience() {
   const { isDark } = useTheme();
-  const [dbExperience, setDbExperience] = useState([]);
+  const [dbExperience, setDbExperience] = useState(() => getCached(CACHE_KEYS.EXPERIENCE, EXPERIENCE));
   const [experienceLoaded, setExperienceLoaded] = useState(false);
 
   useEffect(() => {
     axios.get('/api/experience').then(res => {
       if (Array.isArray(res.data)) {
         setDbExperience(res.data);
+        setCached(CACHE_KEYS.EXPERIENCE, res.data);
         setExperienceLoaded(true);
       }
     }).catch(() => {});
   }, []);
 
-  const experienceToDisplay = experienceLoaded ? dbExperience : EXPERIENCE;
+  const experienceToDisplay = dbExperience && dbExperience.length > 0 ? dbExperience : EXPERIENCE;
   const cardBg     = isDark ? 'rgba(255,255,255,0.02)' : '#FFFFFF';
   const cardBorder = isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0';
 
@@ -115,39 +117,41 @@ export function Certifications() {
   const navigate = useNavigate();
   const cardBg     = isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC';
   const cardBorder = isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0';
-  const [dbAchievements, setDbAchievements] = useState([]);
+  const [dbAchievements, setDbAchievements] = useState(() => getCached(CACHE_KEYS.ACHIEVEMENTS, ACHIEVEMENTS));
   const [achievementsLoaded, setAchievementsLoaded] = useState(false);
-  const [dbCerts, setDbCerts] = useState([]);
+  const [dbCerts, setDbCerts] = useState(() => getCached(CACHE_KEYS.CERTIFICATIONS, CERTIFICATIONS));
   const [certsLoaded, setCertsLoaded] = useState(false);
 
   useEffect(() => {
     axios.get('/api/achievements').then(res => {
       if (Array.isArray(res.data)) {
         setDbAchievements(res.data);
+        setCached(CACHE_KEYS.ACHIEVEMENTS, res.data);
         setAchievementsLoaded(true);
       }
     }).catch(() => {});
   }, []);
 
-  const achievementsToDisplay = achievementsLoaded ? dbAchievements : ACHIEVEMENTS;
+  const achievementsToDisplay = dbAchievements && dbAchievements.length > 0 ? dbAchievements : ACHIEVEMENTS;
 
   useEffect(() => {
     axios.get('/api/certifications')
       .then(res => {
         if (res.data && Array.isArray(res.data)) {
           setDbCerts(res.data);
+          setCached(CACHE_KEYS.CERTIFICATIONS, res.data);
           setCertsLoaded(true);
         }
       })
       .catch(err => console.error("Error fetching certifications:", err));
   }, []);
 
-  const certsToDisplay = certsLoaded ? dbCerts.map(c => ({
+  const certsToDisplay = (dbCerts && dbCerts.length > 0 ? dbCerts : CERTIFICATIONS).map(c => ({
     ...c,
     year: c.year || (c.date ? new Date(c.date).getFullYear().toString() : '2024'),
     color: c.color || '#6366F1',
     badge: c.badge || '🏆'
-  })) : CERTIFICATIONS;
+  }));
 
   return (
     <section id="certifications" style={{ padding:'100px 0' }}>

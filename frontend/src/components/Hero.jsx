@@ -7,6 +7,7 @@ import { FaXTwitter } from 'react-icons/fa6';
 import { SiMongodb } from 'react-icons/si';
 import { useTheme } from '../context/ThemeContext';
 import { PERSONAL_INFO, ROLES } from '../data/portfolioData';
+import { getCached, setCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 import { getSkillIconDetails } from '../utils/skillIcons';
 import heroLogoWhite from '../assets/hero-logo-white.png';
@@ -369,9 +370,12 @@ function CircuitBrain({ isDark }) {
 
 export default function Hero() {
   const { isDark } = useTheme();
-  const [profile, setProfile] = useState(PERSONAL_INFO);
-  const [roles, setRoles] = useState(ROLES);
-  const [dbSkills, setDbSkills] = useState([]);
+  const [profile, setProfile] = useState(() => getCached(CACHE_KEYS.PROFILE, PERSONAL_INFO));
+  const [roles, setRoles] = useState(() => {
+    const p = getCached(CACHE_KEYS.PROFILE, PERSONAL_INFO);
+    return p.roles && p.roles.length > 0 ? p.roles : ROLES;
+  });
+  const [dbSkills, setDbSkills] = useState(() => getCached('hp_cache_skills_flat', []));
   const [skillsLoaded, setSkillsLoaded] = useState(false);
 
   // Parallax mouse interaction logic
@@ -394,6 +398,7 @@ export default function Hero() {
     axios.get('/api/profile').then(res => {
       if (res.data && res.data.name) {
         setProfile(res.data);
+        setCached(CACHE_KEYS.PROFILE, res.data);
         if (res.data.roles) {
           if (res.data.roles.length > 0) {
             setRoles(res.data.roles);
@@ -407,6 +412,7 @@ export default function Hero() {
     axios.get('/api/skills').then(res => {
       if (Array.isArray(res.data)) {
         setDbSkills(res.data);
+        setCached('hp_cache_skills_flat', res.data);
         setSkillsLoaded(true);
       }
     }).catch(() => { });

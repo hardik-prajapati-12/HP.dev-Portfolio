@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiArrowLeft, FiAward, FiCalendar, FiCheckCircle, FiExternalLink, FiShield, FiTarget, FiCpu, FiChevronRight } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import { CERTIFICATIONS, ACHIEVEMENTS } from '../data/portfolioData';
+import { getCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 import EmojiIcon from '../components/EmojiIcon';
 import logo from '../assets/logo.png';
@@ -61,9 +62,18 @@ export default function RecognitionDetails() {
   const navigate = useNavigate();
   const { isDark } = useTheme();
   
-  const [loading, setLoading] = useState(true);
-  const [item, setItem] = useState(null);
-  const [siblings, setSiblings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [item, setItem] = useState(() => {
+    const list = type === 'certification'
+      ? getCached(CACHE_KEYS.CERTIFICATIONS, CERTIFICATIONS)
+      : getCached(CACHE_KEYS.ACHIEVEMENTS, ACHIEVEMENTS);
+    return list.find(x => x._id === id || String(x.id) === String(id)) || list[Number(id)] || null;
+  });
+  const [siblings, setSiblings] = useState(() => {
+    return type === 'certification'
+      ? getCached(CACHE_KEYS.CERTIFICATIONS, CERTIFICATIONS)
+      : getCached(CACHE_KEYS.ACHIEVEMENTS, ACHIEVEMENTS);
+  });
 
   // Fetch sibling list for sidebar navigation
   useEffect(() => {

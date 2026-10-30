@@ -8,6 +8,7 @@ import { PERSONAL_INFO, STATS, EDUCATION } from '../data/portfolioData';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { resolveImageUrl } from '../utils/adminApi';
+import { getCached, setCached, CACHE_KEYS } from '../utils/apiCache';
 
 const CountUp = typeof CountUpModule === 'function' ? CountUpModule : (CountUpModule.default || CountUpModule);
 
@@ -17,7 +18,7 @@ const fadeUp = {
 };
 
 function ProfilePhotoShowcase({ profile, isDark, inView }) {
-  const avatarSrc = resolveImageUrl(profile.avatar) || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah';
+  const avatarSrc = resolveImageUrl(profile.avatar) || PERSONAL_INFO.avatar;
 
   // The card bg must be very close to black so the photo's black bg blends naturally
   const cardBgColor = '#070B14';
@@ -114,32 +115,37 @@ function ProfilePhotoShowcase({ profile, isDark, inView }) {
 export default function About() {
   const { isDark } = useTheme();
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0 });
-  const [profile, setProfile] = useState(PERSONAL_INFO);
-  const [education, setEducation] = useState([]);
+  const [profile, setProfile] = useState(() => getCached(CACHE_KEYS.PROFILE, PERSONAL_INFO));
+  const [education, setEducation] = useState(() => getCached(CACHE_KEYS.EDUCATION, EDUCATION));
   const [eduLoaded, setEduLoaded] = useState(false);
-  const [stats, setStats] = useState([]);
+  const [stats, setStats] = useState(() => getCached(CACHE_KEYS.STATS, STATS));
   const [statsLoaded, setStatsLoaded] = useState(false);
 
   useEffect(() => {
     axios.get('/api/profile').then(res => {
-      if (res.data && res.data.name) setProfile(res.data);
+      if (res.data && res.data.name) {
+        setProfile(res.data);
+        setCached(CACHE_KEYS.PROFILE, res.data);
+      }
     }).catch(() => { });
     axios.get('/api/education').then(res => {
       if (Array.isArray(res.data)) {
         setEducation(res.data);
+        setCached(CACHE_KEYS.EDUCATION, res.data);
         setEduLoaded(true);
       }
     }).catch(() => { });
     axios.get('/api/stats').then(res => {
       if (Array.isArray(res.data) && res.data.length > 0) {
         setStats(res.data);
+        setCached(CACHE_KEYS.STATS, res.data);
         setStatsLoaded(true);
       }
     }).catch(() => { });
   }, []);
 
-  const educationToDisplay = eduLoaded ? education : EDUCATION;
-  const statsToDisplay = statsLoaded ? stats : STATS;
+  const educationToDisplay = education && education.length > 0 ? education : EDUCATION;
+  const statsToDisplay = stats && stats.length > 0 ? stats : STATS;
 
   const cardBg = isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC';
   const cardBorder = isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid #E2E8F0';

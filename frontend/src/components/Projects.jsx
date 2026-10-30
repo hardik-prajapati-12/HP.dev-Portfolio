@@ -1,10 +1,15 @@
-import { useState, useEffect } from 'react';
+  
+  
+  +9999999
+  +9
+  import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FiGithub, FiExternalLink, FiStar, FiCode } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
-import { PROJECTS } from '../data/portfolioData';
+import { PROJECTS, PROJECT_CATEGORIES } from '../data/portfolioData';
+import { getCached, setCached, CACHE_KEYS } from '../utils/apiCache';
 import axios from 'axios';
 import { resolveImageUrl } from '../utils/adminApi';
 
@@ -35,14 +40,15 @@ export default function Projects() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
   const [ref, inView] = useInView({ triggerOnce:true, threshold:0.1 });
-  const [dbProjects, setDbProjects] = useState([]);
-  const [projectCategories, setProjectCategories] = useState([]);
+  const [dbProjects, setDbProjects] = useState(() => getCached(CACHE_KEYS.PROJECTS, PROJECTS));
+  const [projectCategories, setProjectCategories] = useState(() => getCached(CACHE_KEYS.PROJECT_CATEGORIES, PROJECT_CATEGORIES));
 
   useEffect(() => {
     axios.get('/api/projects')
       .then(res => {
         if (res.data?.success && res.data.data?.length) {
           setDbProjects(res.data.data);
+          setCached(CACHE_KEYS.PROJECTS, res.data.data);
         }
       })
       .catch(err => console.error("Error fetching projects from backend:", err));
@@ -50,6 +56,7 @@ export default function Projects() {
       .then(res => {
         if (Array.isArray(res.data) && res.data.length > 0) {
           setProjectCategories(res.data);
+          setCached(CACHE_KEYS.PROJECT_CATEGORIES, res.data);
         }
       })
       .catch(() => {});

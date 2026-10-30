@@ -24,6 +24,7 @@ import {
   EXPERIENCE,
   CERTIFICATIONS,
 } from '../data/portfolioData';
+import { getCached, CACHE_KEYS } from '../utils/apiCache';
 
 const QUICK_ACTIONS = [
   { label: 'Skills', prompt: 'Tell me about Hardik skills', icon: FiCpu },
@@ -233,7 +234,7 @@ export default function Chatbot({ publicSettings }) {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [profile, setProfile] = useState(PERSONAL_INFO);
+  const [profile, setProfile] = useState(() => getCached(CACHE_KEYS.PROFILE, PERSONAL_INFO));
   const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(16).slice(2)}`);
   const [useBackendChat] = useState(true);
   const [leadForm, setLeadForm] = useState({ active: false, step: 'message', message: '', name: '', email: '' });
